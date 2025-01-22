@@ -1,0 +1,11 @@
+﻿################################################################################
+# この .gitignore ファイルは Microsoft(R) Visual Studio によって自動的に作成されました。
+################################################################################
+
+/.vs/newHEW
+/newHEW/newHEW.vcxproj
+/newHEW/newHEW.vcxproj.filters
+/newHEW/newHEW.vcxproj.user
+/newHEW.sln
+/newHEW/x64/Debug
+/x64/Debug
