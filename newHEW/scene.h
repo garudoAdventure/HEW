@@ -1,10 +1,9 @@
 #pragma once
 
-enum SCENE {
-  Title,
-  Game,
-  Result,
-  Over,
+enum Scene {
+  TITLE,
+  GAME,
+  RESULT,
 
   NUM,
 };
@@ -14,5 +13,5 @@ void sceneUpdate();
 void sceneRender();
 void sceneDestroy();
 
-void setScene(SCENE scene);
+void setScene(Scene scene);
 void checkScene();

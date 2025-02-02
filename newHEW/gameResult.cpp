@@ -18,7 +18,7 @@ void resultUpdate() {
 	return;
   }
   if (_kbhit()) {
-	setScene(SCENE::Title);
+	setScene(Scene::TITLE);
 	frame = 0;
   }
 }

@@ -12,5 +12,6 @@ Matrix4x4 rotateXArray(float theta);
 Matrix4x4 rotateYArray(float theta);
 Matrix4x4 rotateZArray(float theta);
 Matrix4x4 projectArray();
-void drawCube(Vector3* vec, const char* shape);
+void clearCube(Vector3* vec);
+void drawCube(Vector3* vec);
 void cubeDemo();

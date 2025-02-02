@@ -1,0 +1,116 @@
+﻿#define CONIOEX
+#include "conioex.h"
+#include "gameField.h"
+#include "buffer.h"
+#include "UI.h"
+#include "player.h"
+#include "game.h"
+
+void fieldInit() {
+  renderBorder(0, 0, 64, 25);
+}
+
+void fieldUpdate() {
+  static int frameCount = 0;
+  frameCount = (frameCount + 1) % 200;
+  if (inport(PK_BS) && frameCount > 50) {
+	setGameScene(GameScene::MAP);
+	frameCount = 0;
+	return;
+  }
+
+  clearField();
+  renderField();
+}
+
+void fieldRender() {
+}
+
+void fieldDestroy() {
+  clearField();
+}
+
+void renderField() {
+  for (int x = 1; x < ScreenFieldWidth; x++) {
+	for (int y = 1; y < ScreenFieldHeight; y++) {
+	  if (y <= 15) {
+		setBufferBgColor(x, y, skyBlue);
+	  }
+	  if (y >= 16) {
+		setBufferBgColor(x, y, seaBlue);
+	  }
+	}
+  }
+}
+
+void clearField() {
+  for (int i = 1; i < ScreenFieldWidth; i++) {
+	for (int j = 1; j < ScreenFieldHeight; j++) {
+	  setBufferText(i, j, " ");
+	}
+  }
+}
+
+void drawSmallBoat(int x, int y) {
+  setFieldBuffer(x, y, "▀", darkBrown);
+  setFieldBuffer(x + 1, y, "▀", darkBrown);
+}
+
+void drawMiddleBoat(int x, int y) {
+  setFieldBuffer(x + 1, y - 2, "▅", brown);
+  setFieldBuffer(x + 2, y - 2, "▅", black);
+
+  setFieldBuffer(x, y - 1, "▅", darkBrown);
+  setFieldBuffer(x + 1, y - 1, "█", brown);
+  setFieldBuffer(x + 2, y - 1, "▅", lightBrown);
+  setFieldBuffer(x + 3, y - 1, "▅", darkBrown);
+
+  setFieldBuffer(x + 1, y, "▀", darkBrown);
+  setFieldBuffer(x + 2, y, "▀", darkBrown);
+}
+
+void drawBigBoat(int x, int y) {
+  setFieldBuffer(x + 3, y - 5, "█", brown);
+  setFieldBuffer(x + 4, y - 5, "█", black);
+  setFieldBuffer(x + 5, y - 5, "█", black);
+
+  setFieldBuffer(x + 2, y - 4, "▅", darkBrown);
+  setFieldBuffer(x + 3, y - 4, "█", brown);
+  setFieldBuffer(x + 4, y - 4, "▅", darkBrown);
+  setFieldBuffer(x + 5, y - 4, "▅", darkBrown);
+
+  setFieldBuffer(x + 1, y - 3, "█", darkBrown);
+  setFieldBuffer(x + 2, y - 3, "█", lightBrown);
+  setFieldBuffer(x + 3, y - 3, "█", brown);
+  setFieldBuffer(x + 4, y - 3, "█", lightBrown);
+  setFieldBuffer(x + 5, y - 3, "█", lightBrown);
+  setFieldBuffer(x + 6, y - 3, "█", darkBrown);
+
+  setFieldBuffer(x, y - 2, "█", darkBrown);
+  setFieldBuffer(x + 1, y - 2, "█", lightBrown);
+  setFieldBuffer(x + 2, y - 2, "█", lightBrown);
+  setFieldBuffer(x + 3, y - 2, "█", lightBrown);
+  setFieldBuffer(x + 4, y - 2, "█", lightBrown);
+  setFieldBuffer(x + 5, y - 2, "█", lightBrown);
+  setFieldBuffer(x + 6, y - 2, "█", lightBrown);
+  setFieldBuffer(x + 7, y - 2, "█", darkBrown);
+
+  setFieldBuffer(x + 1, y - 1, "█", darkBrown);
+  setFieldBuffer(x + 2, y - 1, "█", lightBrown);
+  setFieldBuffer(x + 3, y - 1, "█", lightBrown);
+  setFieldBuffer(x + 4, y - 1, "█", lightBrown);
+  setFieldBuffer(x + 5, y - 1, "█", lightBrown);
+  setFieldBuffer(x + 6, y - 1, "█", darkBrown);
+
+  setFieldBuffer(x + 2, y, "▀", darkBrown);
+  setFieldBuffer(x + 3, y, "█", darkBrown);
+  setFieldBuffer(x + 4, y, "█", darkBrown);
+  setFieldBuffer(x + 5, y, "▀", darkBrown);
+}
+
+void setFieldBuffer(int x, int y, const char* shape, Color color) {
+  if (x < 0 || x > ScreenFieldWidth - 1.0f || y < 0 || y > ScreenFieldHeight - 1.0f) {
+	return;
+  }
+  setBufferTextAndColor(x, y, shape, color);
+}

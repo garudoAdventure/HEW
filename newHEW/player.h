@@ -2,10 +2,8 @@
 #include "mathStruct.h"
 
 struct Player {
-  int hp;
   Vector2f pos;
-  Vector2f prePos;
-  Color color;
+  float viewAngle;
 };
 
 void playerInit();
@@ -15,3 +13,5 @@ void playerDestroy();
 
 Player* getPlayer();
 void playerMove();
+void drawMyBoat();
+void showPlayerPos();

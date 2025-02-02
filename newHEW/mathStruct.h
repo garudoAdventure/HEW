@@ -5,6 +5,8 @@
 #define FIELD_X	  0
 #define FIELD_Y	  0
 
+#define PI	3.1415926
+
 //	  0123456789 
 //	0 ╔════════╗
 //	1 ║        ║
@@ -28,10 +30,4 @@ struct Vector3 {
   float x;
   float y;
   float z;
-};
-
-struct Color {
-  int r;
-  int g;
-  int b;
 };

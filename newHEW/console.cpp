@@ -10,21 +10,7 @@ CHAR_INFO* bufScreen;
 
 void consoleInit(int width, int height, int fontSize) {
   hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-  screenWidth = width;
-  screenHeight = height;
-  bufScreen = new CHAR_INFO[screenWidth * screenHeight];
-  memset(bufScreen, 0, sizeof(CHAR_INFO) * screenWidth * screenHeight);
-
-  enableVTMode();
   SetConsoleOutputCP(65001);
-  setConsoleFontSize(fontSize);
-  setScreenBufferSize(width, height);
-  // setConsoleWindowSize(width, height);
-  // setConsoleFontType(L"MesloLGS NF");
-  setConsoleFontType(L"MS Gothic");
-  // setConsoleFontType(L"Consolas");
-  setConsoleWindowPosition(100, 1);
-  SetConsoleActiveScreenBuffer(hOut);
 }
 
 void consoleEnd() {

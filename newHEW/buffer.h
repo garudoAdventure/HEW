@@ -1,5 +1,6 @@
 #pragma once
 #include "mathStruct.h"
+#include "color.h"
 
 struct Buffer {
   const char* text;
@@ -14,5 +15,6 @@ void bufferDestroy();
 
 void setBuffer(float x, float y, const char* text, Color fgColor, Color bgColor);
 void setBufferText(float x, float y, const char* text);
+void setBufferTextAndColor(float x, float y, const char* text, Color color);
 void setBufferFgColor(float x, float y, Color color);
 void setBufferBgColor(float x, float y, Color color);

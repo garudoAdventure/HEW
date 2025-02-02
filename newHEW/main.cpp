@@ -3,6 +3,17 @@
 #include "console.h"
 #include "iostream"
 
+/* ===================== HEW Library ========================== */
+#ifndef _DEBUG
+#pragma comment(lib, "./Library/HEW_x86_Release.lib")
+#else
+#pragma comment(lib, "./Library/HEW_x86_Debug.lib")
+#endif
+// Function prototype declarations
+bool HEWStartup();
+bool HEWCleanup();
+/* ============================================================ */
+
 #define FPS	60
 
 void init();
@@ -18,6 +29,15 @@ int main() {
   float start, now;
   timeBeginPeriod(1);
   start = now = timeGetTime();
+
+  /* ====== HEW Startup ======*/
+  bool bResurt = 0;
+  bResurt = HEWStartup();
+  if (bResurt != 1) {
+	perror("HEWStartup error");
+	return 0;
+  }
+  /* =========================*/
 
   init();
   while (true) {
@@ -37,6 +57,14 @@ int main() {
 	start = now;
   }
   destroy();
+
+  /* ====== HEW Cleanup ======*/
+  bResurt = HEWCleanup();
+  if (bResurt != 1) {
+	perror("HEWCleanup error");
+	return 0; // FALSE
+  }
+  /* =========================*/
 
   timeEndPeriod(1);
 }

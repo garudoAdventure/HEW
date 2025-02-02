@@ -4,7 +4,7 @@
 #include "buffer.h"
 #include "console.h"
 
-void drawLine(Vector pt1, Vector pt2, const char* shape, Color color) {
+void drawLine(Vector2 pt1, Vector2 pt2, const char* shape, Color color) {
   bool steep = abs(pt2.y - pt1.y) > abs(pt2.x - pt1.x);
   int temp;
   if (steep) {
@@ -45,7 +45,7 @@ void drawLine(Vector pt1, Vector pt2, const char* shape, Color color) {
   }
 }
 
-void drawCircle(int r, Vector center, const char* shape, Color fgColor, Color bgColor) {
+void drawCircle(int r, Vector2 center, const char* shape, Color fgColor, Color bgColor) {
   if (r < 1) {
 	return;
   }
@@ -61,8 +61,8 @@ void drawCircle(int r, Vector center, const char* shape, Color fgColor, Color bg
   }
 }
 
-void drawCirclePt(int x, int y, Vector center, const char* shape, Color fgColor, Color bgColor) {
-  Vector coor[4] = {
+void drawCirclePt(int x, int y, Vector2 center, const char* shape, Color fgColor, Color bgColor) {
+  Vector2 coor[4] = {
 	{x, y}, {x, -y}, {-x, -y}, {-x, y}
   };
   for (int i = 0; i < 4; i++) {
@@ -71,7 +71,7 @@ void drawCirclePt(int x, int y, Vector center, const char* shape, Color fgColor,
   }
 }
 
-void drawBgCircle(int r, Vector center, Color bgColor) {
+void drawBgCircle(int r, Vector2 center, Color bgColor) {
   if (r < 1) {
 	return;
   }
@@ -88,8 +88,8 @@ void drawBgCircle(int r, Vector center, Color bgColor) {
   }
 }
 
-void drawCircleBgPt(int x, int y, Vector center, Color bgColor) {
-  Vector coor[4] = {
+void drawCircleBgPt(int x, int y, Vector2 center, Color bgColor) {
+  Vector2 coor[4] = {
 	{x, y}, {x, -y}, {-x, -y}, {-x, y}
   };
   for (int i = 0; i < 4; i++) {
@@ -98,7 +98,7 @@ void drawCircleBgPt(int x, int y, Vector center, Color bgColor) {
   }
 }
 
-CirclePtList* getCirclePt(int r, Vector center) {
+CirclePtList* getCirclePt(int r, Vector2 center) {
   CirclePtList* circlePtList = (CirclePtList*)malloc(sizeof(CirclePtList));
   circlePtList->next = NULL;
   if (r < 1) {

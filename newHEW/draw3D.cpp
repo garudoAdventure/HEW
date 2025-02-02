@@ -83,12 +83,21 @@ Matrix4x4 projectArray() {
   return pArray;
 }
 
-void drawCube(Vector3* vec, const char* shape) {
+void clearCube(Vector3* vec) {
   for (int i = 0; i < 4; i++) {
 	int next = i + 1 > 3 ? 0 : i + 1;
-	drawLine({ (int)vec[i].x, (int)vec[i].y }, { (int)vec[next].x, (int)vec[next].y }, shape);
-	drawLine({ (int)vec[i + 4].x, (int)vec[i + 4].y }, { (int)vec[next + 4].x, (int)vec[next + 4].y }, shape);
-	drawLine({ (int)vec[i].x, (int)vec[i].y }, { (int)vec[i + 4].x, (int)vec[i + 4].y }, shape);
+	drawLine({ (int)vec[i].x, (int)vec[i].y }, { (int)vec[next].x, (int)vec[next].y }, " ");
+	drawLine({ (int)vec[i + 4].x, (int)vec[i + 4].y }, { (int)vec[next + 4].x, (int)vec[next + 4].y }, " ");
+	drawLine({ (int)vec[i].x, (int)vec[i].y }, { (int)vec[i + 4].x, (int)vec[i + 4].y }, " ");
+  }
+}
+
+void drawCube(Vector3* vec) {
+  for (int i = 0; i < 4; i++) {
+	int next = i + 1 > 3 ? 0 : i + 1;
+	drawLine({ (int)vec[i].x, (int)vec[i].y }, { (int)vec[next].x, (int)vec[next].y }, "▄");
+	drawLine({ (int)vec[i + 4].x, (int)vec[i + 4].y }, { (int)vec[next + 4].x, (int)vec[next + 4].y }, "▀");
+	drawLine({ (int)vec[i].x, (int)vec[i].y }, { (int)vec[i + 4].x, (int)vec[i + 4].y }, "█");
   }
 }
 
@@ -102,11 +111,11 @@ void cubeDemo() {
   float minY = -1.0f;
   float maxY = 1.0f;
   Vector3 edgeVertex[8] = {
-	{minX, minY, zMin}, {minX, maxY, zMin}, {maxX, maxY, zMin}, {maxX, minY, zMin},
-	{minX, minY, zMin + zDepth}, {minX, maxY, zMin + zDepth}, {maxX, maxY, zMin + zDepth}, {maxX, minY, zMin + zDepth},
+	{minX, minY, zMin}, {maxX, minY, zMin}, {maxX, minY, zMin + zDepth}, {minX, minY, zMin + zDepth},
+	{minX, maxY, zMin}, {maxX, maxY, zMin}, {maxX, maxY, zMin + zDepth}, {minX, maxY, zMin + zDepth},
   };
 
-  drawCube(temp, " ");
+  clearCube(temp);
 
   memcpy(temp, edgeVertex, sizeof(temp));
 
@@ -130,5 +139,5 @@ void cubeDemo() {
 
 	temp[i].x -= 0.5 * width;
   }
-  drawCube(temp, "█");
+  drawCube(temp);
 }

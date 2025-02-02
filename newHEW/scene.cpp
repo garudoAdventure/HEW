@@ -8,20 +8,20 @@
 #include "game.h"
 #include "gameResult.h"
 
-SCENE g_scene = SCENE::Title;
-SCENE g_nextSecne = SCENE::Title;
+Scene scene = Scene::TITLE;
+Scene nextSecne = Scene::TITLE;
 
 void sceneInit() {
   bufferInit();
   audioInit();
-  switch (g_scene) {
-  case SCENE::Title:
+  switch (scene) {
+  case Scene::TITLE:
 	titleInit();
 	break;
-  case SCENE::Game:
+  case Scene::GAME:
 	gameInit();
 	break;
-  case SCENE::Result:
+  case Scene::RESULT:
 	resultInit();
 	break;
   }
@@ -29,14 +29,14 @@ void sceneInit() {
 
 void sceneUpdate() {
   audioUpdate();
-  switch (g_scene) {
-	case SCENE::Title:
+  switch (scene) {
+	case Scene::TITLE:
 	  titleUpdate();
 	  break;
-	case SCENE::Game:
+	case Scene::GAME:
 	  gameUpdate();
 	  break;
-	case SCENE::Result:
+	case Scene::RESULT:
 	  resultUpdate();
 	  break;
 	}
@@ -44,41 +44,41 @@ void sceneUpdate() {
 
 void sceneRender() {
   bufferRender();
-  switch (g_scene) {
-  case SCENE::Title:
+  switch (scene) {
+  case Scene::TITLE:
 	titleRender();
 	break;
-  case SCENE::Game:
+  case Scene::GAME:
 	gameRender();
 	break;
-  case SCENE::Result:
+  case Scene::RESULT:
 	resultRender();
 	break;
   }
 }
 
 void sceneDestroy() {
-  switch (g_scene) {
-  case SCENE::Title:
+  switch (scene) {
+  case Scene::TITLE:
 	titleDestroy();
 	break;
-  case SCENE::Game:
+  case Scene::GAME:
 	gameDestroy();
 	break;
-  case SCENE::Result:
+  case Scene::RESULT:
 	resultDestroy();
 	break;
   }
 }
 
-void setScene(SCENE scene) {
-  g_nextSecne = scene;
+void setScene(Scene scene) {
+  nextSecne = scene;
 }
 
 void checkScene() {
-  if (g_scene != g_nextSecne) {
+  if (scene != nextSecne) {
 	sceneDestroy();
-	g_scene = g_nextSecne;
+	scene = nextSecne;
 
 	clrscr();
 

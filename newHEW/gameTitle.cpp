@@ -14,7 +14,7 @@ void titleUpdate() {
 	return;
   }
   if (inport(PK_ENTER)) {
-	setScene(SCENE::Game);
+	setScene(Scene::GAME);
 	frame = 0;
   }
 }

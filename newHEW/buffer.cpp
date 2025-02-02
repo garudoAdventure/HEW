@@ -99,6 +99,21 @@ void setBufferText(float x, float y, const char* text) {
   bufRender[coorY][coorX].text = text;
 }
 
+void setBufferTextAndColor(float x, float y, const char* text, Color color) {
+  int coorX = (int)x;
+  int coorY = (int)y;
+  if (
+	coorX < 0 ||
+	coorX >= bufferXSize ||
+	coorY < 0 ||
+	coorY >= bufferYSize
+	) {
+	return;
+  }
+  bufRender[coorY][coorX].fgColor = color;
+  bufRender[coorY][coorX].text = text;
+}
+
 void setBufferFgColor(float x, float y, Color color) {
   int coorX = (int)x;
   int coorY = (int)y;
