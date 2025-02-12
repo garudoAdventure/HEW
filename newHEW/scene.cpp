@@ -2,18 +2,18 @@
 #include "conioex.h"
 #include "scene.h"
 #include "buffer.h"
-#include "audio.h"
+#include "mic.h"
 #include "console.h"
 #include "gameTitle.h"
 #include "game.h"
 #include "gameResult.h"
 
-Scene scene = Scene::TITLE;
-Scene nextSecne = Scene::TITLE;
+Scene scene = Scene::GAME;
+Scene nextSecne = Scene::GAME;
 
 void sceneInit() {
   bufferInit();
-  audioInit();
+  micInit();
   switch (scene) {
   case Scene::TITLE:
 	titleInit();
@@ -28,7 +28,7 @@ void sceneInit() {
 }
 
 void sceneUpdate() {
-  audioUpdate();
+  micUpdate();
   switch (scene) {
 	case Scene::TITLE:
 	  titleUpdate();

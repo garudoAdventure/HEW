@@ -23,3 +23,5 @@ CirclePtList* getCirclePt(int r, Vector2 center);
 CirclePt* createCirclePt(int x, int y);
 void insertCirclePt(CirclePtList* list, CirclePt* point);
 void emptyCircleList(CirclePtList* list);
+
+void drawSquare(Vector3* vec, Color color);

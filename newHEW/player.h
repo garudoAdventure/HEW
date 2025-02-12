@@ -3,6 +3,7 @@
 
 struct Player {
   Vector2f pos;
+  Vector2f dir;
   float viewAngle;
 };
 

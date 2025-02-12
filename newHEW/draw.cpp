@@ -154,3 +154,15 @@ void emptyCircleList(CirclePtList* list) {
   }
   free(list);
 }
+
+void drawSquare(Vector3* vec, Color color) {
+  for (int i = vec[0].x; i < vec[3].x; i++) {
+	for (int j = vec[0].y; j < vec[3].y; j++) {
+	  if (i < 1 || i > 63 - 1 || j < 1 || j > 24 - 1) {
+		continue;
+	  }
+	  setBufferText(i, j, "█");
+	  setBufferFgColor(i, j, color);
+	}
+  }
+}

@@ -33,10 +33,10 @@ void fieldDestroy() {
 void renderField() {
   for (int x = 1; x < ScreenFieldWidth; x++) {
 	for (int y = 1; y < ScreenFieldHeight; y++) {
-	  if (y <= 15) {
+	  if (y <= 12) {
 		setBufferBgColor(x, y, skyBlue);
 	  }
-	  if (y >= 16) {
+	  if (y >= 13) {
 		setBufferBgColor(x, y, seaBlue);
 	  }
 	}
