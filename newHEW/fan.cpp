@@ -37,8 +37,7 @@ void fanUpdate() {
 	  color = { 0, 255, 255 };
 	}
 	setBufferText(65 + centerX + fanBladeRotate[i][key].x, 1 + centerY + fanBladeRotate[i][key].y, "  ");
-	setBufferText(65 + centerX + fanBladeRotate[i][count].x, 1 + centerY + fanBladeRotate[i][count].y, "■");
-	setBufferFgColor(65 + centerX + fanBladeRotate[i][count].x, 1 + centerY + fanBladeRotate[i][count].y, color);
+	setBufferText(65 + centerX + fanBladeRotate[i][count].x, 1 + centerY + fanBladeRotate[i][count].y, "■", color);
   }
   count = (count + 1) % 4;
 }

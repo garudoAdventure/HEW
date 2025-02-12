@@ -8,6 +8,7 @@
 #include "draw3D.h"
 #include "draw.h"
 #include "fan.h"
+#include "compass.h"
 
 bool isPause;
 
@@ -15,7 +16,6 @@ GameScene gameScene = GameScene::FIELD;
 
 void gameInit() {
   /*
-  renderBorder(64, 8, 16, 8);
   renderBorder(64, 16, 16, 8);
   */
 
@@ -23,6 +23,7 @@ void gameInit() {
   gameSceneInit();
   playerInit();
   fanInit();
+  compassInit();
 }
 
 void gameSceneInit() {
@@ -38,6 +39,7 @@ void gameSceneInit() {
 
 void gameUpdate() {
   fanUpdate();
+  compassUpdate();
   switch (gameScene) {
 	case GameScene::FIELD:
 	  fieldUpdate();

@@ -161,8 +161,7 @@ void drawSquare(Vector3* vec, Color color) {
 	  if (i < 1 || i > 63 - 1 || j < 1 || j > 24 - 1) {
 		continue;
 	  }
-	  setBufferText(i, j, "█");
-	  setBufferFgColor(i, j, color);
+	  setBufferText(i, j, "█", color);
 	}
   }
 }

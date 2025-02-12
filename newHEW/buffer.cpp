@@ -85,7 +85,7 @@ void setBuffer(float x, float y, const char* text, Color fgColor, Color bgColor)
   bufRender[coorY][coorX].bgColor = bgColor;
 }
 
-void setBufferText(float x, float y, const char* text) {
+void setBufferText(float x, float y, const char* text, Color color) {
   int coorX = (int)x;
   int coorY = (int)y;
   if (
@@ -96,6 +96,7 @@ void setBufferText(float x, float y, const char* text) {
 	) {
 	return;
   }
+  bufRender[coorY][coorX].fgColor = color;
   bufRender[coorY][coorX].text = text;
 }
 

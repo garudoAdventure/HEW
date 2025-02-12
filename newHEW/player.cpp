@@ -130,16 +130,13 @@ void drawMyBoat() {
   for (int i = 0; i < shipHeight; i++) {
 	for (int j = 0; j < shipWidth; j++) {
 	  if (ship[i][j] == "B") {
-		setBufferFgColor(startX + j, startY + i, brown);
-		setBufferText(startX + j, startY + i, "█");
+		setBufferText(startX + j, startY + i, "█", brown);
 	  }
 	  if (ship[i][j] == "D") {
-		setBufferFgColor(startX + j, startY + i, lightBrown);
-		setBufferText(startX + j, startY + i, "█");
+		setBufferText(startX + j, startY + i, "█", lightBrown);
 	  }
 	  if (ship[i][j] == "H") {
-		setBufferFgColor(startX + j, startY + i, brown);
-		setBufferText(startX + j, startY + i, "▅");
+		setBufferText(startX + j, startY + i, "▅", brown);
 	  }
 	  if (ship[i][j] == " ") {
 		continue;
