@@ -9,21 +9,19 @@
 #include "draw.h"
 #include "fan.h"
 #include "compass.h"
+#include "gun.h"
 
 bool isPause;
 
 GameScene gameScene = GameScene::FIELD;
 
 void gameInit() {
-  /*
-  renderBorder(64, 16, 16, 8);
-  */
-
   isPause = false;
   gameSceneInit();
   playerInit();
   fanInit();
   compassInit();
+  gunInit();
 }
 
 void gameSceneInit() {
@@ -40,6 +38,7 @@ void gameSceneInit() {
 void gameUpdate() {
   fanUpdate();
   compassUpdate();
+  gunUpdate();
   switch (gameScene) {
 	case GameScene::FIELD:
 	  fieldUpdate();

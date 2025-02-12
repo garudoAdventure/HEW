@@ -6,7 +6,10 @@
 #include "mathStruct.h"
 #include "player.h"
 
-Vector2 NESWCoord[16] = {
+const int compassCenterX = 65 + 6;
+const int compassCenterY = 9 + 2;
+
+const Vector2 NESWCoord[16] = {
   {0, -2}, // N
   {2, -2}, // NNE
   {3, -2}, // NE
@@ -46,8 +49,6 @@ void compassUpdate() {
 	  break;
 	}
   }
-  const int centerX = 6;
-  const int centerY = 2;
   const char* NESWChar[] = { "Ⓝ", "Ⓔ", "ⓢ", "Ⓦ" };
   int preKeyOpr = -1;
   if (inport(PK_RIGHT)) {
@@ -61,8 +62,8 @@ void compassUpdate() {
 	int preKey = key + preKeyOpr;
 	if (preKey < 0) preKey = 15;
 	if (preKey > 15) preKey = 0;
-	setBufferText(65 + centerX + NESWCoord[preKey].x, 9 + centerY + NESWCoord[preKey].y, "  ");
-	setBufferText(65 + centerX + NESWCoord[key].x, 9 + centerY + NESWCoord[key].y, NESWChar[i]);
+	setBufferText(compassCenterX + NESWCoord[preKey].x, compassCenterY + NESWCoord[preKey].y, "  ");
+	setBufferText(compassCenterX + NESWCoord[key].x, compassCenterY + NESWCoord[key].y, NESWChar[i]);
   }
 }
 
@@ -75,15 +76,13 @@ void compassDestroy() {
 }
 
 void drawCompass() {
-  const int centerX = 6;
-  const int centerY = 2;
-  setBufferText(65 + centerX, 9 + centerY, "◎");
-  setBufferText(65 + centerX, 9 + centerY - 1, "↑", { 255, 0, 0 });
-  setBufferText(65 + centerX - 2, 9 + centerY, "←");
-  setBufferText(65 + centerX, 9 + centerY + 1, "↓", {0, 0, 255});
-  setBufferText(65 + centerX + 2, 9 + centerY, "→");
-  setBufferText(65 + centerX - 1, 9 + centerY - 1, "↖");
-  setBufferText(65 + centerX + 2, 9 + centerY - 1, "↗");
-  setBufferText(65 + centerX + 2, 9 + centerY + 1, "↘");
-  setBufferText(65 + centerX - 1, 9 + centerY + 1, "↙");
+  setBufferText(compassCenterX, compassCenterY, "◎");
+  setBufferText(compassCenterX, compassCenterY - 1, "↑", { 255, 0, 0 });
+  setBufferText(compassCenterX - 2, compassCenterY, "←");
+  setBufferText(compassCenterX, compassCenterY + 1, "↓", {0, 0, 255});
+  setBufferText(compassCenterX + 2, compassCenterY, "→");
+  setBufferText(compassCenterX - 1, compassCenterY - 1, "↖");
+  setBufferText(compassCenterX + 2, compassCenterY - 1, "↗");
+  setBufferText(compassCenterX + 2, compassCenterY + 1, "↘");
+  setBufferText(compassCenterX - 1, compassCenterY + 1, "↙");
 }

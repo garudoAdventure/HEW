@@ -31,3 +31,10 @@ struct Vector3 {
   float y;
   float z;
 };
+
+struct Rect4 {
+  int x;
+  int y;
+  int w;
+  int h;
+};
