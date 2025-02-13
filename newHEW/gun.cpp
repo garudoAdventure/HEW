@@ -9,6 +9,8 @@
 const int rawGunCenterX = 65 + 7;
 const int rawGunCenterY = 17 + 2;
 
+bool isGunActive = false;
+
 int gunCenterX;
 int gunCenterY;
 
@@ -29,7 +31,7 @@ const Vector2 centerCoord[4] = {
 };
 
 void gunInit() {
-  renderBorder(64, 16, 16, 8);
+  drawBorder({ 64, 16, 16, 8 });
   clearGunScreen();
   gunCenterX = rawGunCenterX;
   gunCenterY = rawGunCenterY;
@@ -56,6 +58,10 @@ void gunUpdate() {
 
   clearGunScreen();
   drawCrosshair();
+
+  if (isGunActive) {
+	drawBracketBorder({ 65, 17, 14, 6 }, yellow);
+  }
 }
 
 void gunRender() {
@@ -121,4 +127,8 @@ void clearGunScreen() {
 	  setBufferText(65 + i, 17 + j, " ");
 	}
   }
+}
+
+void setGunActive(bool active) {
+  isGunActive = active;
 }

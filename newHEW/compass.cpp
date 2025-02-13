@@ -9,6 +9,8 @@
 const int compassCenterX = 65 + 6;
 const int compassCenterY = 9 + 2;
 
+bool isCompassActive = false;
+
 const Vector2 NESWCoord[16] = {
   {0, -2}, // N
   {2, -2}, // NNE
@@ -29,11 +31,12 @@ const Vector2 NESWCoord[16] = {
 };
 
 void compassInit() {
-  renderBorder(64, 8, 16, 8);
-  drawCompass();
+  drawBorder({ 64, 8, 16, 8 });
 }
 
 void compassUpdate() {
+  clearCompassScene();
+  drawCompass();
   const Player* player = getPlayer();
   float angle = player->viewAngle * 180.0f / PI;
   while (angle > 360.0f) {
@@ -50,20 +53,13 @@ void compassUpdate() {
 	}
   }
   const char* NESWChar[] = { "Ⓝ", "Ⓔ", "ⓢ", "Ⓦ" };
-  int preKeyOpr = -1;
-  if (inport(PK_RIGHT)) {
-	preKeyOpr = -1;
-  }
-  if (inport(PK_LEFT)) {
-	preKeyOpr = 1;
-  }
   for (int i = 0; i < 4; i++) {
 	int key = (northKey + 4 * i) % 16;
-	int preKey = key + preKeyOpr;
-	if (preKey < 0) preKey = 15;
-	if (preKey > 15) preKey = 0;
-	setBufferText(compassCenterX + NESWCoord[preKey].x, compassCenterY + NESWCoord[preKey].y, "  ");
 	setBufferText(compassCenterX + NESWCoord[key].x, compassCenterY + NESWCoord[key].y, NESWChar[i]);
+  }
+  
+  if (isCompassActive) {
+	drawBracketBorder({ 65, 9, 14, 6 }, yellow);
   }
 }
 
@@ -85,4 +81,20 @@ void drawCompass() {
   setBufferText(compassCenterX + 2, compassCenterY - 1, "↗");
   setBufferText(compassCenterX + 2, compassCenterY + 1, "↘");
   setBufferText(compassCenterX - 1, compassCenterY + 1, "↙");
+}
+
+void clearCompassScene() {
+  for (int i = 0; i < 14; i++) {
+	for (int j = 0; j < 6; j++) {
+	  if (i == 13) {
+		setBufferText(65 + i, 9 + j, " ");
+	  } else {
+		setBufferText(65 + i, 9 + j, "  ");
+	  }
+	}
+  }
+}
+
+void setCompassActive(bool active) {
+  isCompassActive = active;
 }

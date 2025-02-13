@@ -8,3 +8,4 @@ void gunDestroy();
 void drawCrosshair();
 void shootEffect();
 void clearGunScreen();
+void setGunActive(bool active);

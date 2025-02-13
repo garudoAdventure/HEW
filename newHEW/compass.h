@@ -6,3 +6,5 @@ void compassRender();
 void compassDestroy();
 
 void drawCompass();
+void clearCompassScene();
+void setCompassActive(bool active);

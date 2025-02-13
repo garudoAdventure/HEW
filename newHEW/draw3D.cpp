@@ -4,7 +4,6 @@
 #include "console.h"
 #include "draw.h"
 #include "draw3D.h"
-#include "math.h"
 
 float width = 63.0;
 float height = 24.0f;

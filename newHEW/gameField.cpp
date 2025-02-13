@@ -6,13 +6,14 @@
 #include "player.h"
 #include "game.h"
 #include "draw.h"
+#include "gameMath.h"
 
 Vector2 stoneCoord[100] = {};
 int stoneNum;
 
 void fieldInit() {
-  renderBorder(0, 0, 64, 25);
-  int stoneNum = 0;
+  drawBorder({ 0, 0, 64, 25 });
+  stoneNum = 0;
   for (int i = 0; i < GameFieldWidth; i++) {
 	for (int j = 0; j < GameFieldHeight; j++) {
 	  if (map[j][i] == 'O') {

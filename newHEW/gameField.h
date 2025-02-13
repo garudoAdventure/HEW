@@ -1,5 +1,4 @@
 #pragma once
-#include "gameMath.h"
 #include "color.h"
 
 #define GameFieldWidth	60
@@ -7,7 +6,6 @@
 #define ScreenFieldWidth  63.0f
 #define ScreenFieldHeight 24.0f
 
-const float fov = PI / 4.0f;
 const char map[GameFieldHeight][GameFieldWidth] = {
   "***********************************************************",
   "*        O O                                              *",

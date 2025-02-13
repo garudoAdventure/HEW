@@ -8,41 +8,33 @@
 const int fanCenterX = 65 + 6;
 const int fanCenterY = 1 + 2;
 
-const Vector2 fanBladeRotate[5][4] = {
-  { {-2, 0}, {-2, 1}, { 0, -1 }, {-2, -1} },
-  { {2, 0}, {2, -1}, {0, 1}, {2, 1} },
+bool isFanActive = false;
+
+const Vector2 fanBladeRotate[3][4] = {
+ /* { {-2, 0}, {-2, 1}, { 0, -1 }, {-2, -1} },
+  { {2, 0}, {2, -1}, {0, 1}, {2, 1} },*/
   { {0, -2}, {2, -2}, {4, -1}, {4, 0} },
   { {4, 1}, {2, 2}, {0, 2}, {-2, 2} },
   { {-4, 1}, {-4, 0}, {-4, -1}, {-2, -2} }
 };
 
 void fanInit() {
-  renderBorder(64, 0, 16, 8);
-  setBufferText(fanCenterX, fanCenterY, "◎");
+  drawBorder({ 64, 0, 16, 8 });
 }
 
 void fanUpdate() {
-  static int count = 0;
   static int frame = 0;
   if (frame < 40) {
 	frame++;
 	return;
   }
   frame = 0;
-
-  Color color = { 255, 255, 255 };
-  for (int i = 0; i < 5; i++) {
-	int key = count;
-	int preKey = count - 1 < 0 ? 3 : count - 1;
-	if (i < 2) {
-	  color = { 255, 255, 0 };
-	} else {
-	  color = { 0, 255, 255 };
-	}
-	setBufferText(fanCenterX + fanBladeRotate[i][preKey].x, fanCenterY + fanBladeRotate[i][preKey].y, "  ");
-	setBufferText(fanCenterX + fanBladeRotate[i][key].x, fanCenterY + fanBladeRotate[i][key].y, "■", color);
+  clearFanScene();
+  drawFan();
+  
+  if (isFanActive) {
+	drawBracketBorder({ 65, 1, 14, 6 }, yellow);
   }
-  count = (count + 1) % 4;
 }
 
 void fanRender() {
@@ -51,4 +43,31 @@ void fanRender() {
 
 void fanDestroy() {
 
+}
+
+void drawFan() {
+  static int key = 0;
+  setBufferText(fanCenterX, fanCenterY, "◎");
+
+  Color color = { 255, 255, 255 };
+  for (int i = 0; i < 3; i++) {
+	setBufferText(fanCenterX + fanBladeRotate[i][key].x, fanCenterY + fanBladeRotate[i][key].y, "■", blue);
+  }
+  key = (key + 1) % 4;
+}
+
+void clearFanScene() {
+  for (int i = 0; i < 14; i++) {
+	for (int j = 0; j < 6; j++) {
+	  if (i == 13) {
+		setBufferText(65 + i, 1 + j, " ");
+	  } else {
+		setBufferText(65 + i, 1 + j, "  ");
+	  }
+	}
+  }
+}
+
+void setFanActive(bool active) {
+  isFanActive = active;
 }
