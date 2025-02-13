@@ -3,7 +3,7 @@
 #include "fan.h"
 #include "UI.h"
 #include "buffer.h"
-#include "mathStruct.h"
+#include "gameMath.h"
 
 const int fanCenterX = 65 + 6;
 const int fanCenterY = 1 + 2;

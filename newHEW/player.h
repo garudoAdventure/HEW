@@ -1,5 +1,5 @@
 #pragma once
-#include "mathStruct.h"
+#include "gameMath.h"
 
 struct Player {
   Vector2f pos;

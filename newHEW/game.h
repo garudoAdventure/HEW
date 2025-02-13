@@ -1,6 +1,5 @@
 #pragma once
-
-#include "mathStruct.h"
+#include "gameMath.h"
 
 enum GameScene {
   FIELD,
@@ -20,8 +19,3 @@ void gameDestroy();
 void gameSceneInit();
 void gameSceneDestroy();
 void setGameScene(GameScene scene);
-
-float dotProduct(Vector3 vec1, Vector3 vec2);
-Vector3 crossProduct(Vector3 vec1, Vector3 vec2);
-float vectorLength(Vector3 vec);
-Vector3 vectorUnitlize(Vector3 vec);

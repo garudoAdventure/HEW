@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mathStruct.h"
+#include "gameMath.h"
 #include "color.h"
 
 void consoleInit(int width, int height, int fontSize);

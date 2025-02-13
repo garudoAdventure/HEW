@@ -1,5 +1,5 @@
 #pragma once
-#include "mathStruct.h"
+#include "gameMath.h"
 #include "color.h"
 
 struct CirclePt {

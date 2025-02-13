@@ -3,7 +3,6 @@
 #include "player.h"
 #include "buffer.h"
 #include "gameField.h"
-#include "cmath"
 #include "iostream"
 #include "mic.h"
 

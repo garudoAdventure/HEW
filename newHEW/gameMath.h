@@ -38,3 +38,18 @@ struct Rect4 {
   int w;
   int h;
 };
+
+struct Matrix4x4 {
+  float m[4][4] = { 0 };
+};
+
+float dotProduct(Vector3 vec1, Vector3 vec2);
+Vector3 crossProduct(Vector3 vec1, Vector3 vec2);
+float vectorLength(Vector3 vec);
+Vector3 vectorUnitlize(Vector3 vec);
+
+Vector3 matrixMultiple(Vector3 vec, Matrix4x4 matrix);
+Matrix4x4 rotateXArray(float theta);
+Matrix4x4 rotateYArray(float theta);
+Matrix4x4 rotateZArray(float theta);
+Matrix4x4 projectArray();

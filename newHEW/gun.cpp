@@ -3,7 +3,7 @@
 #include "UI.h"
 #include "buffer.h"
 #include "gun.h"
-#include "mathStruct.h"
+#include "gameMath.h"
 #include "player.h"
 
 const int rawGunCenterX = 65 + 7;

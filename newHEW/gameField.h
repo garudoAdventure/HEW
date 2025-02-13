@@ -1,5 +1,5 @@
 #pragma once
-#include "mathStruct.h"
+#include "gameMath.h"
 #include "color.h"
 
 #define GameFieldWidth	60
@@ -24,7 +24,7 @@ const char map[GameFieldHeight][GameFieldWidth] = {
   "*        O O                                              *",
   "*        O O                                              *",
   "*        O O                                              *",
-  "*        O O                                              *",
+  "*        OOO                                              *",
   "*                                                         *",
   "*                                                         *",
   "*                                                         *",

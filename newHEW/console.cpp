@@ -1,5 +1,5 @@
 #include "console.h"
-#include "mathStruct.h"
+#include "gameMath.h"
 #include <stdio.h>
 #include <windows.h>
 

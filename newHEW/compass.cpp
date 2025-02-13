@@ -3,7 +3,7 @@
 #include "UI.h"
 #include "buffer.h"
 #include "compass.h"
-#include "mathStruct.h"
+#include "gameMath.h"
 #include "player.h"
 
 const int compassCenterX = 65 + 6;
@@ -77,9 +77,9 @@ void compassDestroy() {
 
 void drawCompass() {
   setBufferText(compassCenterX, compassCenterY, "◎");
-  setBufferText(compassCenterX, compassCenterY - 1, "↑", { 255, 0, 0 });
+  setBufferText(compassCenterX, compassCenterY - 1, "↑", red);
   setBufferText(compassCenterX - 2, compassCenterY, "←");
-  setBufferText(compassCenterX, compassCenterY + 1, "↓", {0, 0, 255});
+  setBufferText(compassCenterX, compassCenterY + 1, "↓", blue);
   setBufferText(compassCenterX + 2, compassCenterY, "→");
   setBufferText(compassCenterX - 1, compassCenterY - 1, "↖");
   setBufferText(compassCenterX + 2, compassCenterY - 1, "↗");

@@ -5,9 +5,22 @@
 #include "UI.h"
 #include "player.h"
 #include "game.h"
+#include "draw.h"
+
+Vector2 stoneCoord[100] = {};
+int stoneNum;
 
 void fieldInit() {
   renderBorder(0, 0, 64, 25);
+  int stoneNum = 0;
+  for (int i = 0; i < GameFieldWidth; i++) {
+	for (int j = 0; j < GameFieldHeight; j++) {
+	  if (map[j][i] == 'O') {
+		stoneCoord[stoneNum] = { i, j };
+		stoneNum++;
+	  }
+	}
+  }
 }
 
 void fieldUpdate() {
@@ -18,7 +31,6 @@ void fieldUpdate() {
 	frameCount = 0;
 	return;
   }
-
   clearField();
   renderField();
 }
@@ -39,6 +51,57 @@ void renderField() {
 	  if (y >= 13) {
 		setBufferBgColor(x, y, seaBlue);
 	  }
+	}
+  }
+  const Player* player = getPlayer();
+  for (int i = 0; i < stoneNum; i++) {
+	// Transform to View Coord
+	const Vector3 shipCenter = { stoneCoord[i].x + 0.5f, 0.01f, stoneCoord[i].y + 0.5f };
+	const float squareWidth = 0.5f;
+	const float squareHeight = 0.5f;
+	const Vector3 shipSquare[4] = {
+	  { -squareWidth, -squareHeight, 0.0f }, { squareWidth, -squareHeight, 0.0f },
+	  { -squareWidth, squareHeight, 0.0f }, { squareWidth, squareHeight, 0.0f },
+	};
+	Vector3 tempCenter;
+	Vector3 temp[4];
+	tempCenter.x = shipCenter.x - player->pos.x;
+	tempCenter.y = shipCenter.y - 0.0f;
+	tempCenter.z = shipCenter.z - player->pos.y;
+	tempCenter = matrixMultiple(tempCenter, rotateYArray(player->viewAngle));
+	for (int i = 0; i < 4; i++) {
+	  temp[i].x = tempCenter.x + shipSquare[i].x;
+	  temp[i].y = tempCenter.y + shipSquare[i].y;
+	  temp[i].z = tempCenter.z + shipSquare[i].z;
+	}
+
+	for (int i = 0; i < 4; i++) {
+	  temp[i] = matrixMultiple(temp[i], projectArray());
+	  temp[i].x = ScreenFieldWidth / 2 * (temp[i].x + 1);
+	  temp[i].y = ScreenFieldHeight / 2 * (temp[i].y + 1);
+	}
+
+	if (0.0f <= temp[0].z && temp[0].z <= 1.0f) {
+	  Color color = { 255, 255, 255 };
+	  if (temp[0].z < 0.65f) {
+		color = { 255, 255, 255 };
+	  }
+	  else if (temp[0].z < 0.8f) {
+		color = { 200, 200, 200 };
+	  }
+	  else if (temp[0].z < 0.86f) {
+		color = { 175, 175, 175 };
+	  }
+	  else if (temp[0].z < 0.98f) {
+		color = { 125, 125, 125 };
+	  }
+	  else if (temp[0].z < 0.99f) {
+		color = { 100, 100, 100 };
+	  }
+	  else if (temp[0].z < 1.0f) {
+		color = { 50, 50, 50 };
+	  }
+	  drawSquare(temp, color);
 	}
   }
 }

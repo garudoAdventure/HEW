@@ -3,7 +3,7 @@
 #include "buffer.h"
 #include "console.h"
 #include "iostream"
-#include "mathStruct.h"
+#include "gameMath.h"
 
 const int bufferXSize = FIELD_W;
 const int bufferYSize = FIELD_H;
@@ -15,8 +15,8 @@ void bufferInit() {
   for (int i = 0; i < bufferYSize; i++) {
 	for (int j = 0; j < bufferXSize; j++) {
 	  bufRender[i][j].text = "  ";
-	  bufRender[i][j].fgColor = { 255, 255, 255 };
-	  bufRender[i][j].bgColor = { 0, 0, 0 };
+	  bufRender[i][j].fgColor = white;
+	  bufRender[i][j].bgColor = black;
 	  bufDisplay[i][j].text = bufRender[i][j].text;
 	  bufDisplay[i][j].fgColor = bufRender[i][j].fgColor;
 	  bufDisplay[i][j].bgColor = bufRender[i][j].bgColor;
@@ -48,8 +48,8 @@ void bufferRender() {
 	  std::cout << bufRender[i][j].text;
 	  bufDisplay[i][j] = bufRender[i][j];
 
-	  setTextColor({ 255, 255, 255 });
-	  setTextBGColor({ 0, 0, 0 });
+	  setTextColor(white);
+	  setTextBGColor(black);
 	}
   }
 }
@@ -65,8 +65,8 @@ void bufferDestroy() {
 	  bufDisplay[i][j].bgColor = bufRender[i][j].bgColor;
 	}
   }
-  setTextColor({ 0, 0, 0 });
-  setTextBGColor({ 255, 255, 255 });
+  setTextColor(white);
+  setTextBGColor(black);
 }
 
 void setBuffer(float x, float y, const char* text, Color fgColor, Color bgColor) {
