@@ -49,7 +49,7 @@ void gunUpdate() {
 	shootEffect();
 	return;
   }
-  if (frame > 200) {
+  if (frame > 150) {
 	frame = 0;
 	centerKey = (centerKey + 1) % 4;
   }

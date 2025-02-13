@@ -37,27 +37,19 @@ void gameSceneInit() {
 
 void gameUpdate() {
   inputKeyUpdate();
-
-  if (getKeydown(KeyType::UP)) {
-	nowItemKey = nowItemKey - 1 < 0 ? 0 : nowItemKey - 1;
-  }
-  if (getKeydown(KeyType::DOWN)) {
-	nowItemKey = nowItemKey + 1 > 2 ? 2 : nowItemKey + 1;
-  }
-
-  setGameItemActive(items[nowItemKey]);
+  setGameItemActive();
   fanUpdate();
   compassUpdate();
   gunUpdate();
   
-  /*switch (gameScene) {
+  switch (gameScene) {
 	case GameScene::FIELD:
 	  fieldUpdate();
 	  break;
 	case GameScene::MAP:
 	  mapUpdate();
 	  break;
-  }*/
+  }
   playerUpdate();
   if (gameScene == GameScene::MAP) {
 	showPlayerPos();
@@ -89,8 +81,14 @@ void setGameScene(GameScene scene) {
   gameSceneInit();
 }
 
-void setGameItemActive(GameItem item) {
-  switch (item) {
+void setGameItemActive() {
+  if (getKeydown(KeyType::UP)) {
+	nowItemKey = nowItemKey - 1 < 0 ? 0 : nowItemKey - 1;
+  }
+  if (getKeydown(KeyType::DOWN)) {
+	nowItemKey = nowItemKey + 1 > 2 ? 2 : nowItemKey + 1;
+  }
+  switch (items[nowItemKey]) {
 	case GameItem::FAN:
 	  setFanActive(true);
 	  setCompassActive(false);

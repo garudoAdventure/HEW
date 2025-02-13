@@ -7,16 +7,18 @@
 #include "mic.h"
 
 Player player;
-float velocity = 0.0f;
+
 const float minV = 0.0f;
 const float maxV = 0.01f;
 const float acceleration = 0.00002f;
 const float resistance = 0.00001f;
 
 bool hitWall = false;
+float velocity = 0.0f;
+float rotateAngle = 0.0f;
 
 void playerInit() {
-  player.pos = { 10.5f, 20.0f };
+  player.pos = { 10.0f, 20.0f };
   player.viewAngle = 0.0f;
   player.dir = { sinf(0.0f), -cosf(0.0f) };
 }
@@ -39,12 +41,13 @@ Player* getPlayer() {
 }
 
 void playerMove() {
+  // Hit wall anim
   static int backwardCount = 0;
   if (hitWall) {
-	player.pos.x -= player.dir.x * 0.01f;
-	player.pos.y -= player.dir.y * 0.01f;
+	player.pos.x -= player.dir.x * 0.05f;
+	player.pos.y -= player.dir.y * 0.05f;
 	backwardCount++;
-	if (backwardCount == 15) {
+	if (backwardCount == 20) {
 	  hitWall = false;
 	  velocity = 0.0f;
 	  backwardCount = 0;
@@ -52,66 +55,45 @@ void playerMove() {
 	return;
   }
 
-  // velocity = velocity < minV ? minV : velocity - resistance;
-  velocity = 0.0f;
-  if (inport(PK_UP)) {
-	// velocity = velocity > maxV ? maxV : velocity + acceleration;
-	velocity = 0.01f;
+  // Wall Test
+  float newX = player.pos.x + player.dir.x * velocity;
+  float newY = player.pos.y + player.dir.y * velocity;
+  int mapX = (int)newX;
+  int mapY = (int)newY;
+  bool nextIsBlock = map[mapY][mapX] == 'O';
+  float centerX = (float)mapX + 0.5f;
+  float centerY = (float)mapY + 0.5f;
+  float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
+  bool inZone = length <= 0.5f;
+  if (nextIsBlock && inZone) {
+	hitWall = true;
+	return;
   }
 
-  if (velocity > 0.0f) {
-	float newX = player.pos.x + player.dir.x * velocity;
-	float newY = player.pos.y + player.dir.y * velocity;
-	int mapX = (int)newX;
-	int mapY = (int)newY;
-	bool nextIsBlock = map[mapY][mapX] == 'O';
-	float centerX = (float)mapX + 0.5f;
-	float centerY = (float)mapY + 0.5f;
-	float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
-	bool inZone = length <= 0.03f;
-	if (nextIsBlock && inZone) {
-	  hitWall = true;
-	} else {
-	  player.pos.x += player.dir.x * velocity;
-	  player.pos.y += player.dir.y * velocity;
-	  if (player.pos.x < 1.0f) {
-		player.pos.x = 1.0f;
-	  }
-	  if (player.pos.y < 1.0f) {
-		player.pos.y = 1.0f;
-	  }
-	  if (player.pos.x > GameFieldWidth - 2.0f) {
-		player.pos.x = GameFieldWidth - 2.0f;
-	  }
-	}
+  // Move
+  player.pos.x += player.dir.x * velocity;
+  player.pos.y += player.dir.y * velocity;
+  if (player.pos.x < 1.0f) {
+	player.pos.x = 1.0f;
   }
+  if (player.pos.y < 1.0f) {
+	player.pos.y = 1.0f;
+  }
+  if (player.pos.x > GameFieldWidth - 2.0f) {
+	player.pos.x = GameFieldWidth - 2.0f;
+  }
+  if (player.pos.y > GameFieldHeight - 2.0f) {
+	player.pos.y = GameFieldHeight - 2.0f;
+  }
+  velocity = 0.0f; // velocity = velocity < minV ? minV : velocity - resistance;
 
-
-  if (inport(PK_DOWN)) {
-	player.pos.x -= player.dir.x * 0.01f;
-	player.pos.y -= player.dir.y * 0.01f;
-	if (player.pos.x < 1.0f) {
-	  player.pos.x = 1.0f;
-	}
-	if (player.pos.y < 1.0f) {
-	  player.pos.y = 1.0f;
-	}
-	if (player.pos.x > GameFieldWidth - 2.0f) {
-	  player.pos.x = GameFieldWidth - 2.0f;
-	}
-  }
-  if (inport(PK_LEFT)) {
-	float angle = -0.1 * PI / 180.0f;
-	player.viewAngle += angle;
-	player.dir.x = cosf(angle) * player.dir.x - sinf(angle) * player.dir.y;
-	player.dir.y = sinf(angle) * player.dir.x + cosf(angle) * player.dir.y;
-  }
-  if (inport(PK_RIGHT)) {
-	float angle = 0.1 * PI / 180.0f;
-	player.viewAngle += angle;
-	player.dir.x = cosf(angle) * player.dir.x - sinf(angle) * player.dir.y;
-	player.dir.y = sinf(angle) * player.dir.x + cosf(angle) * player.dir.y;
-  }
+  // Rotate
+  const float dirX = cosf(rotateAngle) * player.dir.x - sinf(rotateAngle) * player.dir.y;
+  const float dirY = sinf(rotateAngle) * player.dir.x + cosf(rotateAngle) * player.dir.y;
+  player.viewAngle += rotateAngle;
+  player.dir.x = dirX;
+  player.dir.y = dirY;
+  rotateAngle = 0.0f;
 }
 
 void drawMyBoat() {
@@ -146,4 +128,16 @@ void drawMyBoat() {
 
 void showPlayerPos() {
   setBufferText(player.pos.x, player.pos.y, "P");
+}
+
+void setPlayerVelocity(float v) {
+  velocity = v;
+}
+
+void setPlayerRotate(float angle) {
+  rotateAngle = angle;
+}
+
+bool isHitwall() {
+  return hitWall;
 }

@@ -25,4 +25,4 @@ void gameDestroy();
 void gameSceneInit();
 void gameSceneDestroy();
 void setGameScene(GameScene scene);
-void setGameItemActive(GameItem item);
+void setGameItemActive();

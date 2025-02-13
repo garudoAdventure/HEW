@@ -9,8 +9,6 @@
 const int compassCenterX = 65 + 6;
 const int compassCenterY = 9 + 2;
 
-bool isCompassActive = false;
-
 const Vector2 NESWCoord[16] = {
   {0, -2}, // N
   {2, -2}, // NNE
@@ -30,6 +28,8 @@ const Vector2 NESWCoord[16] = {
   {-2, -2} // NNW
 };
 
+bool isCompassActive = false;
+
 void compassInit() {
   drawBorder({ 64, 8, 16, 8 });
 }
@@ -37,29 +37,19 @@ void compassInit() {
 void compassUpdate() {
   clearCompassScene();
   drawCompass();
-  const Player* player = getPlayer();
-  float angle = player->viewAngle * 180.0f / PI;
-  while (angle > 360.0f) {
-	angle -= 360.f;
-  }
-  while (angle < 0.0f) {
-	angle += 360.f;
-  }
-  int northKey = 0;
-  for (int i = 0; i < 16; i++) {
-	if (angle <= 11.25f + 22.5f * i ) {
-	  northKey = i;
-	  break;
-	}
-  }
-  const char* NESWChar[] = { "Ⓝ", "Ⓔ", "ⓢ", "Ⓦ" };
-  for (int i = 0; i < 4; i++) {
-	int key = (northKey + 4 * i) % 16;
-	setBufferText(compassCenterX + NESWCoord[key].x, compassCenterY + NESWCoord[key].y, NESWChar[i]);
-  }
+  drawDirection();
   
   if (isCompassActive) {
 	drawBracketBorder({ 65, 9, 14, 6 }, yellow);
+	
+	if (inport(PK_LEFT)) {
+	  const float angle = -0.1 * PI / 180.0f;
+	  setPlayerRotate(angle);
+	}
+	if (inport(PK_RIGHT)) {
+	  const float angle = 0.1 * PI / 180.0f;
+	  setPlayerRotate(angle);
+	}
   }
 }
 
@@ -81,6 +71,29 @@ void drawCompass() {
   setBufferText(compassCenterX + 2, compassCenterY - 1, "↗");
   setBufferText(compassCenterX + 2, compassCenterY + 1, "↘");
   setBufferText(compassCenterX - 1, compassCenterY + 1, "↙");
+}
+
+void drawDirection() {
+  const Player* player = getPlayer();
+  float angle = player->viewAngle * 180.0f / PI;
+  while (angle > 360.0f) {
+	angle -= 360.f;
+  }
+  while (angle < 0.0f) {
+	angle += 360.f;
+  }
+  int northKey = 0;
+  for (int i = 0; i < 16; i++) {
+	if (angle <= 11.25f + 22.5f * i) {
+	  northKey = i;
+	  break;
+	}
+  }
+  const char* NESWChar[] = { "Ⓝ", "Ⓔ", "ⓢ", "Ⓦ" };
+  for (int i = 0; i < 4; i++) {
+	int key = (northKey + 4 * i) % 16;
+	setBufferText(compassCenterX + NESWCoord[key].x, compassCenterY + NESWCoord[key].y, NESWChar[i]);
+  }
 }
 
 void clearCompassScene() {

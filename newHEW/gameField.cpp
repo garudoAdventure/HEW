@@ -73,7 +73,7 @@ void renderField() {
 	for (int i = 0; i < 4; i++) {
 	  temp[i].x = tempCenter.x + shipSquare[i].x;
 	  temp[i].y = tempCenter.y + shipSquare[i].y;
-	  temp[i].z = tempCenter.z + shipSquare[i].z;
+	  temp[i].z = tempCenter.z + shipSquare[i].z - 0.5f;
 	}
 
 	for (int i = 0; i < 4; i++) {
@@ -84,7 +84,7 @@ void renderField() {
 
 	if (0.0f <= temp[0].z && temp[0].z <= 1.0f) {
 	  Color color = { 255, 255, 255 };
-	  if (temp[0].z < 0.65f) {
+	  /*if (temp[0].z < 0.65f) {
 		color = { 255, 255, 255 };
 	  }
 	  else if (temp[0].z < 0.8f) {
@@ -101,7 +101,7 @@ void renderField() {
 	  }
 	  else if (temp[0].z < 1.0f) {
 		color = { 50, 50, 50 };
-	  }
+	  }*/
 	  drawSquare(temp, color);
 	}
   }

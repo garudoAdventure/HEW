@@ -16,3 +16,6 @@ Player* getPlayer();
 void playerMove();
 void drawMyBoat();
 void showPlayerPos();
+void setPlayerVelocity(float v);
+void setPlayerRotate(float angle);
+bool isHitwall();

@@ -4,6 +4,7 @@
 #include "UI.h"
 #include "buffer.h"
 #include "gameMath.h"
+#include "player.h"
 
 const int fanCenterX = 65 + 6;
 const int fanCenterY = 1 + 2;
@@ -26,14 +27,25 @@ void fanUpdate() {
   static int frame = 0;
   if (frame < 40) {
 	frame++;
-	return;
+  } else {
+	frame = 0;
+	clearFanScene();
+	drawFan();
   }
-  frame = 0;
-  clearFanScene();
-  drawFan();
-  
+
   if (isFanActive) {
 	drawBracketBorder({ 65, 1, 14, 6 }, yellow);
+
+	if (inport(PK_W)) {
+	  // velocity = velocity > maxV ? maxV : velocity + acceleration;
+	  const float velocity = 0.01f;
+	  setPlayerVelocity(velocity);
+	}
+	if (inport(PK_S)) {
+	  // velocity = velocity > maxV ? maxV : velocity + acceleration;
+	  const float velocity = -0.01f;
+	  setPlayerVelocity(velocity);
+	}
   }
 }
 
@@ -49,9 +61,9 @@ void drawFan() {
   static int key = 0;
   setBufferText(fanCenterX, fanCenterY, "◎");
 
-  Color color = { 255, 255, 255 };
+  Color color = isHitwall() ? red : blue;
   for (int i = 0; i < 3; i++) {
-	setBufferText(fanCenterX + fanBladeRotate[i][key].x, fanCenterY + fanBladeRotate[i][key].y, "■", blue);
+	setBufferText(fanCenterX + fanBladeRotate[i][key].x, fanCenterY + fanBladeRotate[i][key].y, "■", color);
   }
   key = (key + 1) % 4;
 }
