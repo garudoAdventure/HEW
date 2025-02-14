@@ -55,57 +55,39 @@ void renderField() {
 	}
   }
   const Player* player = getPlayer();
+
+  const Vector3 sunCoord = { player->pos.x , -0.3f, player->pos.y - 1.0f };
+
+  const float squareWidth = 0.5f;
+  const float squareHeight = 0.5f;
+  const Vector3 stoneSquare[4] = {
+	{ -squareWidth, -squareHeight, 0.0f }, { squareWidth, -squareHeight, 0.0f },
+	{ -squareWidth, squareHeight, 0.0f }, { squareWidth, squareHeight, 0.0f },
+  };
+
+  Vector3 sunViewCoord = transformToViewCoord(*player, sunCoord);
+  Vector3 sunProCoord = transformToProCoord(sunViewCoord);
+  if (0.0f <= sunProCoord.z && sunProCoord.z <= 1.0f) {
+	drawSun(sunProCoord);
+  }
+
   for (int i = 0; i < stoneNum; i++) {
 	if (stoneCoord[i].x == -1 && stoneCoord[i].y == -1) {
 	  continue;
 	}
 	// Transform to View Coord
-	const Vector3 shipCenter = { stoneCoord[i].x + 0.5f, 0.01f, stoneCoord[i].y + 0.5f };
-	const float squareWidth = 0.5f;
-	const float squareHeight = 0.5f;
-	const Vector3 shipSquare[4] = {
-	  { -squareWidth, -squareHeight, 0.0f }, { squareWidth, -squareHeight, 0.0f },
-	  { -squareWidth, squareHeight, 0.0f }, { squareWidth, squareHeight, 0.0f },
-	};
-	Vector3 tempCenter;
-	Vector3 temp[4];
-	tempCenter.x = shipCenter.x - player->pos.x;
-	tempCenter.y = shipCenter.y - 0.0f;
-	tempCenter.z = shipCenter.z - player->pos.y;
-	tempCenter = matrixMultiple(tempCenter, rotateYArray(player->viewAngle));
+	const Vector3 stoneCenter = { stoneCoord[i].x + 0.5f, 0.01f, stoneCoord[i].y + 0.5f };
+	
+	Vector3 viewStoneCenter = transformToViewCoord(*player, stoneCenter);
+	Vector3 stoneVertex[4];
 	for (int i = 0; i < 4; i++) {
-	  temp[i].x = tempCenter.x + shipSquare[i].x;
-	  temp[i].y = tempCenter.y + shipSquare[i].y;
-	  temp[i].z = tempCenter.z + shipSquare[i].z - 0.5f;
+	  stoneVertex[i].x = viewStoneCenter.x + stoneSquare[i].x;
+	  stoneVertex[i].y = viewStoneCenter.y + stoneSquare[i].y;
+	  stoneVertex[i].z = viewStoneCenter.z + stoneSquare[i].z - 0.5f;
+	  stoneVertex[i] = transformToProCoord(stoneVertex[i]);
 	}
-
-	for (int i = 0; i < 4; i++) {
-	  temp[i] = matrixMultiple(temp[i], projectArray());
-	  temp[i].x = ScreenFieldWidth / 2 * (temp[i].x + 1);
-	  temp[i].y = ScreenFieldHeight / 2 * (temp[i].y + 1);
-	}
-
-	if (0.0f <= temp[0].z && temp[0].z <= 1.0f) {
-	  Color color = { 255, 255, 255 };
-	  /*if (temp[0].z < 0.65f) {
-		color = { 255, 255, 255 };
-	  }
-	  else if (temp[0].z < 0.8f) {
-		color = { 200, 200, 200 };
-	  }
-	  else if (temp[0].z < 0.86f) {
-		color = { 175, 175, 175 };
-	  }
-	  else if (temp[0].z < 0.98f) {
-		color = { 125, 125, 125 };
-	  }
-	  else if (temp[0].z < 0.99f) {
-		color = { 100, 100, 100 };
-	  }
-	  else if (temp[0].z < 1.0f) {
-		color = { 50, 50, 50 };
-	  }*/
-	  drawSquare(temp, color);
+	if (0.0f <= stoneVertex[0].z && stoneVertex[0].z <= 1.0f) {
+	  drawSquare(stoneVertex, white);
 	}
   }
 }
@@ -118,70 +100,52 @@ void clearField() {
   }
 }
 
-void drawSmallBoat(int x, int y) {
-  setFieldBuffer(x, y, "▀", darkBrown);
-  setFieldBuffer(x + 1, y, "▀", darkBrown);
-}
-
-void drawMiddleBoat(int x, int y) {
-  setFieldBuffer(x + 1, y - 2, "▅", brown);
-  setFieldBuffer(x + 2, y - 2, "▅", black);
-
-  setFieldBuffer(x, y - 1, "▅", darkBrown);
-  setFieldBuffer(x + 1, y - 1, "█", brown);
-  setFieldBuffer(x + 2, y - 1, "▅", lightBrown);
-  setFieldBuffer(x + 3, y - 1, "▅", darkBrown);
-
-  setFieldBuffer(x + 1, y, "▀", darkBrown);
-  setFieldBuffer(x + 2, y, "▀", darkBrown);
-}
-
-void drawBigBoat(int x, int y) {
-  setFieldBuffer(x + 3, y - 5, "█", brown);
-  setFieldBuffer(x + 4, y - 5, "█", black);
-  setFieldBuffer(x + 5, y - 5, "█", black);
-
-  setFieldBuffer(x + 2, y - 4, "▅", darkBrown);
-  setFieldBuffer(x + 3, y - 4, "█", brown);
-  setFieldBuffer(x + 4, y - 4, "▅", darkBrown);
-  setFieldBuffer(x + 5, y - 4, "▅", darkBrown);
-
-  setFieldBuffer(x + 1, y - 3, "█", darkBrown);
-  setFieldBuffer(x + 2, y - 3, "█", lightBrown);
-  setFieldBuffer(x + 3, y - 3, "█", brown);
-  setFieldBuffer(x + 4, y - 3, "█", lightBrown);
-  setFieldBuffer(x + 5, y - 3, "█", lightBrown);
-  setFieldBuffer(x + 6, y - 3, "█", darkBrown);
-
-  setFieldBuffer(x, y - 2, "█", darkBrown);
-  setFieldBuffer(x + 1, y - 2, "█", lightBrown);
-  setFieldBuffer(x + 2, y - 2, "█", lightBrown);
-  setFieldBuffer(x + 3, y - 2, "█", lightBrown);
-  setFieldBuffer(x + 4, y - 2, "█", lightBrown);
-  setFieldBuffer(x + 5, y - 2, "█", lightBrown);
-  setFieldBuffer(x + 6, y - 2, "█", lightBrown);
-  setFieldBuffer(x + 7, y - 2, "█", darkBrown);
-
-  setFieldBuffer(x + 1, y - 1, "█", darkBrown);
-  setFieldBuffer(x + 2, y - 1, "█", lightBrown);
-  setFieldBuffer(x + 3, y - 1, "█", lightBrown);
-  setFieldBuffer(x + 4, y - 1, "█", lightBrown);
-  setFieldBuffer(x + 5, y - 1, "█", lightBrown);
-  setFieldBuffer(x + 6, y - 1, "█", darkBrown);
-
-  setFieldBuffer(x + 2, y, "▀", darkBrown);
-  setFieldBuffer(x + 3, y, "█", darkBrown);
-  setFieldBuffer(x + 4, y, "█", darkBrown);
-  setFieldBuffer(x + 5, y, "▀", darkBrown);
-}
-
-void setFieldBuffer(int x, int y, const char* shape, Color color) {
-  if (x < 0 || x > ScreenFieldWidth - 1.0f || y < 0 || y > ScreenFieldHeight - 1.0f) {
-	return;
-  }
-  setBufferTextAndColor(x, y, shape, color);
-}
-
 Vector2* getStoneCoord() {
   return stoneCoord;
+}
+
+Vector3 transformToViewCoord(Player player, Vector3 vec) {
+  Vector3 viewVec;
+  viewVec.x = vec.x - player.pos.x;
+  viewVec.y = vec.y - 0.0f;
+  viewVec.z = vec.z - player.pos.y;
+  viewVec = matrixMultiple(viewVec, rotateYArray(player.viewAngle));
+  return viewVec;
+}
+
+Vector3 transformToProCoord(Vector3 vec) {
+  Vector3 proVec;
+  proVec = matrixMultiple(vec, projectArray());
+  proVec.x = ScreenFieldWidth / 2 * (proVec.x + 1);
+  proVec.y = ScreenFieldHeight / 2 * (proVec.y + 1);
+  return proVec;
+}
+
+void drawSun(Vector3 sunCenter) {
+  const char* sun[5][9] = {
+	{" ", " ", "▄", "▄", "█", "▄", "▄", " ", " "},
+	{" ", "█", "█", "█", "█", "█", "█", "█", " "},
+	{"█", "█", "█", "█", "█", "█", "█", "█", "█"},
+	{" ", "█", "█", "█", "█", "█", "█", "█", " "},
+	{" ", " ", "▀", "▀", "█", "▀", "▀", " ", " "},
+  };
+  
+  for (int i = 0; i < 9; i++) {
+	for (int j = 0; j < 5; j++) {
+	  Color color = yellow;
+	  if (j == 0 || j == 4 || i == 0 || i == 8 ||
+		((i == 1 || i == 7) && (j == 1 || j == 3))
+	  ) {
+		color = orange;
+	  }
+	  setFieldBufferText(sunCenter.x - 4 + i, sunCenter.y - 2 + j, sun[j][i], color);
+	}
+  }
+}
+
+void setFieldBufferText(float x, float y, const char* text, Color color) {
+  if (x < 1 || x > ScreenFieldWidth || y < 1 || y > ScreenFieldHeight) {
+	return;
+  }
+  setBufferText(x, y, text, color);
 }

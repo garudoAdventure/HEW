@@ -1,6 +1,7 @@
 #pragma once
 #include "color.h"
 #include "gameMath.h"
+#include "player.h"
 
 #define GameFieldWidth	60
 #define GameFieldHeight	30
@@ -48,9 +49,9 @@ void fieldDestroy();
 void renderField();
 void clearField();
 
-void drawSmallBoat(int x, int y);
-void drawMiddleBoat(int x, int y);
-void drawBigBoat(int x, int y);
+void drawSun(Vector3 sunCenter);
+void setFieldBufferText(float x, float y, const char* text, Color color = {255, 255, 255});
 
-void setFieldBuffer(int x, int y, const char* shape, Color color);
 Vector2* getStoneCoord();
+Vector3 transformToViewCoord(Player player, Vector3 vec);
+Vector3 transformToProCoord(Vector3 vec);
