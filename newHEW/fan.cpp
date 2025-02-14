@@ -35,6 +35,7 @@ void fanUpdate() {
 
   if (isFanActive) {
 	drawBracketBorder({ 65, 1, 14, 6 }, yellow);
+	drawFlag();
 
 	if (inport(PK_W)) {
 	  // velocity = velocity > maxV ? maxV : velocity + acceleration;
@@ -82,4 +83,21 @@ void clearFanScene() {
 
 void setFanActive(bool active) {
   isFanActive = active;
+}
+
+void drawFlag() {
+  const int centerY = 19;
+  for (int i = 0; i < 6; i++) {
+	setBufferText(28 + i, centerY - 3, "█", white);
+	setBufferText(28 + i, centerY - 2, "█", white);
+  }
+  for (int i = 0; i < 10; i++) {
+	setBufferText(26 + i, centerY, "█", white);
+	setBufferText(26 + i, centerY + 1, "█", white);
+	setBufferText(26 + i, centerY + 2, "█", white);
+  }
+  for (int i = 0; i < 9; i++) {
+	setBufferText(30, centerY - 4 + i, "█", darkBrown);
+	setBufferText(31, centerY - 4 + i, "█", darkBrown);
+  }
 }

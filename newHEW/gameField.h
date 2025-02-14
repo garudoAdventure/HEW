@@ -1,5 +1,6 @@
 #pragma once
 #include "color.h"
+#include "gameMath.h"
 
 #define GameFieldWidth	60
 #define GameFieldHeight	30
@@ -8,26 +9,26 @@
 
 const char map[GameFieldHeight][GameFieldWidth] = {
   "***********************************************************",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        O O                                              *",
-  "*        OOO                                              *",
   "*                                                         *",
   "*                                                         *",
   "*                                                         *",
   "*                                                         *",
-  "*                                      O                  *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*            O                                            *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*        OO                                               *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
+  "*                                                         *",
   "*                                                         *",
   "*                                                         *",
   "*                                                         *",
@@ -52,3 +53,4 @@ void drawMiddleBoat(int x, int y);
 void drawBigBoat(int x, int y);
 
 void setFieldBuffer(int x, int y, const char* shape, Color color);
+Vector2* getStoneCoord();

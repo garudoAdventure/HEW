@@ -41,6 +41,7 @@ void compassUpdate() {
   
   if (isCompassActive) {
 	drawBracketBorder({ 65, 9, 14, 6 }, yellow);
+	drawRudder();
 	
 	if (inport(PK_LEFT)) {
 	  const float angle = -0.1 * PI / 180.0f;
@@ -110,4 +111,61 @@ void clearCompassScene() {
 
 void setCompassActive(bool active) {
   isCompassActive = active;
+}
+
+void drawRudder() {
+  const int centerY = 20;
+  setBufferText(31, centerY - 3, "█", gold);
+
+  setBufferText(26, centerY - 2, "█", gold);
+  setBufferText(27, centerY - 2, "█", gold);
+  // setBufferText(28, centerY - 2, "▄", gold);
+  setBufferText(30, centerY - 2, "█", yellowBrown);
+  setBufferText(31, centerY - 2, "█", yellowBrown);
+  setBufferText(32, centerY - 2, "█", yellowBrown);
+  // setBufferText(34, centerY - 2, "▄", gold);
+  setBufferText(35, centerY - 2, "█", gold);
+  setBufferText(36, centerY - 2, "█", gold);
+
+  // setBufferText(27, centerY - 1, "▀", gold);
+  setBufferText(28, centerY - 1, "█", yellowBrown);
+  setBufferText(29, centerY - 1, "█", yellowBrown);
+  setBufferText(30, centerY - 1, "█", gold);
+  setBufferText(31, centerY - 1, "▀", gold);
+  setBufferText(32, centerY - 1, "█", gold);
+  setBufferText(33, centerY - 1, "█", yellowBrown);
+  setBufferText(34, centerY - 1, "█", yellowBrown);
+  // setBufferText(35, centerY - 1, "▀", gold);
+
+  setBufferText(26, centerY, "█", gold);
+  setBufferText(27, centerY, "█", gold);
+  setBufferText(28, centerY, "█", yellowBrown);
+  setBufferText(29, centerY, "█", gold);
+  setBufferText(31, centerY, "█", yellowBrown);
+  setBufferText(33, centerY, "█", gold);
+  setBufferText(34, centerY, "█", yellowBrown);
+  setBufferText(35, centerY, "█", gold);
+  setBufferText(36, centerY, "█", gold);
+
+  // setBufferText(27, centerY + 1, "▄", gold);
+  setBufferText(28, centerY + 1, "█", yellowBrown);
+  setBufferText(29, centerY + 1, "█", yellowBrown);
+  setBufferText(30, centerY + 1, "█", gold);
+  setBufferText(31, centerY + 1, "▄", gold);
+  setBufferText(32, centerY + 1, "█", gold);
+  setBufferText(33, centerY + 1, "█", yellowBrown);
+  setBufferText(34, centerY + 1, "█", yellowBrown);
+  // setBufferText(35, centerY + 1, "▄", gold);
+
+  setBufferText(26, centerY + 2, "█", gold);
+  setBufferText(27, centerY + 2, "█", gold);
+  // setBufferText(28, centerY + 2, "▀", gold);
+  setBufferText(30, centerY + 2, "█", yellowBrown);
+  setBufferText(31, centerY + 2, "█", yellowBrown);
+  setBufferText(32, centerY + 2, "█", yellowBrown);
+  // setBufferText(34, centerY + 2, "▀", gold);
+  setBufferText(35, centerY + 2, "█", gold);
+  setBufferText(36, centerY + 2, "█", gold);
+
+  setBufferText(31, centerY + 3, "█", gold);
 }

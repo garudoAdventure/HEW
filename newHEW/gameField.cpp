@@ -14,8 +14,8 @@ int stoneNum;
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
   stoneNum = 0;
-  for (int i = 0; i < GameFieldWidth; i++) {
-	for (int j = 0; j < GameFieldHeight; j++) {
+  for (int i = GameFieldWidth - 1; i >= 0 ; i--) {
+	for (int j = GameFieldHeight - 1; j >= 0; j--) {
 	  if (map[j][i] == 'O') {
 		stoneCoord[stoneNum] = { i, j };
 		stoneNum++;
@@ -56,6 +56,9 @@ void renderField() {
   }
   const Player* player = getPlayer();
   for (int i = 0; i < stoneNum; i++) {
+	if (stoneCoord[i].x == -1 && stoneCoord[i].y == -1) {
+	  continue;
+	}
 	// Transform to View Coord
 	const Vector3 shipCenter = { stoneCoord[i].x + 0.5f, 0.01f, stoneCoord[i].y + 0.5f };
 	const float squareWidth = 0.5f;
@@ -177,4 +180,8 @@ void setFieldBuffer(int x, int y, const char* shape, Color color) {
 	return;
   }
   setBufferTextAndColor(x, y, shape, color);
+}
+
+Vector2* getStoneCoord() {
+  return stoneCoord;
 }

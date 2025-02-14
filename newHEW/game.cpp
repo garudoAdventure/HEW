@@ -38,10 +38,7 @@ void gameSceneInit() {
 void gameUpdate() {
   inputKeyUpdate();
   setGameItemActive();
-  fanUpdate();
-  compassUpdate();
-  gunUpdate();
-  
+
   switch (gameScene) {
 	case GameScene::FIELD:
 	  fieldUpdate();
@@ -51,6 +48,10 @@ void gameUpdate() {
 	  break;
   }
   playerUpdate();
+  fanUpdate();
+  compassUpdate();
+  gunUpdate();
+
   if (gameScene == GameScene::MAP) {
 	showPlayerPos();
   }

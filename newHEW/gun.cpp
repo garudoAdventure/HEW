@@ -5,6 +5,7 @@
 #include "gun.h"
 #include "gameMath.h"
 #include "player.h"
+#include "gameField.h"
 
 const int rawGunCenterX = 65 + 7;
 const int rawGunCenterY = 17 + 2;
@@ -42,9 +43,7 @@ void gunUpdate() {
   static int frame = 0;
   static int centerKey = 0;
   frame++;
-  if (inport(PK_SP)) {
-	isShooting = true;
-  }
+
   if (isShooting) {
 	shootEffect();
 	return;
@@ -61,6 +60,26 @@ void gunUpdate() {
 
   if (isGunActive) {
 	drawBracketBorder({ 65, 17, 14, 6 }, yellow);
+	drawCannon();
+
+	if (inport(PK_SP)) {
+	  isShooting = true;
+
+	  /* Test */
+	  const Player* player = getPlayer();
+	  Vector2f bulletPos = { player->pos.x, player->pos.y };
+	  for (int i = 1; i < 10; i++) {
+		int mapX = player->pos.x + player->dir.x * i;
+		int mapY = player->pos.y + player->dir.y * i;
+		Vector2* stoneCoord = getStoneCoord();
+		for (int j = 0; j < 10; j++) {
+		  if (stoneCoord[j].x == mapX && stoneCoord[j].y == mapY) {
+			stoneCoord[j].x = -1;
+			stoneCoord[j].y = -1;
+		  }
+		}
+	  }
+	}
   }
 }
 
@@ -131,4 +150,25 @@ void clearGunScreen() {
 
 void setGunActive(bool active) {
   isGunActive = active;
+}
+
+void drawCannon() {
+  const int startY = 18;
+  for (int i = 0; i < 6; i++) {
+	setBufferText(30, startY + i, "█", gray80);
+	setBufferText(31, startY + i, "█", gray92);
+	setBufferText(32, startY + i, "█", gray80);
+	if (i > 0) {
+	  setBufferText(29, startY + i, "█", gray69);
+	  setBufferText(33, startY + i, "█", gray69);
+	}
+	if (i > 3) {
+	  setBufferText(28, startY + i, "█", gray54);
+	  setBufferText(34, startY + i, "█", gray54);
+	}
+	if (i > 4) {
+	  setBufferText(27, startY + i, "█", darkBrown);
+	  setBufferText(35, startY + i, "█", darkBrown);
+	}
+  }
 }

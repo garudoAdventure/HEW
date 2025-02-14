@@ -24,7 +24,7 @@ void playerInit() {
 }
 
 void playerUpdate() {
-  // drawMyBoat();
+  drawMyBoat();
   playerMove();
 }
 
@@ -54,6 +54,21 @@ void playerMove() {
 	}
 	return;
   }
+
+  /**********************For TEST**************************************/
+  if (inport(PK_UP)) {
+	velocity = 0.01f;
+  }
+  if (inport(PK_DOWN)) {
+	velocity = -0.01f;
+  }
+  if (inport(PK_LEFT)) {
+	rotateAngle = -0.1 * PI / 180.0f;
+  }
+  if (inport(PK_RIGHT)) {
+	rotateAngle = 0.1 * PI / 180.0f;
+  }
+  /********************************************************************/
 
   // Wall Test
   float newX = player.pos.x + player.dir.x * velocity;
@@ -97,37 +112,26 @@ void playerMove() {
 }
 
 void drawMyBoat() {
-  const int shipWidth = 12;
-  const int shipHeight = 5;
-  const char* ship[shipHeight][shipWidth] = {
-	{" ", " ", " ", " ", " ", "H", "H", " ", " ", " ", " ", " "},
-	{" ", " ", " ", " ", "B", "D", "D", "B", " ", " ", " ", " "},
-	{" ", " ", " ", "B", "D", "D", "D", "D", "B", " ", " ", " "},
-	{" ", " ", "B", "D", "D", "D", "D", "D", "D", "B", " ", " "},
-	{" ", " ", "B", "D", "D", "D", "D", "D", "D", "B", " ", " "},
-  };
-  const int startX = 27;
-  const int startY = 19;
-  for (int i = 0; i < shipHeight; i++) {
-	for (int j = 0; j < shipWidth; j++) {
-	  if (ship[i][j] == "B") {
-		setBufferText(startX + j, startY + i, "█", brown);
-	  }
-	  if (ship[i][j] == "D") {
-		setBufferText(startX + j, startY + i, "█", lightBrown);
-	  }
-	  if (ship[i][j] == "H") {
-		setBufferText(startX + j, startY + i, "▅", brown);
-	  }
-	  if (ship[i][j] == " ") {
-		continue;
-	  }
-	}
+  for (int i = 0; i < 31; i++) {
+	setBufferText(16 + i, 23, "█", darkBrown);
+  }
+  for (int i = 0; i < 21; i++) {
+	setBufferText(21 + i, 22, "█", darkBrown);
+	setBufferText(21 + i, 23, "█", brown);
+  }
+  for (int i = 0; i < 11; i++) {
+	setBufferText(26 + i, 21, "█", darkBrown);
+	setBufferText(26 + i, 22, "█", brown);
+	setBufferText(26 + i, 23, "█", lightBrown);
   }
 }
 
 void showPlayerPos() {
   setBufferText(player.pos.x, player.pos.y, "P");
+  for (int i = 1; i < 10; i++) {
+	setBufferText(player.pos.x + player.dir.x * i, player.pos.y + player.dir.y * i, " ");
+	setBufferBgColor(player.pos.x + player.dir.x * i, player.pos.y + player.dir.y * i, { 125, 125, 125 });
+  }
 }
 
 void setPlayerVelocity(float v) {

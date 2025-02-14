@@ -20,7 +20,7 @@ void titleUpdate() {
 }
 
 void titleRender() {
-  cubeDemo();
+  // cubeDemo();
 }
 
 void titleDestroy() {
