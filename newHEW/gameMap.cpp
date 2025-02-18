@@ -42,7 +42,7 @@ void clearMap() {
 void renderMap() {
   for (int i = 0; i < GameFieldHeight; i++) {
 	for (int j = 0; j < GameFieldWidth - 1; j++) {
-	  switch (map[i][j]) {
+	  switch (getMapCoordEle(j, i)) {
 		case '*':
 		  setBufferText(j, i, "*");
 		  break;

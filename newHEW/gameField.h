@@ -8,39 +8,6 @@
 #define ScreenFieldWidth  63.0f
 #define ScreenFieldHeight 24.0f
 
-const char map[GameFieldHeight][GameFieldWidth] = {
-  "***********************************************************",
-  "*                                                         *",
-  "*                                                         *",
-  "*       O  O                      O                       *",
-  "*                                                         *",
-  "*                                                         *",
-  "*                 O      O                                *",
-  "*                                            O            *",
-  "*                                                         *",
-  "*   O O                 C                                 *",
-  "*                                                         *",
-  "*           C                                             *",
-  "*                                    O                    *",
-  "*                                    O                    *",
-  "*                                                         *",
-  "*                                                         *",
-  "*                                                         *",
-  "*                     OO                                  *",
-  "*                                           O             *",
-  "*                                                         *",
-  "*                                 C                       *",
-  "*                                                         *",
-  "*                    C                                    *",
-  "*                                        O                *",
-  "*                                                         *",
-  "*                                                         *",
-  "*                                                C        *",
-  "*             C                                           *",
-  "*                                                         *",
-  "***********************************************************",
-};
-
 void fieldInit();
 void fieldUpdate();
 void fieldRender();
@@ -49,9 +16,13 @@ void fieldDestroy();
 void renderField();
 void clearField();
 
+char getMapCoordEle(int x, int y);
+void setMapCoordEle(int x, int y, char text);
+
 void drawSun(Vector3 sunCenter);
 void setFieldBufferText(float x, float y, const char* text, Color color = {255, 255, 255});
 
+int getStoneNum();
 Vector2* getStoneCoord();
 int getCoinNum();
 Vector2* getCoinCoord();
@@ -67,7 +38,6 @@ void drawCoin3x1(Vector2 center);
 void drawCoin1x1(Vector2 center);
 
 void drawIceberg(Vector2 center, float depth);
-
 void drawIceberg63x23(Vector2 center);
 void drawIceberg59x23(Vector2 center);
 void drawIceberg55x23(Vector2 center);
@@ -94,3 +64,6 @@ void drawIceberg3x2(Vector2 center);
 void drawIceberg3x1(Vector2 center);
 void drawIceberg2x1(Vector2 center);
 void drawIceberg1x1(Vector2 center);
+
+void explodeIceberg(Vector2 center);
+void setIcebergExplode(Vector2 icePos);

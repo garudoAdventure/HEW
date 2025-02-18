@@ -68,14 +68,13 @@ void gunUpdate() {
 	  /* Test */
 	  const Player* player = getPlayer();
 	  Vector2f bulletPos = { player->pos.x, player->pos.y };
-	  for (int i = 1; i < 10; i++) {
+	  for (int i = 1; i < 3; i++) {
 		int mapX = player->pos.x + player->dir.x * i;
 		int mapY = player->pos.y + player->dir.y * i;
 		Vector2* stoneCoord = getStoneCoord();
-		for (int j = 0; j < 10; j++) {
+		for (int j = 0; j < getStoneNum(); j++) {
 		  if (stoneCoord[j].x == mapX && stoneCoord[j].y == mapY) {
-			stoneCoord[j].x = -1;
-			stoneCoord[j].y = -1;
+			setIcebergExplode({ mapX, mapY });
 		  }
 		}
 	  }

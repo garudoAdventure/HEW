@@ -9,12 +9,53 @@
 #include "gameMath.h"
 #include "iostream"
 
+char map[GameFieldHeight][GameFieldWidth] = {
+  //	  0         1         2         3         4         5  
+  //	  01234567890123456789012345678901234567890123456789012345678
+  /*0*/  "***********************************************************",
+  /*1*/  "*                                                         *",
+  /*2*/  "*                                                         *",
+  /*3*/  "*       O  O                      O                       *",
+  /*4*/  "*                                                         *",
+  /*5*/  "*                                                         *",
+  /*6*/  "*                 O      O                                *",
+  /*7*/  "*         C                                  O            *",
+  /*8*/  "*    C                                                    *",
+  /*9*/  "*   O O         C       C  C  C                           *",
+  /*0*/  "*                                                         *",
+  /*1*/  "*         C                                               *",
+  /*2*/  "*         C                          O   C                *",
+  /*3*/  "*         C                          O                    *",
+  /*4*/  "*         C                                               *",
+  /*5*/  "*         C                                               *",
+  /*6*/  "*         C                                               *",
+  /*7*/  "*         C           OO                                  *",
+  /*8*/  "*         C                                 O             *",
+  /*9*/  "*         C                                               *",
+  /*0*/  "*         P                       C                       *",
+  /*1*/  "*                                                         *",
+  /*2*/  "*                    C                                    *",
+  /*3*/  "*                                        O                *",
+  /*4*/  "*                                                         *",
+  /*5*/  "*                                                         *",
+  /*6*/  "*                                                C        *",
+  /*7*/  "*             C                                           *",
+  /*8*/  "*                                                         *",
+  /*9*/  "***********************************************************",
+};
+
 Vector2 stoneCoord[100] = {};
 Vector2 coinCoord[100] = {};
 int stoneNum;
 int coinNum;
 
 const int coinTurnSpd = 70;
+
+bool isExplode = false;
+Vector2f explodePos[23][55] = { 0 };
+Vector2f explodeVec[23][55];
+Vector2 explodedIceberg = { 0, 0 };
+
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
   stoneNum = 0;
@@ -68,7 +109,7 @@ void renderField() {
   }
   const Player* player = getPlayer();
 
-  const Vector3 sunCoord = { player->pos.x , -0.3f, player->pos.y - 1.0f };
+  const Vector3 sunCoord = { player->pos.x, -0.3f, player->pos.y - 1.0f };
 
   const float squareWidth = 0.5f;
   const float squareHeight = 0.5f;
@@ -133,6 +174,18 @@ void clearField() {
   }
 }
 
+char getMapCoordEle(int x, int y) {
+  return map[y][x];
+}
+
+void setMapCoordEle(int x, int y, char text) {
+  map[y][x] = text;
+}
+
+int getStoneNum() {
+  return stoneNum;
+}
+
 Vector2* getStoneCoord() {
   return stoneCoord;
 }
@@ -185,7 +238,7 @@ void drawSun(Vector3 sunCenter) {
 }
 
 void setFieldBufferText(float x, float y, const char* text, Color color) {
-  if (x < 1 || x > ScreenFieldWidth - 1 || y < 1 || y > ScreenFieldHeight) {
+  if (x < 1 || x > ScreenFieldWidth - 1 || y < 1 || y > ScreenFieldHeight - 1) {
 	return;
   }
   setBufferText(x, y, text, color);
@@ -428,7 +481,83 @@ void drawCoin1x1(Vector2 center) {
   }
 }
 
+void explodeIceberg(Vector2 center) {
+  const int centerX = center.x;
+  const int centerY = center.y;
+  const int width = 55;
+  const int height = 23;
+  const char* iceberg[height][width] = {
+	//	   0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30   31   32   33   34   35   36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51   52   53   54
+	/*0*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*1*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*2*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", "S", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*3*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*4*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*5*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*6*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*7*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W", "W", "W", "W", "W", "W", "W", "W", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*8*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*9*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "W", "W", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*10*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "W", "W", "W", "W", " ", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*11*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "W", "W", "W", "W", "W", "W", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*12*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "S", "S", "S", "S", "S", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "W", "W", "W", "W", "W", "W", "W", " ", " ", " ", " ", " ", " ", " ", " "},
+	/*13*/{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "B", "S", "S", "S", "S", "S", "S", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", " ", " ", " ", " ", " ", " "},
+	/*14*/{" ", " ", " ", " ", " ", " ", " ", " ", "B", "B", "B", "B", "B", "S", "S", "S", "S", "S", "S", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", " ", " ", " ", " ", " "},
+	/*15*/{" ", " ", " ", " ", " ", " ", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "S", "S", "S", "S", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", " ", " ", " ", " "},
+	/*16*/{" ", " ", " ", " ", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "S", "S", "S", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "S", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", " ", " ", " ", " "},
+	/*17*/{" ", " ", " ", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "S", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "S", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", " ", " ", " "},
+	/*18*/{" ", " ", " ", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "S", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "W", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", " ", " ", " "},
+	/*19*/{" ", " ", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "W", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "S", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "S", "S", " ", " "},
+	/*20*/{" ", " ", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "W", "W", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", " ", " "},
+	/*21*/{" ", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "W", "W", "W", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", " "},
+	/*22*/{"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "W", "S", "S", "S", "S", "S", "S", "S", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"},
+  };
+
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  explodePos[j][i].x += explodeVec[j][i].x;
+	  explodePos[j][i].y += explodeVec[j][i].y;
+	}
+  }
+
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (iceberg[j][i] != " ") {
+		if (iceberg[j][i] == "S") {
+		  color = { 206, 242, 251 };
+		}
+		if (iceberg[j][i] == "B") {
+		  color = { 151, 226, 244 };
+		}
+		int newX = centerX - width / 2 + i + explodePos[j][i].x;
+		int newY = centerY - height / 2 + j + explodePos[j][i].y;
+		setFieldBufferText(newX, newY, "█", color);
+	  }
+	}
+  }
+}
+
 void drawIceberg(Vector2 center, float depth) {
+  static int explodeFrame = 0;
+  if (isExplode) {
+	explodeIceberg(center);
+	explodeFrame++;
+	if (explodeFrame > 100) {
+	  isExplode = false;
+	  explodeFrame = 0;
+	  memset(explodePos, 0, sizeof(explodePos));
+	  for (int i = 0; i < stoneNum; i++) {
+		if (stoneCoord[i].x == explodedIceberg.x && stoneCoord[i].y == explodedIceberg.y) {
+		  stoneCoord[i].x = -1;
+		  stoneCoord[i].y = -1;
+		  break;
+		}
+	  }
+	  setMapCoordEle(explodedIceberg.x, explodedIceberg.y, ' ');
+	}
+	return;
+  }
   if (depth < 0.83f) {
 	drawIceberg63x23(center);
   }
@@ -1381,6 +1510,21 @@ void drawIceberg1x1(Vector2 center) {
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
+	}
+  }
+}
+
+void setIcebergExplode(Vector2 icePos) {
+  isExplode = true;
+  explodedIceberg = icePos;
+  // Prepare random vector
+  for (int i = 0; i < 55; i++) {
+	for (int j = 0; j < 23; j++) {
+	  float randX = rand() % 200 - 100;
+	  randX /= 50.0f;
+	  float randY = rand() % 200 - 100;
+	  randY /= 50.0f;
+	  explodeVec[j][i] = { randX, randY };
 	}
   }
 }
