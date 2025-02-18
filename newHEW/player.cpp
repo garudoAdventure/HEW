@@ -17,6 +17,8 @@ bool hitWall = false;
 float velocity = 0.0f;
 float rotateAngle = 0.0f;
 
+int collectCoinNum = 0;
+
 void playerInit() {
   player.pos = { 10.0f, 20.0f };
   player.viewAngle = 0.0f;
@@ -75,14 +77,28 @@ void playerMove() {
   float newY = player.pos.y + player.dir.y * velocity;
   int mapX = (int)newX;
   int mapY = (int)newY;
-  bool nextIsBlock = map[mapY][mapX] == 'O';
+  bool nextIsBlock = getMapCoordEle(mapX, mapY) == 'O';
+  bool nextIsCoin = getMapCoordEle(mapX, mapY) == 'C';
   float centerX = (float)mapX + 0.5f;
   float centerY = (float)mapY + 0.5f;
   float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
   bool inZone = length <= 0.5f;
-  if (nextIsBlock && inZone) {
-	hitWall = true;
-	return;
+  Vector2* coinCoord = getCoinCoord();
+  if (inZone) {
+	if (nextIsBlock) {
+	  hitWall = true;
+	  return;
+	}
+	if (nextIsCoin) {
+	  collectCoinNum++;
+	  for (int i = 0; i < getCoinNum(); i++) {
+		if (coinCoord[i].x == mapX && coinCoord[i].y == mapY) {
+		  coinCoord[i].x = -1;
+		  coinCoord[i].y = -1;
+		  setMapCoordEle(mapX, mapY, ' ');
+		}
+	  }
+	}
   }
 
   // Move
@@ -144,4 +160,8 @@ void setPlayerRotate(float angle) {
 
 bool isHitwall() {
   return hitWall;
+}
+
+int getCollectCoinNum() {
+  return collectCoinNum;
 }

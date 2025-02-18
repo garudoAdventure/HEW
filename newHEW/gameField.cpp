@@ -14,6 +14,7 @@ Vector2 coinCoord[100] = {};
 int stoneNum;
 int coinNum;
 
+const int coinTurnSpd = 70;
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
   stoneNum = 0;
@@ -41,6 +42,7 @@ void fieldUpdate() {
   }
   clearField();
   renderField();
+  showGetCoinNum(getCollectCoinNum());
 }
 
 void fieldRender() {
@@ -112,17 +114,13 @@ void renderField() {
 	  continue;
 	}
 	// Transform to View Coord
-	const Vector3 coinCenter = { coinCoord[i].x, 0.01f, coinCoord[i].y + 0.5f };
+	const Vector3 coinCenter = { coinCoord[i].x + 0.5f, 0.1f, coinCoord[i].y};
 
 	Vector3 viewCoinCenter = transformToViewCoord(*player, coinCenter);
+	viewCoinCenter.z += 1.0f;
 	Vector3 proCoinCenter = transformToProCoord(viewCoinCenter);
 	if (0.0f <= proCoinCenter.z && proCoinCenter.z <= 1.0f) {
-	  //gotoxy(65, 5);
-	  //std::cout << "               ";
-	  //gotoxy(65, 5);
-	  //std::cout << "depth: " << stoneVertex[0].z;
-	  //drawSquare(stoneVertex, white);
-	  drawCoin({ (int)proCoinCenter.x , (int)proCoinCenter.y });
+	  drawCoin({ (int)proCoinCenter.x , (int)proCoinCenter.y }, proCoinCenter.z);
 	}
   }
 }
@@ -137,6 +135,14 @@ void clearField() {
 
 Vector2* getStoneCoord() {
   return stoneCoord;
+}
+
+int getCoinNum() {
+  return coinNum;
+}
+
+Vector2* getCoinCoord() {
+  return coinCoord;
 }
 
 Vector3 transformToViewCoord(Player player, Vector3 vec) {
@@ -185,16 +191,226 @@ void setFieldBufferText(float x, float y, const char* text, Color color) {
   setBufferText(x, y, text, color);
 }
 
-void drawCoin(Vector2 center) {
+void drawCoin(Vector2 center, float depth) {
+  if (depth < 0.6f) {
+	drawCoin7x5(center);
+  }
+  else if (depth < 0.83f) {
+	drawCoin5x4(center);
+  }
+  else if (depth < 0.92f) {
+	drawCoin3x3(center);
+  }
+  else if (depth < 0.985f) {
+	drawCoin3x1(center);
+  }
+  else if (depth < 0.99f) {
+	drawCoin1x1(center);
+  }
+}
+
+void drawCoin7x5(Vector2 center) {
+  static int frame = 0;
+  const int centerX = center.x;
+  const int centerY = center.y;
+  const int width = 7;
+  const int height = 5;
+  const char* coinFront[height][width] = {
+	{" ", "Y", "Y", "Y", "Y", "Y", " "},
+	{"Y", "Y", "Y", "M", "Y", "Y", "Y"},
+	{"Y", "Y", "Y", "M", "Y", "Y", "Y"},
+	{"Y", "Y", "Y", "M", "Y", "Y", "Y"},
+	{" ", "Y", "Y", "Y", "Y", "Y", " "},
+  };
+  const char* coinSide[height][width] = {
+	{" ", " ", " ", "Y", " ", " ", " "},
+	{" ", " ", " ", "Y", " ", " ", " "},
+	{" ", " ", " ", "Y", " ", " ", " "},
+	{" ", " ", " ", "Y", " ", " ", " "},
+	{" ", " ", " ", "Y", " ", " ", " "},
+  };
+  char* coinTemp[height][width];
+  if (frame < coinTurnSpd) {
+	memcpy(coinTemp, coinFront, sizeof(coinTemp));
+  } else {
+	memcpy(coinTemp, coinSide, sizeof(coinTemp));
+  }
+
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (coinTemp[j][i] != " ") {
+		if (coinTemp[j][i] == "Y") {
+		  color = { 239, 191, 4 };
+		}
+		if (coinTemp[j][i] == "M") {
+		  color = { 244, 221, 131 };
+		}
+		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
+	  }
+	}
+  }
+  frame++;
+  if (frame == coinTurnSpd * 2) {
+	frame = 0;
+  }
+}
+
+void drawCoin5x4(Vector2 center) {
+  static int frame = 0;
   const int centerX = center.x;
   const int centerY = center.y;
   const int width = 5;
   const int height = 4;
+  const char* coinFront[height][width] = {
+	{" ", "Y", "Y", "Y", " "},
+	{"Y", "Y", "M", "Y", "Y"},
+	{"Y", "Y", "M", "Y", "Y"},
+	{" ", "Y", "Y", "Y", " "},
+  };
+  const char* coinSide[height][width] = {
+	{" ", " ", "Y", " ", " "},
+	{" ", " ", "Y", " ", " "},
+	{" ", " ", "Y", " ", " "},
+	{" ", " ", "Y", " ", " "},
+  };
+  char* coinTemp[height][width];
+  if (frame < coinTurnSpd) {
+	memcpy(coinTemp, coinFront, sizeof(coinTemp));
+  }
+  else {
+	memcpy(coinTemp, coinSide, sizeof(coinTemp));
+  }
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (coinTemp[j][i] != " ") {
+		if (coinTemp[j][i] == "Y") {
+		  color = { 239, 191, 4 };
+		}
+		if (coinTemp[j][i] == "M") {
+		  color = { 244, 221, 131 };
+		}
+		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
+	  }
+	}
+  }
+  frame++;
+  if (frame == coinTurnSpd * 2) {
+	frame = 0;
+  }
+}
+
+void drawCoin3x3(Vector2 center) {
+  static int frame = 0;
+  const int centerX = center.x;
+  const int centerY = center.y;
+  const int width = 3;
+  const int height = 3;
+  const char* coinFront[height][width] = {
+	{" ", "Y", " "},
+	{"Y", "M", "Y"},
+	{" ", "Y", " "},
+  };
+  const char* coinSide[height][width] = {
+	{" ", "Y", " "},
+	{" ", "Y", " "},
+	{" ", "Y", " "},
+  };
+  char* coinTemp[height][width];
+  if (frame < coinTurnSpd) {
+	memcpy(coinTemp, coinFront, sizeof(coinTemp));
+  }
+  else {
+	memcpy(coinTemp, coinSide, sizeof(coinTemp));
+  }
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (coinTemp[j][i] != " ") {
+		if (coinTemp[j][i] == "Y") {
+		  color = { 239, 191, 4 };
+		}
+		if (coinTemp[j][i] == "M") {
+		  color = { 244, 221, 131 };
+		}
+		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
+	  }
+	}
+  }
+  frame++;
+  if (frame == coinTurnSpd * 2) {
+	frame = 0;
+  }
+}
+
+void drawCoin3x2(Vector2 center) {
+  const int centerX = center.x;
+  const int centerY = center.y;
+  const int width = 3;
+  const int height = 2;
   const char* coin[height][width] = {
-	{" ", "Y", "Y", "Y", " "},
-	{"Y", "Y", "M", "Y", "Y"},
-	{"Y", "Y", "M", "Y", "Y"},
-	{" ", "Y", "Y", "Y", " "},
+	{"Y", "M", "Y"},
+	{"Y", "M", "Y"},
+  };
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (coin[j][i] != " ") {
+		if (coin[j][i] == "Y") {
+		  color = { 239, 191, 4 };
+		}
+		if (coin[j][i] == "M") {
+		  color = { 244, 221, 131 };
+		}
+		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
+	  }
+	}
+  }
+}
+
+void drawCoin3x1(Vector2 center) {
+  static int frame = 0;
+  const int centerX = center.x;
+  const int centerY = center.y;
+  const int width = 3;
+  const int height = 1;
+  const char* coinFront[height][width] = {
+	{"Y", "M", "Y"},
+  };
+  const char* coinSide[height][width] = {
+	{" ", "Y", " "},
+  };
+  char* coinTemp[height][width];
+  if (frame < coinTurnSpd) {
+	memcpy(coinTemp, coinFront, sizeof(coinTemp));
+  }
+  else {
+	memcpy(coinTemp, coinSide, sizeof(coinTemp));
+  }
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (coinTemp[j][i] != " ") {
+		if (coinTemp[j][i] == "Y") {
+		  color = { 239, 191, 4 };
+		}
+		if (coinTemp[j][i] == "M") {
+		  color = { 244, 221, 131 };
+		}
+		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
+	  }
+	}
+  }
+}
+
+void drawCoin1x1(Vector2 center) {
+  const int centerX = center.x;
+  const int centerY = center.y;
+  const int width = 1;
+  const int height = 1;
+  const char* coin[height][width] = {
+	{ "Y" }
   };
   for (int i = 0; i < width; i++) {
 	for (int j = 0; j < height; j++) {

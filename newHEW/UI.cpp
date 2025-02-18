@@ -49,3 +49,22 @@ void drawBracketBorder(Rect4 rect, Color color) {
   setBufferText(rect.x + rect.w - 1, rect.y + rect.h - 1, "█", color);
   setBufferText(rect.x + rect.w - 2, rect.y + rect.h - 1, "▄", color);
 }
+
+void showGetCoinNum(int num) {
+  const int startX = 56;
+  const char* word[5] = { "C", "O", "I", "N", ":" };
+  const char* digits[10] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+  const char* digit = "0";
+  const char* tenDigit = "0";
+  for (int i = 0; i < 5; i++) {
+	setBuffer(startX + i, 1, word[i], yellow, skyBlue);
+  }
+  if (num < 10) {
+	setBuffer(startX + 6, 1, digits[num], yellow, skyBlue);
+  } else {
+	tenDigit = digits[num / 10];
+	digit = digits[num % 10];
+	setBuffer(startX + 5, 1, tenDigit, yellow, skyBlue);
+	setBuffer(startX + 6, 1, digit, yellow, skyBlue);
+  }
+}

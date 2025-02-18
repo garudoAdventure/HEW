@@ -53,10 +53,19 @@ void drawSun(Vector3 sunCenter);
 void setFieldBufferText(float x, float y, const char* text, Color color = {255, 255, 255});
 
 Vector2* getStoneCoord();
+int getCoinNum();
+Vector2* getCoinCoord();
 Vector3 transformToViewCoord(Player player, Vector3 vec);
 Vector3 transformToProCoord(Vector3 vec);
 
-void drawCoin(Vector2 center);
+void drawCoin(Vector2 center, float depth);
+void drawCoin7x5(Vector2 center);
+void drawCoin5x4(Vector2 center);
+void drawCoin3x3(Vector2 center);
+void drawCoin3x2(Vector2 center);
+void drawCoin3x1(Vector2 center);
+void drawCoin1x1(Vector2 center);
+
 void drawIceberg(Vector2 center, float depth);
 
 void drawIceberg63x23(Vector2 center);
