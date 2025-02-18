@@ -49,6 +49,9 @@ void renderMap() {
 		case 'O':
 		  setBufferText(j, i, "O");
 		  break;
+		case 'C':
+		  setBufferText(j, i, "C");
+		  break;
 	  }
 	}
   }
