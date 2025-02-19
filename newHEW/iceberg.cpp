@@ -63,10 +63,11 @@ IceList* getIceList() {
 
 IceNode* explodeIceberg(IceNode* expIceNode, Vector2 center) {
   static int explodeFrame = 0;
+  const int explodeTime = 50;
   drawExplodeIceberg(center);
   explodeFrame++;
   IceNode* nexNode = expIceNode->next;
-  if (explodeFrame > 100) {
+  if (explodeFrame > explodeTime) {
 	explodeFrame = 0;
 	memset(explodePos, 0, sizeof(explodePos));
 	setMapCoordEle(expIceNode->pos.x, expIceNode->pos.y, ' ');

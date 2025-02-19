@@ -46,9 +46,27 @@ void gunUpdate() {
   frame++;
 
   if (isShooting) {
-	shootEffect();
+	drawCannon();
+	if (!gunFireEffect()) {
+	  const Player* player = getPlayer();
+	  Vector2f bulletPos = { player->pos.x, player->pos.y };
+	  for (int i = 1; i < 3; i++) {
+		int mapX = player->pos.x + player->dir.x * i;
+		int mapY = player->pos.y + player->dir.y * i;
+		IceList* iceList = getIceList();
+		IceNode* iceNode = iceList->next;
+		while (iceNode != NULL) {
+		  if (iceNode->pos.x == mapX && iceNode->pos.y == mapY) {
+			setIcebergExplode(iceNode);
+			break;
+		  }
+		  iceNode = iceNode->next;
+		}
+	  }
+	}
 	return;
   }
+
   if (frame > 150) {
 	frame = 0;
 	centerKey = (centerKey + 1) % 4;
@@ -63,7 +81,7 @@ void gunUpdate() {
 	drawBracketBorder({ 65, 17, 14, 6 }, yellow);
 	drawCannon();
 
-	if (inport(PK_SP)) {
+	if (getKeydown(KeyType::SPACE)) {
 	  isShooting = true;
 
 	  /* Test */
@@ -143,6 +161,28 @@ void shootEffect() {
   }
 }
 
+bool gunFireEffect() {
+  static int frame = 0;
+  const int frameTime = 10;
+  // Draw Fire
+  if (frame < 1 * frameTime) {
+	drawFire5x3();
+  }
+  else if (frame < 2 * frameTime) {
+	drawFire7x4();
+  }
+  else if (frame < 3 * frameTime) {
+	drawFire5x4();
+  }
+  frame++;
+  if (frame == 3 * frameTime) {
+	frame = 0;
+	isShooting = false;
+	return false;
+  }
+  return true;
+}
+
 void clearGunScreen() {
   for (int i = 0; i < 14; i++) {
 	for (int j = 0; j < 6; j++) {
@@ -173,5 +213,64 @@ void drawCannon() {
 	  setBufferText(27, startY + i, "█", darkBrown);
 	  setBufferText(35, startY + i, "█", darkBrown);
 	}
+  }
+}
+
+void drawFire5x3() {
+  const int startX = 29;
+  const int startY = 16;
+
+  setBufferText(startX + 1, startY, "▄", lightRed);
+  setBufferText(startX + 2, startY, "▄", lightRed);
+  setBufferText(startX + 3, startY, "▄", lightRed);
+
+  setBufferText(startX, startY + 1, "█", lightRed);
+  setBufferText(startX + 1, startY + 1, "█", lightOrange);
+  setBufferText(startX + 2, startY + 1, "█", lightYellow);
+  setBufferText(startX + 3, startY + 1, "█", lightOrange);
+  setBufferText(startX + 4, startY + 1, "█", lightRed);
+
+  setBufferText(startX, startY + 2, "▀", lightRed);
+  setBufferText(startX + 4, startY + 2, "▀", lightRed);
+}
+
+void drawFire7x4() {
+  const int startX = 28;
+  const int startY = 15;
+
+  for (int i = 0; i < 5; i++) {
+	setBufferText(startX + 1 + i, startY, "▄", lightRed);
+  }
+  for (int i = 0; i < 2; i++) {
+	setBufferText(startX, startY + 1 + i, "█", lightRed);
+	setBufferText(startX + 1, startY + 1 + i, "█", lightOrange);
+	setBufferText(startX + 2, startY + 1 + i, "█", lightYellow);
+	setBufferText(startX + 3, startY + 1 + i, "█", whiteOrange);
+	setBufferText(startX + 4, startY + 1 + i, "█", lightYellow);
+	setBufferText(startX + 5, startY + 1 + i, "█", lightOrange);
+	setBufferText(startX + 6, startY + 1 + i, "█", lightRed);
+  }
+  setBufferText(startX + 1, startY + 3, "▀", lightRed);
+  setBufferText(startX + 5, startY + 3, "▀", lightRed);
+}
+
+void drawFire5x4() {
+  const int startX = 29;
+  const int startY = 14;
+
+  setBufferText(startX + 1, startY, "▄", lightRed);
+  setBufferText(startX + 2, startY, "█", lightRed);
+  setBufferText(startX + 3, startY, "▄", lightRed);
+  for (int i = 0; i < 3; i++) {
+	setBufferText(startX, startY + 1 + i, "█", lightRed);
+	setBufferText(startX + 1, startY + 1 + i, "█", lightOrange);
+	if (i == 1) {
+	  setBufferText(startX + 2, startY + 1 + i, "█", whiteOrange);
+	}
+	else {
+	  setBufferText(startX + 2, startY + 1 + i, "█", lightYellow);
+	}
+	setBufferText(startX + 3, startY + 1 + i, "█", lightOrange);
+	setBufferText(startX + 4, startY + 1 + i, "█", lightRed);
   }
 }

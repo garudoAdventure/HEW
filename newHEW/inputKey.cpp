@@ -8,7 +8,8 @@ bool isRelease = false;
 
 KeyMapping inputKeys[KeyType::KEY_NUM] = {
   { KeyType::UP, PK_UP },
-  { KeyType::DOWN, PK_DOWN }
+  { KeyType::DOWN, PK_DOWN },
+  { KeyType::SPACE, PK_SP }
 };
 
 KeyState inputKeyState[KeyType::KEY_NUM];

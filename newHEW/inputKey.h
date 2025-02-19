@@ -3,6 +3,7 @@
 enum KeyType {
   UP,
   DOWN,
+  SPACE,
 
   KEY_NUM
 };
