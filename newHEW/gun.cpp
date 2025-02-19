@@ -6,6 +6,7 @@
 #include "gameMath.h"
 #include "player.h"
 #include "gameField.h"
+#include "iceberg.h"
 
 const int rawGunCenterX = 65 + 7;
 const int rawGunCenterY = 17 + 2;
@@ -71,11 +72,14 @@ void gunUpdate() {
 	  for (int i = 1; i < 3; i++) {
 		int mapX = player->pos.x + player->dir.x * i;
 		int mapY = player->pos.y + player->dir.y * i;
-		Vector2* stoneCoord = getStoneCoord();
-		for (int j = 0; j < getStoneNum(); j++) {
-		  if (stoneCoord[j].x == mapX && stoneCoord[j].y == mapY) {
-			setIcebergExplode({ mapX, mapY });
+		IceList* iceList = getIceList();
+		IceNode* iceNode = iceList->next;
+		while (iceNode != NULL) {
+		  if (iceNode->pos.x == mapX && iceNode->pos.y == mapY) {
+			setIcebergExplode(iceNode);
+			break;
 		  }
+		  iceNode = iceNode->next;
 		}
 	  }
 	}

@@ -25,3 +25,7 @@ const Color gray92 = { 92, 92, 92 };
 const Color gray80 = { 80, 80, 80 };
 const Color gray69 = { 69, 69, 69 };
 const Color gray54 = { 54, 54, 54 };
+const Color lightRed = { 253, 94, 94 };
+const Color lightOrange = { 251, 176, 103 };
+const Color lightYellow = { 242, 217, 146 };
+const Color whiteOrange = { 249, 219, 191 };

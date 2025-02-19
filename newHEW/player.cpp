@@ -3,8 +3,8 @@
 #include "player.h"
 #include "buffer.h"
 #include "gameField.h"
-#include "iostream"
 #include "mic.h"
+#include "coin.h"
 
 Player player;
 
@@ -83,7 +83,7 @@ void playerMove() {
   float centerY = (float)mapY + 0.5f;
   float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
   bool inZone = length <= 0.5f;
-  Vector2* coinCoord = getCoinCoord();
+  CoinList* coinList = getCoinList();
   if (inZone) {
 	if (nextIsBlock) {
 	  hitWall = true;
@@ -91,12 +91,21 @@ void playerMove() {
 	}
 	if (nextIsCoin) {
 	  collectCoinNum++;
-	  for (int i = 0; i < getCoinNum(); i++) {
-		if (coinCoord[i].x == mapX && coinCoord[i].y == mapY) {
-		  coinCoord[i].x = -1;
-		  coinCoord[i].y = -1;
+	  CoinNode* coinNode = coinList->next;
+	  CoinNode* prevNode = NULL;
+	  while (coinNode != NULL) {
+		if (coinNode->pos.x == mapX && coinNode->pos.y == mapY) {
+		  if (prevNode == NULL) {
+			coinList->next = coinNode->next;
+		  } else {
+			prevNode->next = coinNode->next;
+		  }
+		  free(coinNode);
 		  setMapCoordEle(mapX, mapY, ' ');
+		  break;
 		}
+		prevNode = coinNode;
+		coinNode = coinNode->next;
 	  }
 	}
   }
