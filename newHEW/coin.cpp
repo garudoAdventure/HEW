@@ -36,7 +36,7 @@ void renderCoin() {
   CoinNode* coinNode = coinList->next;
   while (coinNode != NULL) {
 	// Transform to View Coord
-	Vector3 coinCenter = { coinNode->pos.x + 0.5f, 0.1f, coinNode->pos.y };
+	Vector3 coinCenter = { coinNode->pos.x + 0.5f, 0.1f, coinNode->pos.y + 0.5f };
 	Vector3 viewCoinCenter = transformToViewCoord(*player, coinCenter);
 	viewCoinCenter.z += 1.0f;
 	// Transform to Projection Coord

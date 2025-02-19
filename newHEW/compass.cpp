@@ -119,15 +119,12 @@ void drawRudder() {
 
   setBufferText(26, centerY - 2, "█", gold);
   setBufferText(27, centerY - 2, "█", gold);
-  // setBufferText(28, centerY - 2, "▄", gold);
   setBufferText(30, centerY - 2, "█", yellowBrown);
   setBufferText(31, centerY - 2, "█", yellowBrown);
   setBufferText(32, centerY - 2, "█", yellowBrown);
-  // setBufferText(34, centerY - 2, "▄", gold);
   setBufferText(35, centerY - 2, "█", gold);
   setBufferText(36, centerY - 2, "█", gold);
 
-  // setBufferText(27, centerY - 1, "▀", gold);
   setBufferText(28, centerY - 1, "█", yellowBrown);
   setBufferText(29, centerY - 1, "█", yellowBrown);
   setBufferText(30, centerY - 1, "█", gold);
@@ -135,7 +132,6 @@ void drawRudder() {
   setBufferText(32, centerY - 1, "█", gold);
   setBufferText(33, centerY - 1, "█", yellowBrown);
   setBufferText(34, centerY - 1, "█", yellowBrown);
-  // setBufferText(35, centerY - 1, "▀", gold);
 
   setBufferText(26, centerY, "█", gold);
   setBufferText(27, centerY, "█", gold);
@@ -147,7 +143,6 @@ void drawRudder() {
   setBufferText(35, centerY, "█", gold);
   setBufferText(36, centerY, "█", gold);
 
-  // setBufferText(27, centerY + 1, "▄", gold);
   setBufferText(28, centerY + 1, "█", yellowBrown);
   setBufferText(29, centerY + 1, "█", yellowBrown);
   setBufferText(30, centerY + 1, "█", gold);
@@ -155,15 +150,12 @@ void drawRudder() {
   setBufferText(32, centerY + 1, "█", gold);
   setBufferText(33, centerY + 1, "█", yellowBrown);
   setBufferText(34, centerY + 1, "█", yellowBrown);
-  // setBufferText(35, centerY + 1, "▄", gold);
 
   setBufferText(26, centerY + 2, "█", gold);
   setBufferText(27, centerY + 2, "█", gold);
-  // setBufferText(28, centerY + 2, "▀", gold);
   setBufferText(30, centerY + 2, "█", yellowBrown);
   setBufferText(31, centerY + 2, "█", yellowBrown);
   setBufferText(32, centerY + 2, "█", yellowBrown);
-  // setBufferText(34, centerY + 2, "▀", gold);
   setBufferText(35, centerY + 2, "█", gold);
   setBufferText(36, centerY + 2, "█", gold);
 

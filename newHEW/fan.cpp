@@ -88,13 +88,13 @@ void setFanActive(bool active) {
 void drawFlag() {
   const int centerY = 19;
   for (int i = 0; i < 6; i++) {
-	setBufferText(28 + i, centerY - 3, "█", white);
-	setBufferText(28 + i, centerY - 2, "█", white);
+	setBufferText(28 + i, centerY - 3, "█", gray169);
+	setBufferText(28 + i, centerY - 2, "█", gray169);
   }
   for (int i = 0; i < 10; i++) {
-	setBufferText(26 + i, centerY, "█", white);
-	setBufferText(26 + i, centerY + 1, "█", white);
-	setBufferText(26 + i, centerY + 2, "█", white);
+	setBufferText(26 + i, centerY, "█", gray169);
+	setBufferText(26 + i, centerY + 1, "█", gray169);
+	setBufferText(26 + i, centerY + 2, "█", gray169);
   }
   for (int i = 0; i < 9; i++) {
 	setBufferText(30, centerY - 4 + i, "█", darkBrown);

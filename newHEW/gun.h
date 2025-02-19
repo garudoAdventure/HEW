@@ -9,6 +9,8 @@ void drawCrosshair();
 void drawCannon();
 void shootEffect();
 bool gunFireEffect();
+
+void gunScreenUpdate();
 void clearGunScreen();
 void setGunActive(bool active);
 

@@ -7,6 +7,7 @@
 #include "player.h"
 #include "gameField.h"
 #include "iceberg.h"
+#include "inputKey.h"
 
 const int rawGunCenterX = 65 + 7;
 const int rawGunCenterY = 17 + 2;
@@ -41,10 +42,6 @@ void gunInit() {
 }
 
 void gunUpdate() {
-  static int frame = 0;
-  static int centerKey = 0;
-  frame++;
-
   if (isShooting) {
 	drawCannon();
 	if (!gunFireEffect()) {
@@ -67,15 +64,7 @@ void gunUpdate() {
 	return;
   }
 
-  if (frame > 150) {
-	frame = 0;
-	centerKey = (centerKey + 1) % 4;
-  }
-  gunCenterX = rawGunCenterX + centerCoord[centerKey].x;
-  gunCenterY = rawGunCenterY + centerCoord[centerKey].y;
-
-  clearGunScreen();
-  drawCrosshair();
+  gunScreenUpdate();
 
   if (isGunActive) {
 	drawBracketBorder({ 65, 17, 14, 6 }, yellow);
@@ -83,23 +72,6 @@ void gunUpdate() {
 
 	if (getKeydown(KeyType::SPACE)) {
 	  isShooting = true;
-
-	  /* Test */
-	  const Player* player = getPlayer();
-	  Vector2f bulletPos = { player->pos.x, player->pos.y };
-	  for (int i = 1; i < 3; i++) {
-		int mapX = player->pos.x + player->dir.x * i;
-		int mapY = player->pos.y + player->dir.y * i;
-		IceList* iceList = getIceList();
-		IceNode* iceNode = iceList->next;
-		while (iceNode != NULL) {
-		  if (iceNode->pos.x == mapX && iceNode->pos.y == mapY) {
-			setIcebergExplode(iceNode);
-			break;
-		  }
-		  iceNode = iceNode->next;
-		}
-	  }
 	}
   }
 }
@@ -122,6 +94,21 @@ void drawCrosshair() {
   setBufferText(gunCenterX + 2, gunCenterY + 1, "╝");
   setBufferText(gunCenterX - 2, gunCenterY - 1, "╔");
   setBufferText(gunCenterX - 2, gunCenterY + 1, "╚");
+}
+
+void gunScreenUpdate() {
+  static int frame = 0;
+  static int centerKey = 0;
+  frame++;
+  if (frame > 150) {
+	frame = 0;
+	centerKey = (centerKey + 1) % 4;
+  }
+  gunCenterX = rawGunCenterX + centerCoord[centerKey].x;
+  gunCenterY = rawGunCenterY + centerCoord[centerKey].y;
+
+  clearGunScreen();
+  drawCrosshair();
 }
 
 void shootEffect() {
@@ -150,7 +137,6 @@ void shootEffect() {
 	  } else {
 		setBufferText(x, y, " ");
 	  }
-	  
 	}
   }
   count++;

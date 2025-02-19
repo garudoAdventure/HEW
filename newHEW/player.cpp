@@ -82,14 +82,15 @@ void playerMove() {
   float centerX = (float)mapX + 0.5f;
   float centerY = (float)mapY + 0.5f;
   float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
-  bool inZone = length <= 0.5f;
+  bool inBlockZone = length <= 0.5f;
+  bool inCoinZone = length <= 0.2f;
   CoinList* coinList = getCoinList();
-  if (inZone) {
-	if (nextIsBlock) {
+  if (nextIsBlock && inBlockZone) {
 	  hitWall = true;
 	  return;
 	}
 	if (nextIsCoin) {
+	if (inCoinZone) {
 	  collectCoinNum++;
 	  CoinNode* coinNode = coinList->next;
 	  CoinNode* prevNode = NULL;
@@ -97,7 +98,8 @@ void playerMove() {
 		if (coinNode->pos.x == mapX && coinNode->pos.y == mapY) {
 		  if (prevNode == NULL) {
 			coinList->next = coinNode->next;
-		  } else {
+		  }
+		  else {
 			prevNode->next = coinNode->next;
 		  }
 		  free(coinNode);

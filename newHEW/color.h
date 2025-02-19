@@ -21,6 +21,7 @@ const Color seaBlueDark = { 33, 136, 210 };
 const Color seaBlueLight = { 67, 171, 246 };
 const Color gold = { 234, 174, 55 };
 const Color yellowBrown = { 159, 107, 4 };
+const Color gray169 = { 169, 169, 169 };
 const Color gray92 = { 92, 92, 92 };
 const Color gray80 = { 80, 80, 80 };
 const Color gray69 = { 69, 69, 69 };
