@@ -83,7 +83,7 @@ void playerMove() {
   float centerY = (float)mapY + 0.5f;
   float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
   bool inBlockZone = length <= 0.5f;
-  bool inCoinZone = length <= 0.2f;
+  bool inCoinZone = length <= 0.01f;
   CoinList* coinList = getCoinList();
   if (nextIsBlock && inBlockZone) {
 	hitWall = true;

@@ -8,6 +8,7 @@
 CoinList* coinList;
 
 const int coinTurnSpd = 70;
+const int coinNum = 200;
 
 void coinInit() {
   coinList = (CoinList*)malloc(sizeof(CoinList));
@@ -15,9 +16,9 @@ void coinInit() {
 
   CoinNode* lastCoin = NULL;
   int count = 0;
-  while (count < 200) {
-	int randX = rand() % 57 + 1;
-	int randY = rand() % 28 + 1;
+  while (count < coinNum) {
+	int randX = rand() % 55 + 2;
+	int randY = rand() % 26 + 2;
 	if (getMapCoordEle(randX, randY) != ' ') {
 	  continue;
 	}
@@ -43,11 +44,14 @@ void renderCoin() {
 	// Transform to View Coord
 	Vector3 coinCenter = { coinNode->pos.x + 0.5f, 0.1f, coinNode->pos.y + 0.5f };
 	Vector3 viewCoinCenter = transformToViewCoord(*player, coinCenter);
-	viewCoinCenter.z += 1.0f;
 	// Transform to Projection Coord
 	Vector3 proCoinCenter = transformToProCoord(viewCoinCenter);
-	if (0.0f <= proCoinCenter.z && proCoinCenter.z <= 1.0f) {
-	  drawCoin({ (int)proCoinCenter.x , (int)proCoinCenter.y }, proCoinCenter.z);
+	if (
+	  0.0f <= proCoinCenter.z && proCoinCenter.z <= 1.0f &&
+	  -2.0f <= proCoinCenter.x && proCoinCenter.x <= ScreenFieldWidth + 2
+	) {
+	  SeaObjNode* newNode = createSeaObjNode(ObjectType::COIN, proCoinCenter);
+	  insertToSeaObjList(newNode);
 	}
 	coinNode = coinNode->next;
   }

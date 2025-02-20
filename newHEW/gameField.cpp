@@ -45,8 +45,12 @@ char map[GameFieldHeight][GameFieldWidth] = {
   /*9*/  "***********************************************************",
 };
 
+SeaObjList* seaObjList;
+
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
+  seaObjList = (SeaObjList*)malloc(sizeof(SeaObjList));
+  seaObjList->next = NULL;
 }
 
 void fieldUpdate() {
@@ -96,6 +100,35 @@ void renderField() {
   renderSun();
   renderIceberg();
   renderCoin();
+
+  SeaObjNode* node = seaObjList->next;
+  while (seaObjList->next != NULL) {
+	SeaObjNode* prevNode = NULL;
+	SeaObjNode* maxZNode = node;
+	SeaObjNode* maxZPrevNode = NULL;
+	while (node != NULL) {
+	  if (node->vec.z > maxZNode->vec.z) {
+		maxZNode = node;
+		maxZPrevNode = prevNode;
+	  }
+	  prevNode = node;
+	  node = node->next;
+	}
+	if (maxZNode->type == ObjectType::ICE) {
+	  drawIceberg({ (int)maxZNode->vec.x, (int)maxZNode->vec.y }, maxZNode->vec.z);
+	}
+	else {
+	  drawCoin({ (int)maxZNode->vec.x, (int)maxZNode->vec.y }, maxZNode->vec.z);
+	}
+	// Free Node
+	if (maxZPrevNode == NULL) {
+	  seaObjList->next = maxZNode->next;
+	} else {
+	  maxZPrevNode->next = maxZNode->next;
+	}
+	free(maxZNode);
+	node = seaObjList->next;
+  }
 }
 
 void clearField() {
@@ -247,5 +280,31 @@ void drawSun(Vector3 sunCenter) {
 	  }
 	  setFieldBufferText(sunCenter.x - 4 + i, sunCenter.y - 2 + j, sun[j][i], color);
 	}
+  }
+}
+
+void insertToSeaObjList(SeaObjNode* node) {
+  if (seaObjList->next == NULL) {
+	seaObjList->next = node;
+  } else {
+	seaObjList->last->next = node;
+  }
+  seaObjList->last = node;
+}
+
+SeaObjNode* createSeaObjNode(ObjectType objType, Vector3 objVec) {
+  SeaObjNode* node = (SeaObjNode*)malloc(sizeof(SeaObjNode));
+  node->type = objType;
+  node->vec = objVec;
+  node->next = NULL;
+  return node;
+}
+
+void clearSeaObjList() {
+  SeaObjNode* node = seaObjList->next;
+  while (node != NULL) {
+	SeaObjNode* nextNode = node->next;
+	free(node);
+	node = nextNode;
   }
 }

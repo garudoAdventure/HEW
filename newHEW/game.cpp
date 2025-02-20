@@ -11,6 +11,7 @@
 #include "inputKey.h"
 #include "coin.h"
 #include "iceberg.h"
+#include "UI.h"
 
 bool isPause;
 GameScene gameScene = GameScene::FIELD;
@@ -19,7 +20,7 @@ int nowItemKey = 0;
 
 void gameInit() {
   isPause = false;
-  gameSceneInit();
+  fieldInit();
   playerInit();
   fanInit();
   compassInit();
@@ -31,7 +32,7 @@ void gameInit() {
 void gameSceneInit() {
   switch (gameScene) {
 	case GameScene::FIELD:
-	  fieldInit();
+	  drawBorder({ 0, 0, 64, 25 });
 	  break;
 	case GameScene::MAP:
 	  mapInit();

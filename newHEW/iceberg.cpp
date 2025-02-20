@@ -10,15 +10,17 @@ IceList* iceList;
 Vector2f explodePos[23][55] = { 0 };
 Vector2f explodeVec[23][55];
 
+const int iceNum = 200;
+
 void icebergInit() {
   iceList = (IceList*)malloc(sizeof(IceList));
   iceList->next = NULL;
 
   IceNode* lastIce = NULL;
   int count = 0;
-  while (count < 200) {
-	int randX = rand() % 57 + 1;
-	int randY = rand() % 28 + 1;
+  while (count < iceNum) {
+	int randX = rand() % 55 + 2;
+	int randY = rand() % 26 + 2;
 	if (getMapCoordEle(randX, randY) != ' ') {
 	  continue;
 	}
@@ -48,9 +50,13 @@ void renderIceberg() {
 	viewIceCenter.z += -0.5f;
 	// Transform to Projection Coord
 	Vector3 proIceCenter = transformToProCoord(viewIceCenter);
-	if (0.0f <= proIceCenter.z && proIceCenter.z <= 1.0f) {
+	if (
+	  0.0f <= proIceCenter.z && proIceCenter.z <= 1.0f &&
+	  -30.0f <= proIceCenter.x && proIceCenter.x <= ScreenFieldWidth + 30.0f
+	) {
 	  if (!iceNode->isExplode) {
-		drawIceberg({ (int)proIceCenter.x , (int)proIceCenter.y }, proIceCenter.z);
+		SeaObjNode* newNode = createSeaObjNode(ObjectType::ICE, proIceCenter);
+		insertToSeaObjList(newNode);
 	  }
 	  else {
 		IceNode* nextNode = explodeIceberg(iceNode, { (int)proIceCenter.x , (int)proIceCenter.y });

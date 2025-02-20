@@ -8,6 +8,22 @@
 #define ScreenFieldWidth  63.0f
 #define ScreenFieldHeight 24.0f
 
+enum ObjectType {
+  ICE,
+  COIN
+};
+
+struct SeaObjNode {
+  ObjectType type;
+  Vector3 vec;
+  SeaObjNode* next;
+};
+
+struct SeaObjList {
+  SeaObjNode* next;
+  SeaObjNode* last;
+};
+
 void fieldInit();
 void fieldUpdate();
 void fieldRender();
@@ -25,4 +41,8 @@ void setMapCoordEle(int x, int y, char text);
 void renderBoundary();
 void renderSun();
 void drawSun(Vector3 sunCenter);
+
+void insertToSeaObjList(SeaObjNode* node);
+SeaObjNode* createSeaObjNode(ObjectType objType, Vector3 objVec);
+void clearSeaObjList();
 
