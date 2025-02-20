@@ -30,9 +30,9 @@ char map[GameFieldHeight][GameFieldWidth] = {
   /*4*/  "*                                                         *",
   /*5*/  "*                                                         *",
   /*6*/  "*                                                         *",
-  /*7*/  "*                                                        *",
+  /*7*/  "*                                                         *",
   /*8*/  "*                                                         *",
-  /*9*/  "*                                                        *",
+  /*9*/  "*                                                         *",
   /*0*/  "*                                                         *",
   /*1*/  "*                                                         *",
   /*2*/  "*                                                         *",
@@ -92,6 +92,7 @@ void renderField() {
 	  }
 	}
   }
+  renderBoundary();
   renderSun();
   renderIceberg();
   renderCoin();
@@ -128,6 +129,92 @@ Vector3 transformToProCoord(Vector3 vec) {
   proVec.x = ScreenFieldWidth / 2 * (proVec.x + 1);
   proVec.y = ScreenFieldHeight / 2 * (proVec.y + 1);
   return proVec;
+}
+
+void renderBoundary() {
+  const Player* player = getPlayer();
+  for (int x = 1; x < ScreenFieldWidth; x++) {
+	const float radiant = FOV / 180 * PI;
+	const float rayAngle = (player->viewAngle - radiant / 2) + x / ScreenFieldWidth * radiant;
+	const float rayX = sinf(rayAngle);
+	const float rayY = -cosf(rayAngle);
+	float distanceToWall = 0.0f;
+	bool hitBoundary = false;
+	int testX;
+	int testY;
+
+	while (!hitBoundary && distanceToWall < 10.0f) {
+	  distanceToWall += 0.1f;
+	  testX = player->pos.x + rayX * distanceToWall;
+	  testY = player->pos.y + rayY * distanceToWall;
+	  if (getMapCoordEle(testX, testY) == '*') {
+		hitBoundary = true;
+		break;
+	  }
+	}
+	for (int y = 1; y < ScreenFieldHeight; y++) {
+	  int ceil = 12;
+	  int floor = 12;
+	  Color color = { 206, 242, 251 };
+	  if (distanceToWall < 1.0f) {
+		ceil = 0;
+		floor = 21;
+	  }
+	  else if (distanceToWall < 1.2f) {
+		color = { 199, 237, 247 };
+		ceil = 2;
+		floor = 21;
+	  }
+	  else if (distanceToWall < 1.5f) {
+		color = { 191, 232, 243 };
+		ceil = 3;
+		floor = 21;
+	  }
+	  else if (distanceToWall < 1.8f) {
+		color = { 183, 227, 239 };
+		ceil = 4;
+		floor = 20;
+	  }
+	  else if (distanceToWall < 2.2f) {
+		color = { 175, 222, 234 };
+		ceil = 5;
+		floor = 19;
+	  }
+	  else if (distanceToWall < 2.7f) {
+		color = { 167, 217, 230 };
+		ceil = 6;
+		floor = 18;
+	  }
+	  else if (distanceToWall < 3.3f) {
+		color = { 160, 212, 226 };
+		ceil = 7;
+		floor = 17;
+	  }
+	  else if (distanceToWall < 4.0f) {
+		color = { 152, 207, 221 };
+		ceil = 8;
+		floor = 16;
+	  }
+	  else if (distanceToWall < 5.0f) {
+		color = { 144, 202, 217 };
+		ceil = 9;
+		floor = 15;
+	  }
+	  else if (distanceToWall < 7.0f) {
+		color = { 136, 197, 213 };
+		ceil = 10;
+		floor = 14;
+	  }
+	  else if (distanceToWall < 10.0f) {
+		color = { 128, 192, 208 };
+		ceil = 11;
+		floor = 13;
+	  }
+	  if (ceil < y && y < floor) {
+		setFieldBufferText(x, y, "█", color);
+	  }
+	}
+  }
 }
 
 void renderSun() {

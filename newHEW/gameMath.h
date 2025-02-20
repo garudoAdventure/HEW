@@ -6,6 +6,7 @@
 #define FIELD_Y	  0
 
 #define PI	3.1415926
+#define FOV	45.0f
 
 //	  0123456789 
 //	0 ╔════════╗

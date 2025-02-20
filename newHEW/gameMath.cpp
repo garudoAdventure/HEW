@@ -77,12 +77,11 @@ Matrix4x4 rotateZArray(float theta) {
 
 Matrix4x4 projectArray() {
   Matrix4x4 pArray;
-  const float fov = 45.0f;
   const float zNear = 0.1f;
   const float zFar = 10.0f;
   // const float aspect = width / height;
 
-  const float f = 1.0f / tanf(fov * 0.5f * PI / 180.0f);
+  const float f = 1.0f / tanf(FOV * 0.5f * PI / 180.0f);
   const float nF = 1.0f / (zFar - zNear);
 
   pArray.m[0][0] = f;

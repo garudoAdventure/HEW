@@ -77,7 +77,7 @@ void playerMove() {
   float newY = player.pos.y + player.dir.y * velocity;
   int mapX = (int)newX;
   int mapY = (int)newY;
-  bool nextIsBlock = getMapCoordEle(mapX, mapY) == 'O';
+  bool nextIsBlock = getMapCoordEle(mapX, mapY) == 'O' || getMapCoordEle(mapX, mapY) == '*';
   bool nextIsCoin = getMapCoordEle(mapX, mapY) == 'C';
   float centerX = (float)mapX + 0.5f;
   float centerY = (float)mapY + 0.5f;
@@ -122,8 +122,8 @@ void playerMove() {
   if (player.pos.x > GameFieldWidth - 2.0f) {
 	player.pos.x = GameFieldWidth - 2.0f;
   }
-  if (player.pos.y > GameFieldHeight - 2.0f) {
-	player.pos.y = GameFieldHeight - 2.0f;
+  if (player.pos.y > GameFieldHeight - 1.0f) {
+	player.pos.y = GameFieldHeight - 1.0f;
   }
   velocity = 0.0f; // velocity = velocity < minV ? minV : velocity - resistance;
 
@@ -152,7 +152,7 @@ void drawMyBoat() {
 	setFieldBufferText(16 + i, startY - 1, "█", darkBrown);
   }
   for (int i = 0; i < 21; i++) {
-	setFieldBufferText(16 + i, startY, "█", lightBrown);
+	setFieldBufferText(21 + i, startY, "█", lightBrown);
 	setFieldBufferText(21 + i, startY - 1, "█", brown);
 	setFieldBufferText(21 + i, startY - 2, "█", darkBrown);
   }
