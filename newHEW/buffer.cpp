@@ -4,6 +4,7 @@
 #include "console.h"
 #include "iostream"
 #include "gameMath.h"
+#include "gameField.h"
 
 const int bufferXSize = FIELD_W;
 const int bufferYSize = FIELD_H;
@@ -141,4 +142,11 @@ void setBufferBgColor(float x, float y, Color color) {
 	return;
   }
   bufRender[coorY][coorX].bgColor = color;
+}
+
+void setFieldBufferText(float x, float y, const char* text, Color color) {
+  if (x < 1 || x > ScreenFieldWidth - 1 || y < 1 || y > ScreenFieldHeight - 1) {
+	return;
+  }
+  setBufferText(x, y, text, color);
 }

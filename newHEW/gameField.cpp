@@ -16,39 +16,37 @@ char map[GameFieldHeight][GameFieldWidth] = {
   /*0*/  "***********************************************************",
   /*1*/  "*                                                         *",
   /*2*/  "*                                                         *",
-  /*3*/  "*       O  O                      O                       *",
+  /*3*/  "*                                                         *",
   /*4*/  "*                                                         *",
   /*5*/  "*                                                         *",
-  /*6*/  "*                 O      O                                *",
-  /*7*/  "*         C                                  O            *",
-  /*8*/  "*    C                                                    *",
-  /*9*/  "*   O O         C       C  C  C                           *",
+  /*6*/  "*                                                         *",
+  /*7*/  "*                                                         *",
+  /*8*/  "*                                                         *",
+  /*9*/  "*                                                         *",
   /*0*/  "*                                                         *",
-  /*1*/  "*         C                                               *",
-  /*2*/  "*         C                          O   C                *",
-  /*3*/  "*         C                          O                    *",
-  /*4*/  "*         C                                               *",
-  /*5*/  "*         C                                               *",
-  /*6*/  "*         C                                               *",
-  /*7*/  "*         C           OO                                  *",
-  /*8*/  "*         C                                 O             *",
-  /*9*/  "*         C                                               *",
-  /*0*/  "*         P                       C                       *",
   /*1*/  "*                                                         *",
-  /*2*/  "*                    C                                    *",
-  /*3*/  "*                                        O                *",
+  /*2*/  "*                                                         *",
+  /*3*/  "*                                                         *",
   /*4*/  "*                                                         *",
   /*5*/  "*                                                         *",
-  /*6*/  "*                                                C        *",
-  /*7*/  "*             C                                           *",
+  /*6*/  "*                                                         *",
+  /*7*/  "*                                                        *",
+  /*8*/  "*                                                         *",
+  /*9*/  "*                                                        *",
+  /*0*/  "*                                                         *",
+  /*1*/  "*                                                         *",
+  /*2*/  "*                                                         *",
+  /*3*/  "*                                                         *",
+  /*4*/  "*                                                         *",
+  /*5*/  "*                                                         *",
+  /*6*/  "*                                                         *",
+  /*7*/  "*                                                         *",
   /*8*/  "*                                                         *",
   /*9*/  "***********************************************************",
 };
 
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
-  icebergInit();
-  coinInit();
 }
 
 void fieldUpdate() {
@@ -77,10 +75,19 @@ void renderField() {
 	  if (y <= 12) {
 		setBufferBgColor(x, y, skyBlue);
 	  }
-	  if (y >= 13) {
+	  if (13 <= y && y <= 14) {
 		setBufferBgColor(x, y, seaBlueLight);
 	  }
-	  if (y >= 17) {
+	  if (y == 15) {
+		setBufferBgColor(x, y, seaBlue58);
+	  }
+	  if (16 <= y && y <= 18) {
+		setBufferBgColor(x, y, seaBlue50);
+	  }
+	  if (y == 19) {
+		setBufferBgColor(x, y, seaBlue41);
+	  }
+	  if (20 <= y && y <= 23) {
 		setBufferBgColor(x, y, seaBlueDark);
 	  }
 	}
@@ -154,11 +161,4 @@ void drawSun(Vector3 sunCenter) {
 	  setFieldBufferText(sunCenter.x - 4 + i, sunCenter.y - 2 + j, sun[j][i], color);
 	}
   }
-}
-
-void setFieldBufferText(float x, float y, const char* text, Color color) {
-  if (x < 1 || x > ScreenFieldWidth - 1 || y < 1 || y > ScreenFieldHeight - 1) {
-	return;
-  }
-  setBufferText(x, y, text, color);
 }

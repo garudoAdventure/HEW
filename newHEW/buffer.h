@@ -18,3 +18,4 @@ void setBufferText(float x, float y, const char* text, Color color = {255, 255, 
 void setBufferTextAndColor(float x, float y, const char* text, Color color);
 void setBufferFgColor(float x, float y, Color color);
 void setBufferBgColor(float x, float y, Color color);
+void setFieldBufferText(float x, float y, const char* text, Color color);

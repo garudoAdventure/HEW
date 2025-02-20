@@ -7,8 +7,8 @@ void gunDestroy();
 
 void drawCrosshair();
 void drawCannon();
-void shootEffect();
 bool gunFireEffect();
+void checkShootingRange();
 
 void gunScreenUpdate();
 void clearGunScreen();

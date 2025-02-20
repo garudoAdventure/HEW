@@ -20,7 +20,7 @@ float rotateAngle = 0.0f;
 int collectCoinNum = 0;
 
 void playerInit() {
-  player.pos = { 10.0f, 20.0f };
+  player.pos = { 32.0f, 28.0f };
   player.viewAngle = 0.0f;
   player.dir = { sinf(0.0f), -cosf(0.0f) };
 }
@@ -58,18 +58,18 @@ void playerMove() {
   }
 
   /**********************For TEST**************************************/
-  if (inport(PK_UP)) {
-	velocity = 0.01f;
-  }
-  if (inport(PK_DOWN)) {
-	velocity = -0.01f;
-  }
-  if (inport(PK_LEFT)) {
-	rotateAngle = -0.1 * PI / 180.0f;
-  }
-  if (inport(PK_RIGHT)) {
-	rotateAngle = 0.1 * PI / 180.0f;
-  }
+ // if (inport(PK_UP)) {
+	//velocity = 0.01f;
+ // }
+ // if (inport(PK_DOWN)) {
+	//velocity = -0.01f;
+ // }
+ // if (inport(PK_LEFT)) {
+	//rotateAngle = -0.1 * PI / 180.0f;
+ // }
+ // if (inport(PK_RIGHT)) {
+	//rotateAngle = 0.1 * PI / 180.0f;
+ // }
   /********************************************************************/
 
   // Wall Test
@@ -86,32 +86,30 @@ void playerMove() {
   bool inCoinZone = length <= 0.2f;
   CoinList* coinList = getCoinList();
   if (nextIsBlock && inBlockZone) {
-	  hitWall = true;
-	  return;
-	}
-	if (nextIsCoin) {
-	if (inCoinZone) {
-	  collectCoinNum++;
-	  CoinNode* coinNode = coinList->next;
-	  CoinNode* prevNode = NULL;
-	  while (coinNode != NULL) {
-		if (coinNode->pos.x == mapX && coinNode->pos.y == mapY) {
-		  if (prevNode == NULL) {
-			coinList->next = coinNode->next;
-		  }
-		  else {
-			prevNode->next = coinNode->next;
-		  }
-		  free(coinNode);
-		  setMapCoordEle(mapX, mapY, ' ');
-		  break;
+	hitWall = true;
+	return;
+  }
+  if (nextIsCoin && inCoinZone) {
+	collectCoinNum++;
+	CoinNode* coinNode = coinList->next;
+	CoinNode* prevNode = NULL;
+	while (coinNode != NULL) {
+	  if (coinNode->pos.x == mapX && coinNode->pos.y == mapY) {
+		if (prevNode == NULL) {
+		  coinList->next = coinNode->next;
 		}
-		prevNode = coinNode;
-		coinNode = coinNode->next;
+		else {
+		  prevNode->next = coinNode->next;
+		}
+		free(coinNode);
+		setMapCoordEle(mapX, mapY, ' ');
+		break;
 	  }
+	  prevNode = coinNode;
+	  coinNode = coinNode->next;
 	}
   }
-
+ 
   // Move
   player.pos.x += player.dir.x * velocity;
   player.pos.y += player.dir.y * velocity;
@@ -139,17 +137,29 @@ void playerMove() {
 }
 
 void drawMyBoat() {
+  static int frame = 0;
+  static int startY = 24;
+  if (frame > 200) {
+	frame = 0;
+	startY = startY == 24 ? 23 : 24;
+  }
+  frame++;
+  for (int i = 0; i < 35; i++) {
+	setFieldBufferText(14 + i, startY, "█", darkBrown);
+  }
   for (int i = 0; i < 31; i++) {
-	setBufferText(16 + i, 23, "█", darkBrown);
+	setFieldBufferText(16 + i, startY, "█", brown);
+	setFieldBufferText(16 + i, startY - 1, "█", darkBrown);
   }
   for (int i = 0; i < 21; i++) {
-	setBufferText(21 + i, 22, "█", darkBrown);
-	setBufferText(21 + i, 23, "█", brown);
+	setFieldBufferText(16 + i, startY, "█", lightBrown);
+	setFieldBufferText(21 + i, startY - 1, "█", brown);
+	setFieldBufferText(21 + i, startY - 2, "█", darkBrown);
   }
   for (int i = 0; i < 11; i++) {
-	setBufferText(26 + i, 21, "█", darkBrown);
-	setBufferText(26 + i, 22, "█", brown);
-	setBufferText(26 + i, 23, "█", lightBrown);
+	setFieldBufferText(26 + i, startY - 1, "█", lightBrown);
+	setFieldBufferText(26 + i, startY - 2, "█", brown);
+	setFieldBufferText(26 + i, startY - 3, "█", darkBrown);
   }
 }
 

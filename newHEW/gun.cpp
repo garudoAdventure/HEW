@@ -16,8 +16,11 @@ bool isGunActive = false;
 
 int gunCenterX;
 int gunCenterY;
+Color crosshairCol = white;
 
+bool inShootingRange = false;
 bool isShooting = false;
+Vector2 lockIceCoord = { 0, 0 };
 
 const Rect4 shootEffectCoord[7] = {
   {-1, -1, 3, 3},
@@ -42,33 +45,32 @@ void gunInit() {
 }
 
 void gunUpdate() {
+  gunScreenUpdate();
+  crosshairCol = white;
+
   if (isShooting) {
 	drawCannon();
-	if (!gunFireEffect()) {
-	  const Player* player = getPlayer();
-	  Vector2f bulletPos = { player->pos.x, player->pos.y };
-	  for (int i = 1; i < 3; i++) {
-		int mapX = player->pos.x + player->dir.x * i;
-		int mapY = player->pos.y + player->dir.y * i;
-		IceList* iceList = getIceList();
-		IceNode* iceNode = iceList->next;
-		while (iceNode != NULL) {
-		  if (iceNode->pos.x == mapX && iceNode->pos.y == mapY) {
-			setIcebergExplode(iceNode);
-			break;
-		  }
-		  iceNode = iceNode->next;
-		}
-	  }
+	if (gunFireEffect() || !inShootingRange) {
+	  return;
 	}
+	IceList* iceList = getIceList();
+	IceNode* iceNode = iceList->next;
+	while (iceNode != NULL) {
+	  if (iceNode->pos.x == lockIceCoord.x && iceNode->pos.y == lockIceCoord.y) {
+		setIcebergExplode(iceNode);
+		break;
+	  }
+	  iceNode = iceNode->next;
+	}
+	inShootingRange = false;
 	return;
   }
-
-  gunScreenUpdate();
-
+  
   if (isGunActive) {
 	drawBracketBorder({ 65, 17, 14, 6 }, yellow);
 	drawCannon();
+	inShootingRange = false;
+	checkShootingRange();
 
 	if (getKeydown(KeyType::SPACE)) {
 	  isShooting = true;
@@ -84,16 +86,36 @@ void gunDestroy() {
 
 }
 
+void checkShootingRange() {
+  const Player* player = getPlayer();
+  float dirX = sinf(player->viewAngle);
+  float dirY = -cosf(player->viewAngle);
+  int mapX;
+  int mapY;
+  mapX = player->pos.x + dirX * 2;
+  mapY = player->pos.y + dirY * 2;
+  if (getMapCoordEle(mapX, mapY) == 'O') {
+	crosshairCol = red;
+  }
+  mapX = player->pos.x + dirX;
+  mapY = player->pos.y + dirY;
+  if (getMapCoordEle(mapX, mapY) == 'O') {
+	crosshairCol = green;
+	inShootingRange = true;
+	lockIceCoord = { mapX, mapY };
+  }
+}
+
 void drawCrosshair() {
   setBufferText(gunCenterX, gunCenterY, "⊕");
-  setBufferText(gunCenterX, gunCenterY - 1, "|");
-  setBufferText(gunCenterX, gunCenterY + 1, "|");
-  setBufferText(gunCenterX + 2, gunCenterY, "━");
-  setBufferText(gunCenterX - 3, gunCenterY, "━");
-  setBufferText(gunCenterX + 2, gunCenterY - 1, "╗");
-  setBufferText(gunCenterX + 2, gunCenterY + 1, "╝");
-  setBufferText(gunCenterX - 2, gunCenterY - 1, "╔");
-  setBufferText(gunCenterX - 2, gunCenterY + 1, "╚");
+  setBufferText(gunCenterX, gunCenterY - 1, "|", crosshairCol);
+  setBufferText(gunCenterX, gunCenterY + 1, "|", crosshairCol);
+  setBufferText(gunCenterX + 2, gunCenterY, "━", crosshairCol);
+  setBufferText(gunCenterX - 3, gunCenterY, "━", crosshairCol);
+  setBufferText(gunCenterX + 2, gunCenterY - 1, "╗", crosshairCol);
+  setBufferText(gunCenterX + 2, gunCenterY + 1, "╝", crosshairCol);
+  setBufferText(gunCenterX - 2, gunCenterY - 1, "╔", crosshairCol);
+  setBufferText(gunCenterX - 2, gunCenterY + 1, "╚", crosshairCol);
 }
 
 void gunScreenUpdate() {
@@ -109,42 +131,6 @@ void gunScreenUpdate() {
 
   clearGunScreen();
   drawCrosshair();
-}
-
-void shootEffect() {
-  static int frame = 0;
-  if (frame < 5) {
-	frame++;
-	return;
-  }
-  frame = 0;
-  static int count = 0;
-  const int key = count % 7;
-  const int startX = gunCenterX + shootEffectCoord[key].x;
-  const int startY = gunCenterY + shootEffectCoord[key].y;
-  const int endX = startX + shootEffectCoord[key].w;
-  const int endY = startY + shootEffectCoord[key].h;
-  for (int x = startX; x < endX; x++) {
-	for (int y = startY; y < endY; y++) {
-	  if (x == gunCenterX && y == gunCenterY) {
-		continue;
-	  }
-	  if (x < 65 || x > 79 || y < 17 || y > 22) {
-		continue;
-	  }
-	  if (count < 7) {
-		setBufferText(x, y, "▒", {50, 50, 50});
-	  } else {
-		setBufferText(x, y, " ");
-	  }
-	}
-  }
-  count++;
-  if (count == 14) {
-	isShooting = false;
-	count = 0;
-	drawCrosshair();
-  }
 }
 
 bool gunFireEffect() {

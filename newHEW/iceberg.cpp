@@ -3,6 +3,7 @@
 #include "iceberg.h"
 #include "gameField.h"
 #include "player.h"
+#include "buffer.h"
 
 IceList* iceList;
 
@@ -14,22 +15,26 @@ void icebergInit() {
   iceList->next = NULL;
 
   IceNode* lastIce = NULL;
-  for (int i = GameFieldWidth - 1; i >= 0; i--) {
-	for (int j = GameFieldHeight - 1; j >= 0; j--) {
-	  if (getMapCoordEle(i, j) == 'O') {
-		IceNode* ice = (IceNode*)malloc(sizeof(IceNode));
-		ice->pos = { i, j };
-		ice->isExplode = false;
-		ice->next = NULL;
-		if (iceList->next == NULL) {
-		  iceList->next = ice;
-		}
-		else {
-		  lastIce->next = ice;
-		}
-		lastIce = ice;
-	  }
+  int count = 0;
+  while (count < 200) {
+	int randX = rand() % 57 + 1;
+	int randY = rand() % 28 + 1;
+	if (getMapCoordEle(randX, randY) != ' ') {
+	  continue;
 	}
+	setMapCoordEle(randX, randY, 'O');
+	IceNode* ice = (IceNode*)malloc(sizeof(IceNode));
+	ice->pos = { randX, randY };
+	ice->isExplode = false;
+	ice->next = NULL;
+	if (iceList->next == NULL) {
+	  iceList->next = ice;
+	}
+	else {
+	  lastIce->next = ice;
+	}
+	lastIce = ice;
+	count++;
   }
 }
 

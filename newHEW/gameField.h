@@ -15,7 +15,6 @@ void fieldDestroy();
 
 void renderField();
 void clearField();
-void setFieldBufferText(float x, float y, const char* text, Color color = {255, 255, 255});
 
 Vector3 transformToViewCoord(Player player, Vector3 vec);
 Vector3 transformToProCoord(Vector3 vec);

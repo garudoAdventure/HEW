@@ -86,18 +86,24 @@ void setFanActive(bool active) {
 }
 
 void drawFlag() {
-  const int centerY = 19;
+  static int frame = 0;
+  static int centerY = 20;
+  if (frame > 200) {
+	frame = 0;
+	centerY = centerY == 19 ? 20 : 19;
+  }
+  frame++;
   for (int i = 0; i < 6; i++) {
-	setBufferText(28 + i, centerY - 3, "█", gray169);
-	setBufferText(28 + i, centerY - 2, "█", gray169);
+	setFieldBufferText(28 + i, centerY - 3, "█", gray169);
+	setFieldBufferText(28 + i, centerY - 2, "█", gray169);
   }
   for (int i = 0; i < 10; i++) {
-	setBufferText(26 + i, centerY, "█", gray169);
-	setBufferText(26 + i, centerY + 1, "█", gray169);
-	setBufferText(26 + i, centerY + 2, "█", gray169);
+	setFieldBufferText(26 + i, centerY, "█", gray169);
+	setFieldBufferText(26 + i, centerY + 1, "█", gray169);
+	setFieldBufferText(26 + i, centerY + 2, "█", gray169);
   }
   for (int i = 0; i < 9; i++) {
-	setBufferText(30, centerY - 4 + i, "█", darkBrown);
-	setBufferText(31, centerY - 4 + i, "█", darkBrown);
+	setFieldBufferText(30, centerY - 4 + i, "█", darkBrown);
+	setFieldBufferText(31, centerY - 4 + i, "█", darkBrown);
   }
 }

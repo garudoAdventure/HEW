@@ -9,6 +9,8 @@
 #include "compass.h"
 #include "gun.h"
 #include "inputKey.h"
+#include "coin.h"
+#include "iceberg.h"
 
 bool isPause;
 GameScene gameScene = GameScene::FIELD;
@@ -22,6 +24,8 @@ void gameInit() {
   fanInit();
   compassInit();
   gunInit();
+  icebergInit();
+  coinInit();
 }
 
 void gameSceneInit() {

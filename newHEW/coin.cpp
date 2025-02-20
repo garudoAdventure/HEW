@@ -3,6 +3,7 @@
 #include "coin.h"
 #include "gameField.h"
 #include "player.h"
+#include "buffer.h"
 
 CoinList* coinList;
 
@@ -13,21 +14,25 @@ void coinInit() {
   coinList->next = NULL;
 
   CoinNode* lastCoin = NULL;
-  for (int i = GameFieldWidth - 1; i >= 0; i--) {
-	for (int j = GameFieldHeight - 1; j >= 0; j--) {
-	  if (getMapCoordEle(i, j) == 'C') {
-		CoinNode* coin = (CoinNode*)malloc(sizeof(CoinNode));
-		coin->pos = { i, j };
-		coin->next = NULL;
-		if (coinList->next == NULL) {
-		  coinList->next = coin;
-		}
-		else {
-		  lastCoin->next = coin;
-		}
-		lastCoin = coin;
-	  }
+  int count = 0;
+  while (count < 200) {
+	int randX = rand() % 57 + 1;
+	int randY = rand() % 28 + 1;
+	if (getMapCoordEle(randX, randY) != ' ') {
+	  continue;
 	}
+	setMapCoordEle(randX, randY, 'C');
+	CoinNode* coin = (CoinNode*)malloc(sizeof(CoinNode));
+	coin->pos = { randX, randY };
+	coin->next = NULL;
+	if (coinList->next == NULL) {
+	  coinList->next = coin;
+	}
+	else {
+	  lastCoin->next = coin;
+	}
+	lastCoin = coin;
+	count++;
   }
 }
 
