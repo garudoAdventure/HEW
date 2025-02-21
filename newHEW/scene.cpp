@@ -7,8 +7,8 @@
 #include "game.h"
 #include "gameResult.h"
 
-Scene scene = Scene::GAME;
-Scene nextSecne = Scene::GAME;
+Scene scene = Scene::TITLE;
+Scene nextSecne = Scene::TITLE;
 
 void sceneInit() {
   bufferInit();

@@ -130,6 +130,20 @@ void setBufferFgColor(float x, float y, Color color) {
   bufRender[coorY][coorX].fgColor = color;
 }
 
+Color getBufferFgColor(float x, float y) {
+  int coorX = (int)x;
+  int coorY = (int)y;
+  if (
+	coorX < 0 ||
+	coorX > bufferXSize ||
+	coorY < 0 ||
+	coorY > bufferYSize
+	) {
+	return white;
+  }
+  return bufRender[coorY][coorX].fgColor;
+}
+
 void setBufferBgColor(float x, float y, Color color) {
   int coorX = (int)x;
   int coorY = (int)y;
@@ -142,6 +156,20 @@ void setBufferBgColor(float x, float y, Color color) {
 	return;
   }
   bufRender[coorY][coorX].bgColor = color;
+}
+
+Color getBufferBgColor(float x, float y) {
+  int coorX = (int)x;
+  int coorY = (int)y;
+  if (
+	coorX < 0 ||
+	coorX >= bufferXSize ||
+	coorY < 0 ||
+	coorY >= bufferYSize
+	) {
+	return black;
+  }
+  return bufRender[coorY][coorX].bgColor;
 }
 
 void setFieldBufferText(float x, float y, const char* text, Color color) {

@@ -147,10 +147,10 @@ void drawExplodeIceberg(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		int newX = centerX - width / 2 + i + explodePos[j][i].x;
 		int newY = centerY - height / 2 + j + explodePos[j][i].y;
@@ -277,10 +277,10 @@ void drawIceberg63x23(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -324,10 +324,10 @@ void drawIceberg59x23(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -371,10 +371,10 @@ void drawIceberg55x23(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -417,10 +417,10 @@ void drawIceberg53x22(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -461,10 +461,10 @@ void drawIceberg51x20(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -503,10 +503,10 @@ void drawIceberg47x18(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -543,10 +543,10 @@ void drawIceberg43x16(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -581,10 +581,10 @@ void drawIceberg39x14(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -617,10 +617,10 @@ void drawIceberg35x12(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -652,10 +652,10 @@ void drawIceberg31x11(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -686,10 +686,10 @@ void drawIceberg25x10(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -718,10 +718,10 @@ void drawIceberg23x8(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -749,10 +749,10 @@ void drawIceberg21x7(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -780,10 +780,10 @@ void drawIceberg19x7(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -810,10 +810,10 @@ void drawIceberg17x6(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -839,10 +839,10 @@ void drawIceberg15x5(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -868,10 +868,10 @@ void drawIceberg13x5(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -896,10 +896,10 @@ void drawIceberg11x4(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -924,10 +924,10 @@ void drawIceberg9x4(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -951,10 +951,10 @@ void drawIceberg7x3(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -978,10 +978,10 @@ void drawIceberg5x3(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -1005,10 +1005,10 @@ void drawIceberg3x3(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -1031,10 +1031,10 @@ void drawIceberg3x2(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -1056,10 +1056,10 @@ void drawIceberg3x1(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -1081,10 +1081,10 @@ void drawIceberg2x1(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -1106,10 +1106,10 @@ void drawIceberg1x1(Vector2 center) {
 	  Color color = white;
 	  if (iceberg[j][i] != " ") {
 		if (iceberg[j][i] == "S") {
-		  color = { 206, 242, 251 };
+		  color = iceBlueLight;
 		}
 		if (iceberg[j][i] == "B") {
-		  color = { 151, 226, 244 };
+		  color = iceBlueDark;
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
