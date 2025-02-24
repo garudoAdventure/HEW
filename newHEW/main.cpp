@@ -70,7 +70,7 @@ int main() {
 }
 
 void init() {
-  consoleInit(80, 25, 25);
+  SetConsoleOutputCP(65001);
   sceneInit();
 }
 

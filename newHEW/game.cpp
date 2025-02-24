@@ -17,8 +17,11 @@ bool isPause;
 GameScene gameScene = GameScene::FIELD;
 GameItem items[3] = { GameItem::FAN, GameItem::COMPASS, GameItem::GUN };
 int nowItemKey = 0;
+int hSound;
+int gameElapsedTime;
 
 void gameInit() {
+  gameElapsedTime = 0;
   isPause = false;
   fieldInit();
   playerInit();
@@ -27,6 +30,8 @@ void gameInit() {
   gunInit();
   icebergInit();
   coinInit();
+  hSound = opensound((char*)"./Sound/galaxy.mp3");
+  playsound(hSound, 1);
 }
 
 void gameSceneInit() {
@@ -60,6 +65,8 @@ void gameUpdate() {
   if (gameScene == GameScene::MAP) {
 	showPlayerPos();
   }
+
+  gameElapsedTime++;
 }
 
 void gameRender() {
@@ -68,6 +75,7 @@ void gameRender() {
 
 void gameDestroy() {
   playerDestroy();
+  closesound(hSound);
 }
 
 void gameSceneDestroy() {
@@ -111,4 +119,8 @@ void setGameItemActive() {
 	  setGunActive(true);
 	  break;
 	}
+}
+
+int getGameElapsedTime() {
+  return gameElapsedTime;
 }

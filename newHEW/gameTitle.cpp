@@ -2,13 +2,15 @@
 #include "conioex.h"
 #include "scene.h"
 #include "gameTitle.h"
-#include "draw3D.h"
 #include "buffer.h"
 
 float lightCenterX = 24.0f;
 bool changeScene = false;
+int sound;
 
 void titleInit() {
+  sound = opensound((char*)"./Sound/begin.mid");
+  playsound(sound, 0);
 }
 
 void titleUpdate() {
@@ -31,7 +33,7 @@ void titleRender() {
 }
 
 void titleDestroy() {
-
+  closesound(sound);
 }
 
 bool titleSceneFadeOut() {

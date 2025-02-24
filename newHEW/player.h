@@ -13,6 +13,7 @@ void playerRender();
 void playerDestroy();
 
 Player* getPlayer();
+float getPlayerVelocity();
 void playerMove();
 void drawMyBoat();
 void showPlayerPos();

@@ -6,9 +6,9 @@
 #include "player.h"
 #include "game.h"
 #include "draw.h"
-#include "gameMath.h"
 #include "iceberg.h"
 #include "coin.h"
+#include "scene.h"
 
 char map[GameFieldHeight][GameFieldWidth] = {
   //	  0         1         2         3         4         5  
@@ -55,15 +55,21 @@ void fieldInit() {
 
 void fieldUpdate() {
   static int frameCount = 0;
-  frameCount = (frameCount + 1) % 200;
-  if (inport(PK_BS) && frameCount > 50) {
-	setGameScene(GameScene::MAP);
+  static int countdown = 60;
+  if (frameCount < 400) {
+	frameCount++;
+  } else {
 	frameCount = 0;
+	countdown--;
+  }
+  if (countdown < 0) {
+	setScene(Scene::RESULT);
 	return;
   }
   clearField();
   renderField();
   showGetCoinNum(getCollectCoinNum());
+  showLifeBar(countdown, 60);
 }
 
 void fieldRender() {
@@ -97,7 +103,6 @@ void renderField() {
 	}
   }
   renderBoundary();
-  renderSun();
   renderIceberg();
   renderCoin();
 

@@ -26,3 +26,4 @@ void gameSceneInit();
 void gameSceneDestroy();
 void setGameScene(GameScene scene);
 void setGameItemActive();
+int getGameElapsedTime();

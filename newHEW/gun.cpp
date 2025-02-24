@@ -8,9 +8,10 @@
 #include "gameField.h"
 #include "iceberg.h"
 #include "inputKey.h"
+#include "mic.h"
 
 const int rawGunCenterX = 65 + 7;
-const int rawGunCenterY = 17 + 2;
+const int rawGunCenterY = 15 + 2;
 
 bool isGunActive = false;
 
@@ -21,27 +22,21 @@ Color crosshairCol = white;
 bool inShootingRange = false;
 bool isShooting = false;
 Vector2 lockIceCoord = { 0, 0 };
-
-const Rect4 shootEffectCoord[7] = {
-  {-1, -1, 3, 3},
-  {-2, -1, 5, 3},
-  {-3, -1, 7, 3},
-  {-4, -1, 9, 4},
-  {-5, -2, 11, 5},
-  {-6, -2, 13, 5},
-  {-7, -2, 14, 6},
-};
+float micPeak = 0.0f;
 
 const Vector2 centerCoord[4] = {
   {0, 0}, {-1, 0}, {-1, 1}, {0, 1}
 };
 
+int explodeSound;
+
 void gunInit() {
-  drawBorder({ 64, 16, 16, 8 });
+  drawBorder({ 64, 15, 16, 7 });
   clearGunScreen();
   gunCenterX = rawGunCenterX;
   gunCenterY = rawGunCenterY;
   drawCrosshair();
+  explodeSound = opensound((char*)"./Sound/explosion.mp3");
 }
 
 void gunUpdate() {
@@ -57,6 +52,7 @@ void gunUpdate() {
 	IceNode* iceNode = iceList->next;
 	while (iceNode != NULL) {
 	  if (iceNode->pos.x == lockIceCoord.x && iceNode->pos.y == lockIceCoord.y) {
+		playsound(explodeSound, 0);
 		setIcebergExplode(iceNode);
 		break;
 	  }
@@ -65,17 +61,19 @@ void gunUpdate() {
 	inShootingRange = false;
 	return;
   }
-  
-  if (isGunActive) {
-	drawBracketBorder({ 65, 17, 14, 6 }, yellow);
-	drawCannon();
-	inShootingRange = false;
-	checkShootingRange();
 
-	if (getKeydown(KeyType::SPACE)) {
+  inShootingRange = false;
+  checkShootingRange();
+  if (isGunActive) {
+	drawBracketBorder({ 65, 16, 14, 5 }, yellow);
+	drawCannon();
+
+	if (getMicPeak() - micPeak > 50.0f) {
 	  isShooting = true;
 	}
   }
+
+  micPeak = getMicPeak();
 }
 
 void gunRender() {
@@ -90,19 +88,37 @@ void checkShootingRange() {
   const Player* player = getPlayer();
   float dirX = sinf(player->viewAngle);
   float dirY = -cosf(player->viewAngle);
+  float testX;
+  float testY;
+  float centerX;
+  float centerY;
   int mapX;
   int mapY;
-  mapX = player->pos.x + dirX * 2;
-  mapY = player->pos.y + dirY * 2;
+
+  testX = player->pos.x + dirX * 2;
+  testY = player->pos.y + dirY * 2;
+  mapX = (int)testX;
+  mapY = (int)testY;
   if (getMapCoordEle(mapX, mapY) == 'O') {
-	crosshairCol = red;
+	centerX = (float)mapX + 0.5f;
+	centerY = (float)mapY + 0.5f;
+	if ((centerX - testX) * (centerX - testX) + (centerY - testY) * (centerY - testY) <= 0.5f) {
+	  crosshairCol = red;
+	}
   }
-  mapX = player->pos.x + dirX;
-  mapY = player->pos.y + dirY;
+
+  testX = player->pos.x + dirX;
+  testY = player->pos.y + dirY;
+  mapX = (int)testX;
+  mapY = (int)testY;
   if (getMapCoordEle(mapX, mapY) == 'O') {
-	crosshairCol = green;
-	inShootingRange = true;
-	lockIceCoord = { mapX, mapY };
+	centerX = (float)mapX + 0.5f;
+	centerY = (float)mapY + 0.5f;
+	if ((centerX - testX) * (centerX - testX) + (centerY - testY) * (centerY - testY) <= 0.5f) {
+	  crosshairCol = green;
+	  inShootingRange = true;
+	  lockIceCoord = { mapX, mapY };
+	}
   }
 }
 
@@ -157,8 +173,8 @@ bool gunFireEffect() {
 
 void clearGunScreen() {
   for (int i = 0; i < 14; i++) {
-	for (int j = 0; j < 6; j++) {
-	  setBufferText(65 + i, 17 + j, " ");
+	for (int j = 0; j < 5; j++) {
+	  setBufferText(65 + i, 16 + j, " ");
 	}
   }
 }

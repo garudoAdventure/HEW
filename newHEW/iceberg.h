@@ -4,7 +4,7 @@
 
 struct IceNode {
   Vector2 pos;
-  bool isExplode;
+  Vector3 proCoord;
   IceNode* next;
 };
 
@@ -16,6 +16,7 @@ void icebergInit();
 void renderIceberg();
 
 IceList* getIceList();
+int getDestroyIceNum();
 
 void drawIceberg(Vector2 center, float depth);
 void drawIceberg63x23(Vector2 center);
@@ -45,6 +46,6 @@ void drawIceberg3x1(Vector2 center);
 void drawIceberg2x1(Vector2 center);
 void drawIceberg1x1(Vector2 center);
 
-IceNode* explodeIceberg(IceNode* expIceNode, Vector2 center);
+void explodeIceberg();
 void drawExplodeIceberg(Vector2 center);
 void setIcebergExplode(IceNode* iceNode);

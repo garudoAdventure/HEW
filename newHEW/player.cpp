@@ -9,20 +9,20 @@
 Player player;
 
 const float minV = 0.0f;
-const float maxV = 0.01f;
-const float acceleration = 0.00002f;
-const float resistance = 0.00001f;
+const float resistance = 0.000001f;
 
 bool hitWall = false;
 float velocity = 0.0f;
 float rotateAngle = 0.0f;
 
 int collectCoinNum = 0;
+int coinSound;
 
 void playerInit() {
   player.pos = { 32.0f, 28.0f };
   player.viewAngle = 0.0f;
   player.dir = { sinf(0.0f), -cosf(0.0f) };
+  coinSound = opensound((char*)"./Sound/coin.wav");
 }
 
 void playerUpdate() {
@@ -42,6 +42,10 @@ Player* getPlayer() {
   return &player;
 }
 
+float getPlayerVelocity() {
+  return velocity;
+}
+
 void playerMove() {
   // Hit wall anim
   static int backwardCount = 0;
@@ -49,28 +53,13 @@ void playerMove() {
 	player.pos.x -= player.dir.x * 0.05f;
 	player.pos.y -= player.dir.y * 0.05f;
 	backwardCount++;
-	if (backwardCount == 20) {
+	if (backwardCount == 18) {
 	  hitWall = false;
 	  velocity = 0.0f;
 	  backwardCount = 0;
 	}
 	return;
   }
-
-  /**********************For TEST**************************************/
- // if (inport(PK_UP)) {
-	//velocity = 0.01f;
- // }
- // if (inport(PK_DOWN)) {
-	//velocity = -0.01f;
- // }
- // if (inport(PK_LEFT)) {
-	//rotateAngle = -0.1 * PI / 180.0f;
- // }
- // if (inport(PK_RIGHT)) {
-	//rotateAngle = 0.1 * PI / 180.0f;
- // }
-  /********************************************************************/
 
   // Wall Test
   float newX = player.pos.x + player.dir.x * velocity;
@@ -91,6 +80,7 @@ void playerMove() {
   }
   if (nextIsCoin && inCoinZone) {
 	collectCoinNum++;
+	playsound(coinSound, 0);
 	CoinNode* coinNode = coinList->next;
 	CoinNode* prevNode = NULL;
 	while (coinNode != NULL) {
@@ -125,7 +115,7 @@ void playerMove() {
   if (player.pos.y > GameFieldHeight - 1.0f) {
 	player.pos.y = GameFieldHeight - 1.0f;
   }
-  velocity = 0.0f; // velocity = velocity < minV ? minV : velocity - resistance;
+  velocity = velocity - resistance < minV ? minV : velocity - resistance;
 
   // Rotate
   const float dirX = cosf(rotateAngle) * player.dir.x - sinf(rotateAngle) * player.dir.y;

@@ -51,20 +51,36 @@ void drawBracketBorder(Rect4 rect, Color color) {
 }
 
 void showGetCoinNum(int num) {
-  const int startX = 56;
+  const int startX = 65;
+  const int startY = 23;
   const char* word[5] = { "C", "O", "I", "N", ":" };
   const char* digits[10] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
   const char* digit = "0";
   const char* tenDigit = "0";
   for (int i = 0; i < 5; i++) {
-	setBuffer(startX + i, 1, word[i], yellow, skyBlue);
+	setBufferText(startX + i, startY, word[i], yellow);
   }
   if (num < 10) {
-	setBuffer(startX + 6, 1, digits[num], yellow, skyBlue);
+	setBufferText(startX + 6, startY, digits[num], yellow);
   } else {
 	tenDigit = digits[num / 10];
 	digit = digits[num % 10];
-	setBuffer(startX + 5, 1, tenDigit, yellow, skyBlue);
-	setBuffer(startX + 6, 1, digit, yellow, skyBlue);
+	setBufferText(startX + 5, startY, tenDigit, yellow);
+	setBufferText(startX + 6, startY, digit, yellow);
+  }
+}
+
+void showLifeBar(int countdown, int max) {
+  const Color srcColor = { 90, 171, 245 };
+  const Color destColor = { 246, 51, 51 };
+  const float dr = (destColor.r - srcColor.r) / max;
+  const float dg = (destColor.g - srcColor.g) / max;
+  const float db = (destColor.b - srcColor.b) / max;
+  for (int i = 0; i < countdown; i++) {
+	Color gradient;
+	gradient.r = srcColor.r + dr * i;
+	gradient.g = srcColor.g + dg * i;
+	gradient.b = srcColor.b + db * i;
+	setBufferText(2 + i, 2, "█", gradient);
   }
 }

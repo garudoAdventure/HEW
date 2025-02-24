@@ -5,6 +5,7 @@
 #include "compass.h"
 #include "gameMath.h"
 #include "player.h"
+#include "mic.h"
 
 const int compassCenterX = 65 + 6;
 const int compassCenterY = 9 + 2;
@@ -31,7 +32,7 @@ const Vector2 NESWCoord[16] = {
 bool isCompassActive = false;
 
 void compassInit() {
-  drawBorder({ 64, 8, 16, 8 });
+  drawBorder({ 64, 8, 16, 7 });
 }
 
 void compassUpdate() {
@@ -40,16 +41,18 @@ void compassUpdate() {
   drawDirection();
   
   if (isCompassActive) {
-	drawBracketBorder({ 65, 9, 14, 6 }, yellow);
+	drawBracketBorder({ 65, 9, 14, 5 }, yellow);
 	drawRudder();
 	
-	if (inport(PK_LEFT)) {
-	  const float angle = -0.1 * PI / 180.0f;
-	  setPlayerRotate(angle);
-	}
-	if (inport(PK_RIGHT)) {
-	  const float angle = 0.1 * PI / 180.0f;
-	  setPlayerRotate(angle);
+	if (getMicPeak() > 50.0f) {
+	  if (inport(PK_LEFT)) {
+		const float angle = -0.1 * PI / 180.0f;
+		setPlayerRotate(angle);
+	  }
+	  if (inport(PK_RIGHT)) {
+		const float angle = 0.1 * PI / 180.0f;
+		setPlayerRotate(angle);
+	  }
 	}
   }
 }
@@ -99,7 +102,7 @@ void drawDirection() {
 
 void clearCompassScene() {
   for (int i = 0; i < 14; i++) {
-	for (int j = 0; j < 6; j++) {
+	for (int j = 0; j < 5; j++) {
 	  if (i == 13) {
 		setBufferText(65 + i, 9 + j, " ");
 	  } else {

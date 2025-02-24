@@ -4,13 +4,16 @@
 #include "gameField.h"
 #include "player.h"
 #include "buffer.h"
+#include "UI.h"
 
 CoinList* coinList;
 
 const int coinTurnSpd = 70;
-const int coinNum = 200;
+const int coinNum = 500;
 
 void coinInit() {
+  drawBorder({ 64, 22, 16, 3});
+
   coinList = (CoinList*)malloc(sizeof(CoinList));
   coinList->next = NULL;
 
@@ -72,9 +75,6 @@ void drawCoin(Vector2 center, float depth) {
 	drawCoin3x3(center);
   }
   else if (depth < 0.985f) {
-	drawCoin3x1(center);
-  }
-  else if (depth < 0.99f) {
 	drawCoin1x1(center);
   }
 }

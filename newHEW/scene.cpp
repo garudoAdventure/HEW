@@ -12,18 +12,18 @@ Scene nextSecne = Scene::TITLE;
 
 void sceneInit() {
   bufferInit();
-  micInit();
   switch (scene) {
-  case Scene::TITLE:
-	titleInit();
-	break;
-  case Scene::GAME:
-	gameInit();
-	break;
-  case Scene::RESULT:
-	resultInit();
-	break;
-  }
+	case Scene::TITLE:
+	  micInit();
+	  titleInit();
+	  break;
+	case Scene::GAME:
+	  gameInit();
+	  break;
+	case Scene::RESULT:
+	  resultInit();
+	  break;
+	}
 }
 
 void sceneUpdate() {
@@ -78,9 +78,6 @@ void checkScene() {
   if (scene != nextSecne) {
 	sceneDestroy();
 	scene = nextSecne;
-
-	clrscr();
-
 	sceneInit();
   }
 }

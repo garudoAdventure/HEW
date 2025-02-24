@@ -1,3 +1,5 @@
+#define CONIOEX
+#include "conioex.h"
 #include "mic.h"
 #include "endpointvolume.h"
 #include "mmdeviceapi.h"
@@ -10,21 +12,24 @@ IAudioMeterInformation* pMeterInfo = NULL;
 
 float peak;
 
+int peakTime;
+
 void micInit() {
   peak = 0.0f;
+  peakTime = 0;
 
   // 記得要先把マイク設定介面打開
 
-  CoInitializeEx(0, COINIT_MULTITHREADED);
+  CoInitializeEx(0, COINIT_APARTMENTTHREADED);
   CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER, __uuidof(IMMDeviceEnumerator), (void**)&pEnum);
   pEnum->EnumAudioEndpoints(eAll, DEVICE_STATE_ACTIVE | DEVICE_STATE_UNPLUGGED, &pDeviceCollection);  
   
-  pEnum->GetDefaultAudioEndpoint(eCapture, eConsole, &pDevice);   // For Default Mic
-  // pDeviceCollection->Item(13, &pDevice); // For USB Mic
+  // pEnum->GetDefaultAudioEndpoint(eCapture, eConsole, &pDevice);   // For Default Mic
+  pDeviceCollection->Item(11, &pDevice); // For USB Mic
   
   pDevice->Activate(__uuidof(IAudioMeterInformation), CLSCTX_ALL, NULL, (void**)&pMeterInfo);
   
- // // Check mic device name
+  // Check mic device name
  // for (int i = 0; i < 20; i++) {
 	//getMicName(i);
  // }
@@ -32,6 +37,9 @@ void micInit() {
 
 void micUpdate() {
   pMeterInfo->GetPeakValue(&peak);
+  if (peak * 100.0f > 90.0f) {
+	peakTime++;
+  }
 }
 
 void micDestroy() {
@@ -40,6 +48,10 @@ void micDestroy() {
 
 float getMicPeak() {
   return peak * 100.0f;
+}
+
+int getPeakTime() {
+  return peakTime;
 }
 
 void getMicName(int count) {
@@ -53,5 +65,5 @@ void getMicName(int count) {
   PROPVARIANT varName;
   PropVariantInit(&varName);
   propertyStore->GetValue(key, &varName);
-  
+
 }

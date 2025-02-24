@@ -5,12 +5,14 @@
 #include "player.h"
 #include "buffer.h"
 
+const int iceNum = 200;
 IceList* iceList;
+int destroyIceNum = 0;
 
 Vector2f explodePos[23][55] = { 0 };
 Vector2f explodeVec[23][55];
 
-const int iceNum = 200;
+IceNode* explodeIce = NULL;
 
 void icebergInit() {
   iceList = (IceList*)malloc(sizeof(IceList));
@@ -27,7 +29,6 @@ void icebergInit() {
 	setMapCoordEle(randX, randY, 'O');
 	IceNode* ice = (IceNode*)malloc(sizeof(IceNode));
 	ice->pos = { randX, randY };
-	ice->isExplode = false;
 	ice->next = NULL;
 	if (iceList->next == NULL) {
 	  iceList->next = ice;
@@ -50,21 +51,18 @@ void renderIceberg() {
 	viewIceCenter.z += -0.5f;
 	// Transform to Projection Coord
 	Vector3 proIceCenter = transformToProCoord(viewIceCenter);
+	iceNode->proCoord = proIceCenter;
 	if (
 	  0.0f <= proIceCenter.z && proIceCenter.z <= 1.0f &&
 	  -30.0f <= proIceCenter.x && proIceCenter.x <= ScreenFieldWidth + 30.0f
 	) {
-	  if (!iceNode->isExplode) {
-		SeaObjNode* newNode = createSeaObjNode(ObjectType::ICE, proIceCenter);
-		insertToSeaObjList(newNode);
-	  }
-	  else {
-		IceNode* nextNode = explodeIceberg(iceNode, { (int)proIceCenter.x , (int)proIceCenter.y });
-		iceNode = nextNode;
-		continue;
-	  }
+	  SeaObjNode* newNode = createSeaObjNode(ObjectType::ICE, proIceCenter);
+	  insertToSeaObjList(newNode);
 	}
 	iceNode = iceNode->next;
+  }
+  if (explodeIce != NULL) {
+	explodeIceberg();
   }
 }
 
@@ -72,35 +70,18 @@ IceList* getIceList() {
   return iceList;
 }
 
-IceNode* explodeIceberg(IceNode* expIceNode, Vector2 center) {
+void explodeIceberg() {
   static int explodeFrame = 0;
   const int explodeTime = 50;
-  drawExplodeIceberg(center);
+  drawExplodeIceberg({ (int)explodeIce->proCoord.x, (int)explodeIce->proCoord.y });
   explodeFrame++;
-  IceNode* nexNode = expIceNode->next;
   if (explodeFrame > explodeTime) {
 	explodeFrame = 0;
 	memset(explodePos, 0, sizeof(explodePos));
-	setMapCoordEle(expIceNode->pos.x, expIceNode->pos.y, ' ');
-
-	IceNode* iceNode = iceList->next;
-	IceNode* prevNode = NULL;
-	while (iceNode != NULL) {
-	  if (iceNode == expIceNode) {
-		if (prevNode == NULL) {
-		  iceList->next = iceNode->next;
-		}
-		else {
-		  prevNode->next = iceNode->next;
-		}
-		free(iceNode);
-		break;
-	  }
-	  prevNode = iceNode;
-	  iceNode = iceNode->next;
-	}
+	free(explodeIce);
+	explodeIce = NULL;
+	destroyIceNum++;
   }
-  return nexNode;
 }
 
 void drawExplodeIceberg(Vector2 center) {
@@ -158,6 +139,10 @@ void drawExplodeIceberg(Vector2 center) {
 	  }
 	}
   }
+}
+
+int getDestroyIceNum() {
+  return destroyIceNum;
 }
 
 void drawIceberg(Vector2 center, float depth) {
@@ -1118,7 +1103,22 @@ void drawIceberg1x1(Vector2 center) {
 }
 
 void setIcebergExplode(IceNode* iceNode) {
-  iceNode->isExplode = true;
+  explodeIce = iceNode;
+  setMapCoordEle(explodeIce->pos.x, explodeIce->pos.y, ' ');
+  IceNode* node = iceList->next;
+  IceNode* prevNode = NULL;
+  while (node != NULL) {
+	if (node == iceNode) {
+	  if (prevNode == NULL) {
+		iceList->next = node->next;
+	  } else {
+		prevNode->next = node->next;
+	  }
+	  break;
+	}
+	prevNode = node;
+	node = node->next;
+  }
   // Prepare random vector
   for (int i = 0; i < 55; i++) {
 	for (int j = 0; j < 23; j++) {
