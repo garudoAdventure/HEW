@@ -20,3 +20,5 @@ void drawRe(int x, int y);
 void drawJi(int x, int y);
 void drawYa(int x, int y);
 void drawNobashibo(int x, int y);
+void drawSmallBoat();
+void drawTitleCoin(int x, int y);

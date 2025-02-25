@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "gameTitle.h"
 #include "buffer.h"
+#include "coin.h"
 
 float lightCenterX = 24.0f;
 bool changeScene = false;
@@ -26,6 +27,10 @@ void titleUpdate() {
   }
   drawTitleBackground();
   drawTitle();
+  drawSmallBoat();
+  for (int i = 0; i < 4; i++) {
+	drawTitleCoin(10 + 18 * i, 21);
+  }
 }
 
 void titleRender() {
@@ -306,5 +311,84 @@ void drawNobashibo(int x, int y) {
 	  }
 	  setBuffer(x + i, y + j, moji[j][i], color, skyBlue);
 	}
+  }
+}
+
+void drawSmallBoat() {
+  static int frame = 0;
+  static int startX = 5;
+  int startY = 16;
+  if (frame < 200) {
+	frame++;
+  } else {
+	if (startX < 33) {
+	  startX++;
+	}
+	frame = 0;
+  }
+  setBufferText(startX + 4, startY - 3, "▄", darkBrown);
+  setBufferText(startX + 2, startY - 2, "█", white);
+  setBufferText(startX + 3, startY - 2, "█", white);
+  setBufferText(startX + 4, startY - 2, "█", darkBrown);
+  for (int i = 0; i < 8; i++) {
+	setBufferText(startX + 1 + i, startY - 1, "▄", brown);
+	if (i == 3) {
+	  setBufferText(startX + 1 + i, startY - 1, "█", darkBrown);
+	}
+  }
+  for (int i = 0; i < 10; i++) {
+	setBufferText(startX + i, startY, "█", darkBrown);
+  }
+  for (int i = 0; i < 8; i++) {
+	setBufferText(startX + 1 + i, startY + 1, "█", darkBrown);
+	if (i < 1 || i > 5) {
+	  setBufferText(startX + 1 + i, startY + 1, "▀", darkBrown);
+	}
+  }
+}
+
+void drawTitleCoin(int x, int y) {
+  static int frame = 0;
+  const int turnSpeed = 250;
+  const int centerX = x;
+  const int centerY = y;
+  const int width = 5;
+  const int height = 4;
+  const char* coinFront[height][width] = {
+	{" ", "Y", "Y", "Y", " "},
+	{"Y", "Y", "M", "Y", "Y"},
+	{"Y", "Y", "M", "Y", "Y"},
+	{" ", "Y", "Y", "Y", " "},
+  };
+  const char* coinSide[height][width] = {
+	{" ", " ", "Y", " ", " "},
+	{" ", " ", "Y", " ", " "},
+	{" ", " ", "Y", " ", " "},
+	{" ", " ", "Y", " ", " "},
+  };
+  char* coinTemp[height][width];
+  if (frame < turnSpeed) {
+	memcpy(coinTemp, coinFront, sizeof(coinTemp));
+  }
+  else {
+	memcpy(coinTemp, coinSide, sizeof(coinTemp));
+  }
+  for (int i = 0; i < width; i++) {
+	for (int j = 0; j < height; j++) {
+	  Color color = white;
+	  if (coinTemp[j][i] != " ") {
+		if (coinTemp[j][i] == "Y") {
+		  color = { 239, 191, 4 };
+		}
+		if (coinTemp[j][i] == "M") {
+		  color = { 244, 221, 131 };
+		}
+		setBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
+	  }
+	}
+  }
+  frame++;
+  if (frame == turnSpeed * 2) {
+	frame = 0;
   }
 }
