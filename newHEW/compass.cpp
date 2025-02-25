@@ -117,7 +117,7 @@ void setCompassActive(bool active) {
 }
 
 void drawRudder() {
-  const int centerY = 20;
+  const int centerY = 19 + getBoatWave();
   setBufferText(31, centerY - 3, "█", gold);
 
   setBufferText(26, centerY - 2, "█", gold);

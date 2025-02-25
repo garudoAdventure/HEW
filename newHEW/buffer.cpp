@@ -172,9 +172,9 @@ Color getBufferBgColor(float x, float y) {
   return bufRender[coorY][coorX].bgColor;
 }
 
-void setFieldBufferText(float x, float y, const char* text, Color color) {
+void setFieldBufferText(float x, float y, const char* text, Color color, Color bgColor) {
   if (x < 1 || x > ScreenFieldWidth - 1 || y < 1 || y > ScreenFieldHeight - 1) {
 	return;
   }
-  setBufferText(x, y, text, color);
+  setBuffer(x, y, text, color, bgColor);
 }

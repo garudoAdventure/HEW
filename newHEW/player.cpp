@@ -7,6 +7,7 @@
 #include "coin.h"
 
 Player player;
+BoatWave boatWave = BoatWave::BOAT_DOWN;
 
 const float minV = 0.0f;
 const float resistance = 0.000001f;
@@ -47,6 +48,14 @@ float getPlayerVelocity() {
 }
 
 void playerMove() {
+  static int frame = 0;
+  if (frame < 200) {
+	frame++;
+  } else {
+	frame = 0;
+	boatWave = boatWave == BoatWave::BOAT_DOWN ? BoatWave::BOAT_UP : BoatWave::BOAT_DOWN;
+  }
+
   // Hit wall anim
   static int backwardCount = 0;
   if (hitWall) {
@@ -128,12 +137,44 @@ void playerMove() {
 
 void drawMyBoat() {
   static int frame = 0;
-  static int startY = 24;
-  if (frame > 200) {
+  static int sprayBlueIdx = 0;
+  if (frame < 10) {
+	frame++;
+  } else {
+	sprayBlueIdx = (sprayBlueIdx + 1) % 23;
 	frame = 0;
-	startY = startY == 24 ? 23 : 24;
   }
-  frame++;
+ // // Spray
+ // for (int i = 0; i < 47; i++) {
+	//setFieldBufferText(8 + i, 23, "█", skyBlue);
+	//for (int j = 0; j < 3; j++) {
+	//  setFieldBufferText(31 + j + sprayBlueIdx, 23, "█", white);
+	//  setFieldBufferText(31 - j - sprayBlueIdx, 23, "█", white);
+	//}
+ // }
+ // for (int i = 0; i < 41; i++) {
+	//setFieldBufferText(11 + i, 22, "█", skyBlue);
+	//for (int j = 0; j < 3; j++) {
+	//  setFieldBufferText(31 + j + sprayBlueIdx, 22, "█", white);
+	//  setFieldBufferText(31 - j - sprayBlueIdx, 22, "█", white);
+	//}
+ // }
+ // for (int i = 0; i < 29; i++) {
+	//setFieldBufferText(17 + i, 21, "█", skyBlue);
+	//for (int j = 0; j < 3; j++) {
+	//  setFieldBufferText(31 + j + sprayBlueIdx, 21, "█", white);
+	//  setFieldBufferText(31 - j - sprayBlueIdx, 21, "█", white);
+	//}
+ // }
+ // for (int i = 0; i < 13; i++) {
+	//setFieldBufferText(25 + i, 20, "█", skyBlue);
+	//for (int j = 0; j < 3; j++) {
+	//  setFieldBufferText(31 + j + sprayBlueIdx, 20, "█", white);
+	//  setFieldBufferText(31 - j - sprayBlueIdx, 20, "█", white);
+	//}
+ // }
+
+  int startY = 23 + boatWave;
   for (int i = 0; i < 35; i++) {
 	setFieldBufferText(14 + i, startY, "█", darkBrown);
   }
@@ -175,4 +216,8 @@ bool isHitwall() {
 
 int getCollectCoinNum() {
   return collectCoinNum;
+}
+
+BoatWave getBoatWave() {
+  return boatWave;
 }

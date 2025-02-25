@@ -13,7 +13,6 @@ void mapUpdate() {
   static int frameCount = 0;
   frameCount = (frameCount + 1) % 200;
   if (inport(PK_BS) && frameCount > 50) {
-	setGameScene(GameScene::FIELD);
 	frameCount = 0;
 	return;
   }

@@ -20,4 +20,4 @@ void setBufferFgColor(float x, float y, Color color);
 Color getBufferFgColor(float x, float y);
 void setBufferBgColor(float x, float y, Color color);
 Color getBufferBgColor(float x, float y);
-void setFieldBufferText(float x, float y, const char* text, Color color);
+void setFieldBufferText(float x, float y, const char* text, Color color, Color bgColor = {0, 0, 0});

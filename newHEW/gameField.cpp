@@ -54,22 +54,9 @@ void fieldInit() {
 }
 
 void fieldUpdate() {
-  static int frameCount = 0;
-  static int countdown = 60;
-  if (frameCount < 400) {
-	frameCount++;
-  } else {
-	frameCount = 0;
-	countdown--;
-  }
-  if (countdown < 0) {
-	setScene(Scene::RESULT);
-	return;
-  }
   clearField();
   renderField();
   showGetCoinNum(getCollectCoinNum());
-  showLifeBar(countdown, 60);
 }
 
 void fieldRender() {

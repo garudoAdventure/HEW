@@ -184,22 +184,22 @@ void setGunActive(bool active) {
 }
 
 void drawCannon() {
-  const int startY = 18;
-  for (int i = 0; i < 6; i++) {
-	setBufferText(30, startY + i, "█", gray80);
-	setBufferText(31, startY + i, "█", gray92);
-	setBufferText(32, startY + i, "█", gray80);
+  const int startY = 17 + getBoatWave();
+  for (int i = 0; i < 7; i++) {
+	setFieldBufferText(30, startY + i, "█", gray80);
+	setFieldBufferText(31, startY + i, "█", gray92);
+	setFieldBufferText(32, startY + i, "█", gray80);
 	if (i > 0) {
-	  setBufferText(29, startY + i, "█", gray69);
-	  setBufferText(33, startY + i, "█", gray69);
+	  setFieldBufferText(29, startY + i, "█", gray69);
+	  setFieldBufferText(33, startY + i, "█", gray69);
 	}
 	if (i > 3) {
-	  setBufferText(28, startY + i, "█", gray54);
-	  setBufferText(34, startY + i, "█", gray54);
+	  setFieldBufferText(28, startY + i, "█", gray54);
+	  setFieldBufferText(34, startY + i, "█", gray54);
 	}
 	if (i > 4) {
-	  setBufferText(27, startY + i, "█", darkBrown);
-	  setBufferText(35, startY + i, "█", darkBrown);
+	  setFieldBufferText(27, startY + i, "█", darkBrown);
+	  setFieldBufferText(35, startY + i, "█", darkBrown);
 	}
   }
 }

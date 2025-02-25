@@ -91,12 +91,7 @@ void setFanActive(bool active) {
 
 void drawFlag() {
   static int frame = 0;
-  static int centerY = 20;
-  if (frame > 200) {
-	frame = 0;
-	centerY = centerY == 19 ? 20 : 19;
-  }
-  frame++;
+  int centerY = 19 + getBoatWave();
   for (int i = 0; i < 6; i++) {
 	setFieldBufferText(28 + i, centerY - 3, "█", gray169);
 	setFieldBufferText(28 + i, centerY - 2, "█", gray169);

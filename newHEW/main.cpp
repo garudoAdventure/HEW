@@ -23,6 +23,7 @@ void destroy();
 void showFPS(float start, float end);
 
 int main() {
+  system("cls");
   srand((unsigned int)time(NULL));
   setcursortype(NOCURSOR);
 
