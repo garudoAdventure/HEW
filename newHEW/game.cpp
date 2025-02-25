@@ -2,7 +2,7 @@
 #include "conioex.h"
 #include "game.h"
 #include "gameField.h"
-#include "gameMap.h"
+#include "scene.h"
 #include "player.h"
 #include "buffer.h"
 #include "fan.h"
@@ -14,11 +14,12 @@
 #include "UI.h"
 
 bool isPause;
-GameScene gameScene = GameScene::FIELD;
 GameItem items[3] = { GameItem::FAN, GameItem::COMPASS, GameItem::GUN };
 int nowItemKey = 0;
-int hSound;
 int gameElapsedTime;
+int gameSound;
+int startSound;
+int endSound;
 
 void gameInit() {
   gameElapsedTime = 0;
@@ -30,41 +31,44 @@ void gameInit() {
   gunInit();
   icebergInit();
   coinInit();
-  hSound = opensound((char*)"./Sound/galaxy.mp3");
-  playsound(hSound, 1);
-}
-
-void gameSceneInit() {
-  switch (gameScene) {
-	case GameScene::FIELD:
-	  drawBorder({ 0, 0, 64, 25 });
-	  break;
-	case GameScene::MAP:
-	  mapInit();
-	  break;
-	}
+  gameSound = opensound((char*)"./Sound/galaxy.mp3");
+  startSound = opensound((char*)"./Sound/gameStart.mp3");
+  endSound = opensound((char*)"./Sound/gameEnd.mp3");
+  playsound(startSound, 0);
 }
 
 void gameUpdate() {
+  static int frameCount = 0;
+  static int countdown = 60;
+  if (frameCount < 450) {
+	frameCount++;
+  }
+  else {
+	frameCount = 0;
+	countdown--;
+  }
+
   inputKeyUpdate();
   setGameItemActive();
-
-  switch (gameScene) {
-	case GameScene::FIELD:
-	  fieldUpdate();
-	  break;
-	case GameScene::MAP:
-	  mapUpdate();
-	  break;
-  }
+  
+  fieldUpdate();
   playerUpdate();
+  if (showGameStart()) {
+	return;
+  }
+
+  if (countdown < 0) {
+	if (!showGameEnd()) {
+	  setScene(Scene::RESULT);
+	}
+	return;
+  }
+
+  showLifeBar(countdown, 60);
+  
   fanUpdate();
   compassUpdate();
   gunUpdate();
-
-  if (gameScene == GameScene::MAP) {
-	showPlayerPos();
-  }
 
   gameElapsedTime++;
 }
@@ -75,24 +79,7 @@ void gameRender() {
 
 void gameDestroy() {
   playerDestroy();
-  closesound(hSound);
-}
-
-void gameSceneDestroy() {
-  switch (gameScene) {
-	case GameScene::FIELD:
-	  fieldDestroy();
-	  break;
-	case GameScene::MAP:
-	  mapDestroy();
-	  break;
-  }
-}
-
-void setGameScene(GameScene scene) {
-  gameSceneDestroy();
-  gameScene = scene;
-  gameSceneInit();
+  closesound(gameSound);
 }
 
 void setGameItemActive() {
@@ -123,4 +110,80 @@ void setGameItemActive() {
 
 int getGameElapsedTime() {
   return gameElapsedTime;
+}
+
+bool showGameStart() {
+  static int frame = 0;
+  static int shift = 0;
+  const int maxShift = 110;
+  if (shift == maxShift) {
+	return false;
+  }
+  const char* word[6][42] = {
+	{ "█", "█", "█", "█", "█", "█", "█", "╗", "█", "█", "█", "█", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "█", "█", "█", "█", "╗" },
+	{ "█", "█", "╔", "═", "═", "═", "═", "╝", "╚", "═", "═", "█", "█", "╔", "═", "═", "╝", "█", "█", "╔", "═", "═", "█", "█", "╗", "█", "█", "╔", "═", "═", "█", "█", "╗", "╚", "═", "═", "█", "█", "╔", "═", "═", "╝" },
+	{ "█", "█", "█", "█", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "█", "█", "█", "█", "█", "║", "█", "█", "█", "█", "█", "█", "╔", "╝", " ", " ", " ", "█", "█", "║", " ", " ", " " },
+	{ "╚", "═", "═", "═", "═", "█", "█", "║", " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "╔", "═", "═", "█", "█", "║", "█", "█", "╔", "═", "═", "█", "█", "╗", " ", " ", " ", "█", "█", "║", " ", " ", " " },
+	{ "█", "█", "█", "█", "█", "█", "█", "║", " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", " ", " ", "█", "█", "║", "█", "█", "║", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", " ", " ", " " },
+	{ "╚", "═", "═", "═", "═", "═", "═", "╝", " ", " ", " ", "╚", "═", "╝", " ", " ", " ", "╚", "═", "╝", " ", " ", "╚", "═", "╝", "╚", "═", "╝", " ", " ", "╚", "═", "╝", " ", " ", " ", "╚", "═", "╝", " ", " ", " " }
+  };
+  if (frame < 2) {
+	frame++;
+  } else {
+	shift++;
+	frame = 0;
+  }
+  if (shift == maxShift) {
+	playsound(gameSound, 1);
+  }
+  for (int i = 0; i < 50; i++) {
+	for (int j = 0; j < 8; j++) {
+	  setFieldBufferText(-49 + shift + i, 2 + j, "█", gold);
+	}
+  }
+  for (int i = 0; i < 42; i++) {
+	for (int j = 0; j < 6; j++) {
+	  setFieldBufferText(-45 + shift + i, 3 + j, word[j][i], white, gold);
+	}
+  }
+  return shift < maxShift;
+}
+
+bool showGameEnd() {
+  static int frame = 0;
+  static int shift = 0;
+  const int maxShift = 110;
+  if (frame == 0 && shift == 0) {
+	stopsound(gameSound);
+	playsound(endSound, 0);
+  }
+  if (shift == maxShift) {
+	return false;
+  }
+  const char* word[6][56] = {
+	{ "█", "█", "█", "█", "█", "█", "█", "█", "╗", "█", "█", "╗", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "█", "╗", "█", "█", "█", "█", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "╗", " ", " ", " ", "█", "█", "╗", "█", "█", "█", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "╗" },
+	{ "╚", "═", "═", "█", "█", "╔", "═", "═", "╝", "█", "█", "║", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "║", "█", "█", "╔", "═", "═", "═", "═", "╝", " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", "█", "█", "╔", "═", "═", "█", "█", "╗", " ", " ", "█", "█", "║" },
+	{ " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", "█", "█", "╔", "█", "█", "█", "█", "╔", "█", "█", "║", "█", "█", "█", "█", "█", "╗", " ", " ", " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", "█", "█", "█", "█", "█", "█", "╔", "╝", " ", " ", "█", "█", "║" },
+	{ " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", "█", "█", "║", "╚", "█", "█", "╔", "╝", "█", "█", "║", "█", "█", "╔", "═", "═", "╝", " ", " ", " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", "█", "█", "╔", "═", "═", "═", "╝", " ", " ", " ", "╚", "═", "╝" },
+	{ " ", " ", " ", "█", "█", "║", " ", " ", " ", "█", "█", "║", "█", "█", "║", " ", "╚", "═", "╝", " ", "█", "█", "║", "█", "█", "█", "█", "█", "█", "█", "╗", " ", " ", " ", "╚", "█", "█", "█", "█", "█", "█", "╔", "╝", "█", "█", "║", " ", " ", " ", " ", " ", " ", " ", "█", "█", "╗" },
+	{ " ", " ", " ", "╚", "═", "╝", " ", " ", " ", "╚", "═", "╝", "╚", "═", "╝", " ", " ", " ", " ", " ", "╚", "═", "╝", "╚", "═", "═", "═", "═", "═", "═", "╝", " ", " ", " ", " ", "╚", "═", "═", "═", "═", "═", "╝", " ", "╚", "═", "╝", " ", " ", " ", " ", " ", " ", " ", "╚", "═", "╝" },
+  };
+  if (frame < 2) {
+	frame++;
+  }
+  else {
+	shift++;
+	frame = 0;
+  }
+  for (int i = 0; i < 60; i++) {
+	for (int j = 0; j < 8; j++) {
+	  setFieldBufferText(-49 + shift + i, 2 + j, "█", gold);
+	}
+  }
+  for (int i = 0; i < 56; i++) {
+	for (int j = 0; j < 6; j++) {
+	  setFieldBufferText(-45 + shift + i, 3 + j, word[j][i], white, gold);
+	}
+  }
+  return shift < maxShift;
 }

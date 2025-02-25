@@ -1,11 +1,6 @@
 #pragma once
 #include "gameMath.h"
 
-enum GameScene {
-  FIELD,
-  MAP,
-};
-
 enum GameItem {
   FAN,
   COMPASS,
@@ -22,8 +17,7 @@ void gameUpdate();
 void gameRender();
 void gameDestroy();
 
-void gameSceneInit();
-void gameSceneDestroy();
-void setGameScene(GameScene scene);
 void setGameItemActive();
 int getGameElapsedTime();
+bool showGameStart();
+bool showGameEnd();
