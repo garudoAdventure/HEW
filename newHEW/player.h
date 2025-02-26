@@ -27,3 +27,4 @@ void setPlayerRotate(float angle);
 bool isHitwall();
 int getCollectCoinNum();
 BoatWave getBoatWave();
+void drawSpray();

@@ -27,6 +27,7 @@ void playerInit() {
 }
 
 void playerUpdate() {
+  drawSpray();
   drawMyBoat();
   playerMove();
 }
@@ -81,7 +82,7 @@ void playerMove() {
   float centerY = (float)mapY + 0.5f;
   float length = (centerX - newX) * (centerX - newX) + (centerY - newY) * (centerY - newY);
   bool inBlockZone = length <= 0.5f;
-  bool inCoinZone = length <= 0.01f;
+  bool inCoinZone = length <= 0.02f;
   CoinList* coinList = getCoinList();
   if (nextIsBlock && inBlockZone) {
 	hitWall = true;
@@ -136,44 +137,6 @@ void playerMove() {
 }
 
 void drawMyBoat() {
-  static int frame = 0;
-  static int sprayBlueIdx = 0;
-  if (frame < 10) {
-	frame++;
-  } else {
-	sprayBlueIdx = (sprayBlueIdx + 1) % 23;
-	frame = 0;
-  }
- // // Spray
- // for (int i = 0; i < 47; i++) {
-	//setFieldBufferText(8 + i, 23, "█", skyBlue);
-	//for (int j = 0; j < 3; j++) {
-	//  setFieldBufferText(31 + j + sprayBlueIdx, 23, "█", white);
-	//  setFieldBufferText(31 - j - sprayBlueIdx, 23, "█", white);
-	//}
- // }
- // for (int i = 0; i < 41; i++) {
-	//setFieldBufferText(11 + i, 22, "█", skyBlue);
-	//for (int j = 0; j < 3; j++) {
-	//  setFieldBufferText(31 + j + sprayBlueIdx, 22, "█", white);
-	//  setFieldBufferText(31 - j - sprayBlueIdx, 22, "█", white);
-	//}
- // }
- // for (int i = 0; i < 29; i++) {
-	//setFieldBufferText(17 + i, 21, "█", skyBlue);
-	//for (int j = 0; j < 3; j++) {
-	//  setFieldBufferText(31 + j + sprayBlueIdx, 21, "█", white);
-	//  setFieldBufferText(31 - j - sprayBlueIdx, 21, "█", white);
-	//}
- // }
- // for (int i = 0; i < 13; i++) {
-	//setFieldBufferText(25 + i, 20, "█", skyBlue);
-	//for (int j = 0; j < 3; j++) {
-	//  setFieldBufferText(31 + j + sprayBlueIdx, 20, "█", white);
-	//  setFieldBufferText(31 - j - sprayBlueIdx, 20, "█", white);
-	//}
- // }
-
   int startY = 23 + boatWave;
   for (int i = 0; i < 35; i++) {
 	setFieldBufferText(14 + i, startY, "█", darkBrown);
@@ -220,4 +183,41 @@ int getCollectCoinNum() {
 
 BoatWave getBoatWave() {
   return boatWave;
+}
+
+void drawSpray() {
+  static int frame = 0;
+  static int sprayIdx[4] = { 0, 0, 0, 0 };
+  const int startY = 23;
+  const int currentV = velocity * 20000;
+  const int maxFrame = 180 - currentV;
+
+  if (currentV < 1.0f) {
+	return;
+  }
+
+  if (frame % (maxFrame / 18) == 0) {
+	sprayIdx[0] = (sprayIdx[0] + 1) % 19;
+  }
+  if (frame % (maxFrame / 16) == 0) {
+	sprayIdx[1] = (sprayIdx[1] + 1) % 17;
+  }
+  if (frame % (maxFrame / 12) == 0) {
+	sprayIdx[2] = (sprayIdx[2] + 1) % 13;
+  }
+  if (frame % (maxFrame / 8) == 0) {
+	sprayIdx[3] = (sprayIdx[3] + 1) % 8;
+  }
+  frame++;
+  if (frame > maxFrame) {
+	frame = 0;
+	memset(sprayIdx, 0, sizeof(sprayIdx));
+  }
+
+  for (int i = 0; i < 4; i++) {
+	for (int j = 0; j < 3; j++) {
+	  setFieldBufferText(31 + j + sprayIdx[i], startY - i, "█", white);
+	  setFieldBufferText(31 - j - sprayIdx[i], startY - i, "█", white);
+	}
+  }
 }
