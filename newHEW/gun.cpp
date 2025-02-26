@@ -13,29 +13,37 @@
 const int rawGunCenterX = 65 + 7;
 const int rawGunCenterY = 15 + 2;
 
-bool isGunActive = false;
-
-int gunCenterX;
-int gunCenterY;
-Color crosshairCol = white;
-
-bool inShootingRange = false;
-bool isShooting = false;
-Vector2 lockIceCoord = { 0, 0 };
-float micPeak = 0.0f;
-
 const Vector2 centerCoord[4] = {
   {0, 0}, {-1, 0}, {-1, 1}, {0, 1}
 };
+
+int gunCenterX;
+int gunCenterY;
+Color crosshairCol;
+
+bool isGunActive;
+bool inShootingRange;
+bool isShooting;
+Vector2 lockIceCoord;
+float micPeak;
 
 int explodeSound;
 
 void gunInit() {
   drawBorder({ 64, 15, 16, 7 });
+  
   clearGunScreen();
   gunCenterX = rawGunCenterX;
   gunCenterY = rawGunCenterY;
+  crosshairCol = white;
   drawCrosshair();
+
+  isGunActive = false;
+  inShootingRange = false;
+  isShooting = false;
+  lockIceCoord = { 0, 0 };
+  micPeak = false;
+
   explodeSound = opensound((char*)"./Sound/explosion.mp3");
 }
 
@@ -81,7 +89,7 @@ void gunRender() {
 }
 
 void gunDestroy() {
-
+  closesound(explodeSound);
 }
 
 void checkShootingRange() {

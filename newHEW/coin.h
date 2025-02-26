@@ -12,6 +12,7 @@ struct CoinList {
 };
 
 void coinInit();
+void coinDestroy();
 void renderCoin();
 
 CoinList* getCoinList();

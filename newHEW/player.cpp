@@ -12,18 +12,26 @@ BoatWave boatWave = BoatWave::BOAT_DOWN;
 const float minV = 0.0f;
 const float resistance = 0.000001f;
 
-bool hitWall = false;
-float velocity = 0.0f;
-float rotateAngle = 0.0f;
+bool hitWall;
+float velocity;
+float rotateAngle;
 
-int collectCoinNum = 0;
+int collectCoinNum;
 int coinSound;
 
 void playerInit() {
+  // Init player
   player.pos = { 32.0f, 28.0f };
   player.viewAngle = 0.0f;
   player.dir = { sinf(0.0f), -cosf(0.0f) };
+  
+  // Init variable
+  hitWall = false;
+  velocity = 0.0f;
+  rotateAngle = 0.0f;
+  collectCoinNum = 0;
   coinSound = opensound((char*)"./Sound/coin.wav");
+  boatWave = BoatWave::BOAT_DOWN;
 }
 
 void playerUpdate() {
@@ -37,7 +45,7 @@ void playerRender() {
 }
 
 void playerDestroy() {
-
+  closesound(coinSound);
 }
 
 Player* getPlayer() {

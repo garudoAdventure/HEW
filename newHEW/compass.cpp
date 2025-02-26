@@ -28,14 +28,19 @@ const Vector2 NESWCoord[16] = {
   {-3, -2},// NW
   {-2, -2} // NNW
 };
-bool isTurnRudder = false;
-int turnRightTimer = 0;
-int turnLeftTimer = 0;
 
-bool isCompassActive = false;
+bool isTurnRudder;
+int turnRightTimer;
+int turnLeftTimer;
+bool isCompassActive;
 
 void compassInit() {
   drawBorder({ 64, 8, 16, 7 });
+
+  isTurnRudder = false;
+  turnRightTimer = 0;
+  turnLeftTimer = 0;
+  isCompassActive = false;
 }
 
 void compassUpdate() {
@@ -54,7 +59,7 @@ void compassUpdate() {
 		turnRightTimer = 0;
 		if (turnLeftTimer % 100 == 0) {
 		  turnRudder();
-	  }
+		}
 		turnLeftTimer++;
 		return;
 	  }
@@ -64,9 +69,10 @@ void compassUpdate() {
 		turnLeftTimer = 0;
 		if (turnRightTimer % 100 == 0) {
 		  turnRudder();
-	  }
+		}
 		turnRightTimer++;
 		return;
+	  }
 	}
 	turnRightTimer = 0;
 	turnLeftTimer = 0;
@@ -179,8 +185,6 @@ void drawRudder() {
   setBufferText(30, centerY - 2, "█", yellowBrown);
   setBufferText(31, centerY - 2, "█", yellowBrown);
   setBufferText(32, centerY - 2, "█", yellowBrown);
-  setBufferText(35, centerY - 2, "█", gold);
-  setBufferText(36, centerY - 2, "█", gold);
 
   setBufferText(28, centerY - 1, "█", yellowBrown);
   setBufferText(29, centerY - 1, "█", yellowBrown);
@@ -190,15 +194,11 @@ void drawRudder() {
   setBufferText(33, centerY - 1, "█", yellowBrown);
   setBufferText(34, centerY - 1, "█", yellowBrown);
 
-  setBufferText(26, centerY, "█", gold);
-  setBufferText(27, centerY, "█", gold);
   setBufferText(28, centerY, "█", yellowBrown);
   setBufferText(29, centerY, "█", gold);
   setBufferText(31, centerY, "█", yellowBrown);
   setBufferText(33, centerY, "█", gold);
   setBufferText(34, centerY, "█", yellowBrown);
-  setBufferText(35, centerY, "█", gold);
-  setBufferText(36, centerY, "█", gold);
 
   setBufferText(28, centerY + 1, "█", yellowBrown);
   setBufferText(29, centerY + 1, "█", yellowBrown);
@@ -208,8 +208,6 @@ void drawRudder() {
   setBufferText(33, centerY + 1, "█", yellowBrown);
   setBufferText(34, centerY + 1, "█", yellowBrown);
 
-  setBufferText(26, centerY + 2, "█", gold);
-  setBufferText(27, centerY + 2, "█", gold);
   setBufferText(30, centerY + 2, "█", yellowBrown);
   setBufferText(31, centerY + 2, "█", yellowBrown);
   setBufferText(32, centerY + 2, "█", yellowBrown);

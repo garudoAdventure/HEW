@@ -10,8 +10,6 @@
 const int fanCenterX = 65 + 6;
 const int fanCenterY = 1 + 2;
 
-bool isFanActive = false;
-
 const float maxV = 0.008f;
 const float acceleration = 0.0001f;
 
@@ -21,10 +19,13 @@ const Vector2 fanBladeRotate[3][4] = {
   { {-4, 1}, {-4, 0}, {-4, -1}, {-2, -2} }
 };
 
+bool isFanActive;
 int slidingSound;
 
 void fanInit() {
   drawBorder({ 64, 0, 16, 8 });
+
+  isFanActive = false;
 
   slidingSound = opensound((char*)"./Sound/sliding.mp3");
   setvolume(slidingSound, 0);
@@ -53,7 +54,7 @@ void fanRender() {
 }
 
 void fanDestroy() {
-
+  closesound(slidingSound);
 }
 
 void drawFan() {

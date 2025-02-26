@@ -13,6 +13,7 @@ struct IceList {
 };
 
 void icebergInit();
+void icebergDestroy();
 void renderIceberg();
 
 IceList* getIceList();

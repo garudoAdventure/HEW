@@ -5,4 +5,4 @@ void resultUpdate();
 void resultRender();
 void resultDestroy();
 
-void showResultInfo();
+bool showResultInfo();

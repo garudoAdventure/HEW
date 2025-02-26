@@ -7,11 +7,6 @@ enum GameItem {
   GUN
 };
 
-struct ViewData {
-  Vector2 visionData[62] = { 0 };
-  float distanceToObj[62] = { 0 };
-};
-
 void gameInit();
 void gameUpdate();
 void gameRender();

@@ -25,7 +25,7 @@ void micInit() {
   pEnum->EnumAudioEndpoints(eAll, DEVICE_STATE_ACTIVE | DEVICE_STATE_UNPLUGGED, &pDeviceCollection);  
   
   // pEnum->GetDefaultAudioEndpoint(eCapture, eConsole, &pDevice);   // For Default Mic
-  pDeviceCollection->Item(11, &pDevice); // For USB Mic
+  pDeviceCollection->Item(12, &pDevice); // For USB Mic
   
   pDevice->Activate(__uuidof(IAudioMeterInformation), CLSCTX_ALL, NULL, (void**)&pMeterInfo);
   

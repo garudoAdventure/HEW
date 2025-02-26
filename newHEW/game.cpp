@@ -9,28 +9,31 @@
 #include "compass.h"
 #include "gun.h"
 #include "inputKey.h"
-#include "coin.h"
-#include "iceberg.h"
 #include "UI.h"
 
-bool isPause;
-GameItem items[3] = { GameItem::FAN, GameItem::COMPASS, GameItem::GUN };
-int nowItemKey = 0;
+const GameItem items[3] = { GameItem::FAN, GameItem::COMPASS, GameItem::GUN };
+int nowItemKey;
 int gameElapsedTime;
+int countdown;
+
+bool gameStartFinish;
+bool gameEndFinish;
+
 int gameSound;
 int startSound;
 int endSound;
 
 void gameInit() {
-  gameElapsedTime = 0;
-  isPause = false;
   fieldInit();
   playerInit();
   fanInit();
   compassInit();
   gunInit();
-  icebergInit();
-  coinInit();
+  nowItemKey = 0;
+  gameElapsedTime = 0;
+  countdown = 60;
+  gameStartFinish = false;
+  gameEndFinish = false;
   gameSound = opensound((char*)"./Sound/galaxy.mp3");
   startSound = opensound((char*)"./Sound/gameStart.mp3");
   endSound = opensound((char*)"./Sound/gameEnd.mp3");
@@ -39,11 +42,9 @@ void gameInit() {
 
 void gameUpdate() {
   static int frameCount = 0;
-  static int countdown = 60;
   if (frameCount < 450) {
 	frameCount++;
-  }
-  else {
+  } else {
 	frameCount = 0;
 	countdown--;
   }
@@ -52,15 +53,20 @@ void gameUpdate() {
   setGameItemActive();
   
   fieldUpdate();
-  playerUpdate();
-  if (showGameStart()) {
-	return;
-  }
-
+  
   if (countdown < 0) {
-	if (!showGameEnd()) {
+	gameEndFinish = showGameEnd();
+	if (gameEndFinish) {
 	  setScene(Scene::RESULT);
 	}
+	return;
+  }
+  
+  playerUpdate();
+  showGetCoinNum(getCollectCoinNum());
+
+  gameStartFinish = showGameStart();
+  if (!gameStartFinish) {
 	return;
   }
 
@@ -78,8 +84,14 @@ void gameRender() {
 }
 
 void gameDestroy() {
+  fieldDestroy();
   playerDestroy();
+  fanDestroy();
+  compassDestroy();
+  gunDestroy();
   closesound(gameSound);
+  closesound(startSound);
+  closesound(endSound);
 }
 
 void setGameItemActive() {
@@ -116,8 +128,13 @@ bool showGameStart() {
   static int frame = 0;
   static int shift = 0;
   const int maxShift = 110;
+  if (gameStartFinish) {
+	frame = 0;
+	shift = 0;
+	return true;
+  }
   if (shift == maxShift) {
-	return false;
+	return true;
   }
   const char* word[6][42] = {
 	{ "█", "█", "█", "█", "█", "█", "█", "╗", "█", "█", "█", "█", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "█", "█", "╗", " ", "█", "█", "█", "█", "█", "█", "█", "█", "╗" },
@@ -146,7 +163,7 @@ bool showGameStart() {
 	  setFieldBufferText(-45 + shift + i, 3 + j, word[j][i], white, gold);
 	}
   }
-  return shift < maxShift;
+  return shift > maxShift;
 }
 
 bool showGameEnd() {
@@ -158,7 +175,9 @@ bool showGameEnd() {
 	playsound(endSound, 0);
   }
   if (shift == maxShift) {
-	return false;
+	frame = 0;
+	shift = 0;
+	return true;
   }
   const char* word[6][56] = {
 	{ "█", "█", "█", "█", "█", "█", "█", "█", "╗", "█", "█", "╗", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "█", "╗", "█", "█", "█", "█", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "╗", " ", " ", " ", "█", "█", "╗", "█", "█", "█", "█", "█", "█", "╗", " ", " ", " ", "█", "█", "╗" },
@@ -185,5 +204,5 @@ bool showGameEnd() {
 	  setFieldBufferText(-45 + shift + i, 3 + j, word[j][i], white, gold);
 	}
   }
-  return shift < maxShift;
+  return shift > maxShift;
 }

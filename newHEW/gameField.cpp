@@ -4,11 +4,9 @@
 #include "buffer.h"
 #include "UI.h"
 #include "player.h"
-#include "game.h"
 #include "draw.h"
 #include "iceberg.h"
 #include "coin.h"
-#include "scene.h"
 
 char map[GameFieldHeight][GameFieldWidth] = {
   //	  0         1         2         3         4         5  
@@ -49,6 +47,8 @@ SeaObjList* seaObjList;
 
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
+  icebergInit();
+  coinInit();
   seaObjList = (SeaObjList*)malloc(sizeof(SeaObjList));
   seaObjList->next = NULL;
 }
@@ -56,39 +56,25 @@ void fieldInit() {
 void fieldUpdate() {
   clearField();
   renderField();
-  showGetCoinNum(getCollectCoinNum());
 }
 
 void fieldRender() {
 }
 
 void fieldDestroy() {
-  clearField();
-}
-
-void renderField() {
-  for (int x = 1; x < ScreenFieldWidth; x++) {
-	for (int y = 1; y < ScreenFieldHeight; y++) {
-	  if (y <= 12) {
-		setBufferBgColor(x, y, skyBlue);
-	  }
-	  if (13 <= y && y <= 14) {
-		setBufferBgColor(x, y, seaBlueLight);
-	  }
-	  if (y == 15) {
-		setBufferBgColor(x, y, seaBlue58);
-	  }
-	  if (16 <= y && y <= 18) {
-		setBufferBgColor(x, y, seaBlue50);
-	  }
-	  if (y == 19) {
-		setBufferBgColor(x, y, seaBlue41);
-	  }
-	  if (20 <= y && y <= 23) {
-		setBufferBgColor(x, y, seaBlueDark);
-	  }
+  // clearField();
+  clearSeaObjList();
+  icebergDestroy();
+  coinDestroy();
+  for (int i = 1; i < GameFieldWidth - 2; i++) {
+	for (int j = 1; j < GameFieldHeight - 1; j++) {
+	  setMapCoordEle(i, j, ' ');
 	}
   }
+ }
+
+void renderField() {
+  renderFieldBg();
   renderBoundary();
   renderIceberg();
   renderCoin();
@@ -154,6 +140,31 @@ Vector3 transformToProCoord(Vector3 vec) {
   proVec.x = ScreenFieldWidth / 2 * (proVec.x + 1);
   proVec.y = ScreenFieldHeight / 2 * (proVec.y + 1);
   return proVec;
+}
+
+void renderFieldBg() {
+  for (int x = 1; x < ScreenFieldWidth; x++) {
+	for (int y = 1; y < ScreenFieldHeight; y++) {
+	  if (y <= 12) {
+		setBufferBgColor(x, y, skyBlue);
+	  }
+	  if (13 <= y && y <= 14) {
+		setBufferBgColor(x, y, seaBlueLight);
+	  }
+	  if (y == 15) {
+		setBufferBgColor(x, y, seaBlue58);
+	  }
+	  if (16 <= y && y <= 18) {
+		setBufferBgColor(x, y, seaBlue50);
+	  }
+	  if (y == 19) {
+		setBufferBgColor(x, y, seaBlue41);
+	  }
+	  if (20 <= y && y <= 23) {
+		setBufferBgColor(x, y, seaBlueDark);
+	  }
+	}
+  }
 }
 
 void renderBoundary() {
@@ -242,39 +253,6 @@ void renderBoundary() {
   }
 }
 
-void renderSun() {
-  const Player* player = getPlayer();
-
-  const Vector3 sunCoord = { player->pos.x, -0.3f, player->pos.y - 1.0f };
-  Vector3 sunViewCoord = transformToViewCoord(*player, sunCoord);
-  Vector3 sunProCoord = transformToProCoord(sunViewCoord);
-  if (0.0f <= sunProCoord.z && sunProCoord.z <= 1.0f) {
-	drawSun(sunProCoord);
-  }
-}
-
-void drawSun(Vector3 sunCenter) {
-  const char* sun[5][9] = {
-	{" ", " ", "▄", "▄", "█", "▄", "▄", " ", " "},
-	{" ", "█", "█", "█", "█", "█", "█", "█", " "},
-	{"█", "█", "█", "█", "█", "█", "█", "█", "█"},
-	{" ", "█", "█", "█", "█", "█", "█", "█", " "},
-	{" ", " ", "▀", "▀", "█", "▀", "▀", " ", " "},
-  };
-  
-  for (int i = 0; i < 9; i++) {
-	for (int j = 0; j < 5; j++) {
-	  Color color = yellow;
-	  if (j == 0 || j == 4 || i == 0 || i == 8 ||
-		((i == 1 || i == 7) && (j == 1 || j == 3))
-	  ) {
-		color = orange;
-	  }
-	  setFieldBufferText(sunCenter.x - 4 + i, sunCenter.y - 2 + j, sun[j][i], color);
-	}
-  }
-}
-
 void insertToSeaObjList(SeaObjNode* node) {
   if (seaObjList->next == NULL) {
 	seaObjList->next = node;
@@ -299,4 +277,5 @@ void clearSeaObjList() {
 	free(node);
 	node = nextNode;
   }
+  free(seaObjList);
 }

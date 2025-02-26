@@ -5,11 +5,16 @@
 #include "buffer.h"
 #include "coin.h"
 
-float lightCenterX = 24.0f;
-bool changeScene = false;
+float lightCenterX;
+bool changeScene;
 int sound;
+int boatCoordX;
 
 void titleInit() {
+  lightCenterX = 24.0f;
+  changeScene = false;
+  boatCoordX = 5;
+
   sound = opensound((char*)"./Sound/begin.mid");
   playsound(sound, 0);
 }
@@ -317,33 +322,32 @@ void drawNobashibo(int x, int y) {
 
 void drawSmallBoat() {
   static int frame = 0;
-  static int startX = 5;
   int startY = 18;
   if (frame < 200) {
 	frame++;
   } else {
-	if (startX < 33) {
-	  startX++;
+	if (boatCoordX < 33) {
+	  boatCoordX++;
 	}
 	frame = 0;
   }
-  setBufferText(startX + 4, startY - 3, "▄", darkBrown);
-  setBufferText(startX + 2, startY - 2, "█", white);
-  setBufferText(startX + 3, startY - 2, "█", white);
-  setBufferText(startX + 4, startY - 2, "█", darkBrown);
+  setBufferText(boatCoordX + 4, startY - 3, "▄", darkBrown);
+  setBufferText(boatCoordX + 2, startY - 2, "█", white);
+  setBufferText(boatCoordX + 3, startY - 2, "█", white);
+  setBufferText(boatCoordX + 4, startY - 2, "█", darkBrown);
   for (int i = 0; i < 8; i++) {
-	setBufferText(startX + 1 + i, startY - 1, "▄", brown);
+	setBufferText(boatCoordX + 1 + i, startY - 1, "▄", brown);
 	if (i == 3) {
-	  setBufferText(startX + 1 + i, startY - 1, "█", darkBrown);
+	  setBufferText(boatCoordX + 1 + i, startY - 1, "█", darkBrown);
 	}
   }
   for (int i = 0; i < 10; i++) {
-	setBufferText(startX + i, startY, "█", darkBrown);
+	setBufferText(boatCoordX + i, startY, "█", darkBrown);
   }
   for (int i = 0; i < 8; i++) {
-	setBufferText(startX + 1 + i, startY + 1, "█", darkBrown);
+	setBufferText(boatCoordX + 1 + i, startY + 1, "█", darkBrown);
 	if (i < 1 || i > 5) {
-	  setBufferText(startX + 1 + i, startY + 1, "▀", darkBrown);
+	  setBufferText(boatCoordX + 1 + i, startY + 1, "▀", darkBrown);
 	}
   }
 }

@@ -17,6 +17,7 @@ int maxScore;
 int resultCoinNum;
 int resultIceNum;
 float hotPower;
+bool showResultFinish;
 
 const char resultWord[6][135] = {
   "██████╗ ███████╗███████╗██╗   ██╗██╗  ████████╗",
@@ -34,33 +35,30 @@ void resultInit() {
 	  setBufferText(7 + i, 4 + j, " ");
 	}
   }
-  resultSound = opensound((char*)"./Sound/result.mp3");
-  playsound(resultSound, 0);
 
+  showResultFinish = false;
+  score = 0;
   resultCoinNum = getCollectCoinNum();
   resultIceNum = getDestroyIceNum();
   hotPower = (float)getPeakTime() / (float)getGameElapsedTime() * 100.0f;
   maxScore = resultCoinNum * 1000 + resultIceNum * 500 + hotPower * 10;
+
+  resultSound = opensound((char*)"./Sound/result.mp3");
+  playsound(resultSound, 0);
 }
 
 void resultUpdate() {
-  static int frame = 0;
-  
   for (int i = 0; i < 6; i++) {
 	gotoxy(17, 5 + i);
 	std::cout << resultWord[i];
   }
 
-  showResultInfo();
+  showResultFinish = showResultInfo();
 
-  if (frame > 100000) {
-	if (_kbhit()) {
-	  setScene(Scene::TITLE);
-	  frame = 0;
-	  return;
-    }
+  if (inport(PK_ENTER)) {
+	setScene(Scene::TITLE);
+	return;
   }
-  frame++;
 }
 
 void resultRender() {
@@ -71,15 +69,20 @@ void resultDestroy() {
   closesound(resultSound);
 }
 
-void showResultInfo() {
+bool showResultInfo() {
   static int frame = 0;
   static int i = 0;
   const int startX = 22;
-  if (i > 5) {
+  if (showResultFinish) {
+	frame = 0;
+	i = 0;
 	gotoxy(startX + 26, 19);
 	std::cout << score;
 	score = score + 123 > maxScore ? maxScore : score + 123;
-	return;
+	return true;
+  }
+  if (i > 5) {
+	return true;
   }
   if (frame < 20) {
 	frame++;
@@ -125,4 +128,5 @@ void showResultInfo() {
   score = score + 77 > maxScore ? maxScore : score + 77;
 
   resetTextColor();
+  return false;
 }

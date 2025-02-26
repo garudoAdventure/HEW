@@ -9,17 +9,18 @@
 CoinList* coinList;
 
 const int coinTurnSpd = 70;
-const int coinNum = 500;
+const int maxCoinNum = 500;
 
 void coinInit() {
   drawBorder({ 64, 22, 16, 3});
 
+  // Initialize Coin List
   coinList = (CoinList*)malloc(sizeof(CoinList));
   coinList->next = NULL;
 
   CoinNode* lastCoin = NULL;
   int count = 0;
-  while (count < coinNum) {
+  while (count < maxCoinNum) {
 	int randX = rand() % 55 + 2;
 	int randY = rand() % 26 + 2;
 	if (getMapCoordEle(randX, randY) != ' ') {
@@ -38,6 +39,16 @@ void coinInit() {
 	lastCoin = coin;
 	count++;
   }
+}
+
+void coinDestroy() {
+  CoinNode* node = coinList->next;
+  while (node != NULL) {
+	CoinNode* nextNode = node->next;
+	free(node);
+	node = nextNode;
+  }
+  free(coinList);
 }
 
 void renderCoin() {

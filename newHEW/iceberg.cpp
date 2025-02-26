@@ -7,14 +7,16 @@
 
 const int iceNum = 200;
 IceList* iceList;
-int destroyIceNum = 0;
+int destroyIceNum;
 
 Vector2f explodePos[23][55] = { 0 };
-Vector2f explodeVec[23][55];
-
+Vector2f explodeVec[23][55] = { 0 };
 IceNode* explodeIce = NULL;
 
 void icebergInit() {
+  destroyIceNum = 0;
+
+  // Initialize Ice List
   iceList = (IceList*)malloc(sizeof(IceList));
   iceList->next = NULL;
 
@@ -23,7 +25,11 @@ void icebergInit() {
   while (count < iceNum) {
 	int randX = rand() % 55 + 2;
 	int randY = rand() % 26 + 2;
-	if (getMapCoordEle(randX, randY) != ' ') {
+	if (
+	  getMapCoordEle(randX, randY) != ' ' ||
+	  31 <= randX && randX <= 33 &&
+	  27 <= randY && randY <= 28
+	) {
 	  continue;
 	}
 	setMapCoordEle(randX, randY, 'O');
@@ -39,6 +45,16 @@ void icebergInit() {
 	lastIce = ice;
 	count++;
   }
+}
+
+void icebergDestroy() {
+  IceNode* node = iceList->next;
+  while (node != NULL) {
+	IceNode* nextNode = node->next;
+	free(node);
+	node = nextNode;
+  }
+  free(iceList);
 }
 
 void renderIceberg() {
@@ -1105,6 +1121,8 @@ void drawIceberg1x1(Vector2 center) {
 void setIcebergExplode(IceNode* iceNode) {
   explodeIce = iceNode;
   setMapCoordEle(explodeIce->pos.x, explodeIce->pos.y, ' ');
+  
+  // Remove explode node form List
   IceNode* node = iceList->next;
   IceNode* prevNode = NULL;
   while (node != NULL) {
@@ -1119,6 +1137,7 @@ void setIcebergExplode(IceNode* iceNode) {
 	prevNode = node;
 	node = node->next;
   }
+
   // Prepare random vector
   for (int i = 0; i < 55; i++) {
 	for (int j = 0; j < 23; j++) {
