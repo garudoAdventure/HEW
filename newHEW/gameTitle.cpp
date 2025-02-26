@@ -26,6 +26,7 @@ void titleUpdate() {
 	return;
   }
   drawTitleBackground();
+  showStartHint();
   drawTitle();
   drawSmallBoat();
   for (int i = 0; i < 4; i++) {
@@ -317,7 +318,7 @@ void drawNobashibo(int x, int y) {
 void drawSmallBoat() {
   static int frame = 0;
   static int startX = 5;
-  int startY = 16;
+  int startY = 18;
   if (frame < 200) {
 	frame++;
   } else {
@@ -391,4 +392,26 @@ void drawTitleCoin(int x, int y) {
   if (frame == turnSpeed * 2) {
 	frame = 0;
   }
+}
+
+void showStartHint() {
+  static int frame = 0;
+  const int maxFrame = 300;
+  const char* hint[9] = {
+	"ほ", "っ", "と", "し", "て", "ス", "タ", "ー", "ト"
+  };
+  if (frame < maxFrame) {
+	for (int i = 0; i < 9; i++) {
+	  setBufferText(31 + i * 2, 14, hint[i]);
+	}
+  } else {
+	for (int i = 0; i < 9; i++) {
+	  setBufferText(31 + i * 2, 14, "  ");
+	}
+  }
+  if (frame == maxFrame + 50) {
+	frame = 0;
+  }
+  
+  frame++;
 }
