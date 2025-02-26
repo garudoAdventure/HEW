@@ -28,6 +28,9 @@ const Vector2 NESWCoord[16] = {
   {-3, -2},// NW
   {-2, -2} // NNW
 };
+bool isTurnRudder = false;
+int turnRightTimer = 0;
+int turnLeftTimer = 0;
 
 bool isCompassActive = false;
 
@@ -48,12 +51,25 @@ void compassUpdate() {
 	  if (inport(PK_LEFT)) {
 		const float angle = -0.1 * PI / 180.0f;
 		setPlayerRotate(angle);
+		turnRightTimer = 0;
+		if (turnLeftTimer % 100 == 0) {
+		  turnRudder();
+	  }
+		turnLeftTimer++;
+		return;
 	  }
 	  if (inport(PK_RIGHT)) {
 		const float angle = 0.1 * PI / 180.0f;
 		setPlayerRotate(angle);
+		turnLeftTimer = 0;
+		if (turnRightTimer % 100 == 0) {
+		  turnRudder();
 	  }
+		turnRightTimer++;
+		return;
 	}
+	turnRightTimer = 0;
+	turnLeftTimer = 0;
   }
 }
 
@@ -118,10 +134,48 @@ void setCompassActive(bool active) {
 
 void drawRudder() {
   const int centerY = 19 + getBoatWave();
+  if (!isTurnRudder) {
+	// Up
   setBufferText(31, centerY - 3, "█", gold);
-
+	// Left Up
   setBufferText(26, centerY - 2, "█", gold);
   setBufferText(27, centerY - 2, "█", gold);
+	// Right Up
+	setBufferText(35, centerY - 2, "█", gold);
+	setBufferText(36, centerY - 2, "█", gold);
+	// Left
+	setBufferText(26, centerY, "█", gold);
+	setBufferText(27, centerY, "█", gold);
+	// Right
+	setBufferText(35, centerY, "█", gold);
+	setBufferText(36, centerY, "█", gold);
+	// Left Down
+	setBufferText(26, centerY + 2, "█", gold);
+	setBufferText(27, centerY + 2, "█", gold);
+	// Right Down
+	setBufferText(35, centerY + 2, "█", gold);
+	setBufferText(36, centerY + 2, "█", gold);
+	// Down
+	setBufferText(31, centerY + 3, "█", gold);
+  } else {
+	// Up
+	setBufferText(29, centerY - 3, "█", gold);
+	setBufferText(33, centerY - 3, "█", gold);
+	// Left
+	setBufferText(26, centerY - 1, "█", gold);
+	setBufferText(27, centerY - 1, "█", gold);
+	setBufferText(26, centerY + 1, "█", gold);
+	setBufferText(27, centerY + 1, "█", gold);
+	// Right
+	setBufferText(35, centerY - 1, "█", gold);
+	setBufferText(36, centerY - 1, "█", gold);
+	setBufferText(35, centerY + 1, "█", gold);
+	setBufferText(36, centerY + 1, "█", gold);
+	// Down
+	setBufferText(29, centerY + 3, "█", gold);
+	setBufferText(33, centerY + 3, "█", gold);
+  }
+  
   setBufferText(30, centerY - 2, "█", yellowBrown);
   setBufferText(31, centerY - 2, "█", yellowBrown);
   setBufferText(32, centerY - 2, "█", yellowBrown);
@@ -159,8 +213,8 @@ void drawRudder() {
   setBufferText(30, centerY + 2, "█", yellowBrown);
   setBufferText(31, centerY + 2, "█", yellowBrown);
   setBufferText(32, centerY + 2, "█", yellowBrown);
-  setBufferText(35, centerY + 2, "█", gold);
-  setBufferText(36, centerY + 2, "█", gold);
+}
 
-  setBufferText(31, centerY + 3, "█", gold);
+void turnRudder() {
+  isTurnRudder = !isTurnRudder;
 }

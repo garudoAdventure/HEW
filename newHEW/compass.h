@@ -10,3 +10,4 @@ void drawDirection();
 void drawRudder();
 void clearCompassScene();
 void setCompassActive(bool active);
+void turnRudder();
