@@ -11,8 +11,6 @@
 #include "inputKey.h"
 #include "UI.h"
 
-const GameItem items[3] = { GameItem::FAN, GameItem::COMPASS, GameItem::GUN };
-int nowItemKey;
 int gameElapsedTime;
 int countdown;
 
@@ -29,7 +27,6 @@ void gameInit() {
   fanInit();
   compassInit();
   gunInit();
-  nowItemKey = 0;
   gameElapsedTime = 0;
   countdown = 60;
   gameStartFinish = false;
@@ -41,40 +38,46 @@ void gameInit() {
 }
 
 void gameUpdate() {
-  static int frameCount = 0;
-  if (frameCount < 450) {
-	frameCount++;
-  } else {
-	frameCount = 0;
-	countdown--;
+  inputKeyUpdate();
+  fieldUpdate();
+  showGetCoinNum(getCollectCoinNum());
+  
+  gameStartFinish = showGameStart();
+  if (!gameStartFinish) {
+	drawMyBoat();
+	drawFlag();
+	return;
   }
 
-  inputKeyUpdate();
-  setGameItemActive();
-  
-  fieldUpdate();
-  
-  if (countdown < 0) {
+  if (!gameCountdown()) {
 	gameEndFinish = showGameEnd();
+	drawMyBoat();
+	drawFlag();
 	if (gameEndFinish) {
 	  setScene(Scene::RESULT);
 	}
 	return;
   }
-  
+
   playerUpdate();
-  showGetCoinNum(getCollectCoinNum());
-
-  gameStartFinish = showGameStart();
-  if (!gameStartFinish) {
-	return;
-  }
-
   showLifeBar(countdown, 60);
   
-  fanUpdate();
   compassUpdate();
   gunUpdate();
+
+  if (getGunActive()) {
+	drawCannon();
+  } else {
+	fanUpdate();
+	if (getCompassActive()) {
+	  drawRudder();
+	} else {  
+	  drawFlag();
+	}
+  }
+  setGunActive(false);
+  setCompassActive(false);
+  setFanActive(false);
 
   gameElapsedTime++;
 }
@@ -94,34 +97,27 @@ void gameDestroy() {
   closesound(endSound);
 }
 
-void setGameItemActive() {
-  if (getKeydown(KeyType::UP)) {
-	nowItemKey = nowItemKey - 1 < 0 ? 0 : nowItemKey - 1;
-  }
-  if (getKeydown(KeyType::DOWN)) {
-	nowItemKey = nowItemKey + 1 > 2 ? 2 : nowItemKey + 1;
-  }
-  switch (items[nowItemKey]) {
-	case GameItem::FAN:
-	  setFanActive(true);
-	  setCompassActive(false);
-	  setGunActive(false);
-	  break;
-	case GameItem::COMPASS:
-	  setFanActive(false);
-	  setCompassActive(true);
-	  setGunActive(false);
-	  break;
-	case GameItem::GUN:
-	  setFanActive(false);
-	  setCompassActive(false);
-	  setGunActive(true);
-	  break;
-	}
-}
-
 int getGameElapsedTime() {
   return gameElapsedTime;
+}
+
+int getCountdown() {
+  return countdown;
+}
+
+bool gameCountdown() {
+  static int frameCount = 0;
+  if (countdown < 0) {
+	frameCount = 0;
+	return false;
+  }
+  if (frameCount < 150) {
+	frameCount++;
+  } else {
+	frameCount = 0;
+	countdown--;
+  }
+  return true;
 }
 
 bool showGameStart() {
@@ -129,11 +125,11 @@ bool showGameStart() {
   static int shift = 0;
   const int maxShift = 110;
   if (gameStartFinish) {
-	frame = 0;
-	shift = 0;
 	return true;
   }
   if (shift == maxShift) {
+	frame = 0;
+	shift = 0;
 	return true;
   }
   const char* word[6][42] = {

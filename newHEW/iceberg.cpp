@@ -4,6 +4,7 @@
 #include "gameField.h"
 #include "player.h"
 #include "buffer.h"
+#include "gun.h"
 
 const int iceNum = 200;
 IceList* iceList;
@@ -91,6 +92,7 @@ void explodeIceberg() {
   const int explodeTime = 50;
   drawExplodeIceberg({ (int)explodeIce->proCoord.x, (int)explodeIce->proCoord.y });
   explodeFrame++;
+  setGunActive(true);
   if (explodeFrame > explodeTime) {
 	explodeFrame = 0;
 	memset(explodePos, 0, sizeof(explodePos));

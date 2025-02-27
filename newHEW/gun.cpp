@@ -24,6 +24,8 @@ Color crosshairCol;
 bool isGunActive;
 bool inShootingRange;
 bool isShooting;
+bool isStartShooting;
+int gunShootTimer;
 Vector2 lockIceCoord;
 float micPeak;
 
@@ -41,6 +43,7 @@ void gunInit() {
   isGunActive = false;
   inShootingRange = false;
   isShooting = false;
+  isStartShooting = false;
   lockIceCoord = { 0, 0 };
   micPeak = false;
 
@@ -52,7 +55,7 @@ void gunUpdate() {
   crosshairCol = white;
 
   if (isShooting) {
-	drawCannon();
+	isGunActive = true;
 	if (gunFireEffect() || !inShootingRange) {
 	  return;
 	}
@@ -72,13 +75,25 @@ void gunUpdate() {
 
   inShootingRange = false;
   checkShootingRange();
-  if (isGunActive) {
-	drawBracketBorder({ 65, 16, 14, 5 }, yellow);
-	drawCannon();
-
-	if (getMicPeak() - micPeak > 50.0f) {
-	  isShooting = true;
+  
+  if (isStartShooting) {
+	float mic = getMicPeak();
+	if (mic < 50.0f) {
+	  isStartShooting = false;
 	}
+	if (gunShootTimer > 0) {
+	  if (mic < 50.0f) {
+		isShooting = true;
+		isStartShooting = false;
+	  }
+	  gunShootTimer--;
+	} else {
+	  isStartShooting = false;
+	}
+  }
+  if (!isStartShooting && getMicPeak() - micPeak > 50.0f) {
+	isStartShooting = true;
+	gunShootTimer = 50;
   }
 
   micPeak = getMicPeak();
@@ -189,6 +204,10 @@ void clearGunScreen() {
 
 void setGunActive(bool active) {
   isGunActive = active;
+}
+
+bool getGunActive() {
+  return isGunActive;
 }
 
 void drawCannon() {

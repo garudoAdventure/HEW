@@ -1,18 +1,14 @@
 #pragma once
 #include "gameMath.h"
 
-enum GameItem {
-  FAN,
-  COMPASS,
-  GUN
-};
-
 void gameInit();
 void gameUpdate();
 void gameRender();
 void gameDestroy();
 
-void setGameItemActive();
+bool gameCountdown();
+
 int getGameElapsedTime();
+int getCountdown();
 bool showGameStart();
 bool showGameEnd();

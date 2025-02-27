@@ -10,14 +10,14 @@
 #include "console.h"
 #include "game.h"
 #include "mic.h"
+#include "fstream"
 
-int resultSound;
+GameResultData resultData;
 int score;
-int maxScore;
-int resultCoinNum;
-int resultIceNum;
-float hotPower;
 bool showResultFinish;
+int resultSound;
+
+const int scoreIncrease = 17;
 
 const char resultWord[6][135] = {
   "██████╗ ███████╗███████╗██╗   ██╗██╗  ████████╗",
@@ -35,16 +35,23 @@ void resultInit() {
 	  setBufferText(7 + i, 4 + j, " ");
 	}
   }
-
   showResultFinish = false;
   score = 0;
-  resultCoinNum = getCollectCoinNum();
-  resultIceNum = getDestroyIceNum();
-  hotPower = (float)getPeakTime() / (float)getGameElapsedTime() * 100.0f;
-  maxScore = resultCoinNum * 1000 + resultIceNum * 500 + hotPower * 10;
+  resultData.coin = getCollectCoinNum();
+  resultData.ice = getDestroyIceNum();
+  resultData.hot = (float)getPeakTime() / (float)getGameElapsedTime() * 100.0f;
+  resultData.score = resultData.coin * 1000 + resultData.ice * 500 + resultData.hot * 10;
 
   resultSound = opensound((char*)"./Sound/result.mp3");
   playsound(resultSound, 0);
+
+  std::ofstream File;
+  File.open("result.txt", std::ios::app);
+  File << resultData.coin << "       ";
+  File << resultData.ice << "      ";
+  File << resultData.hot << "      ";
+  File << resultData.score << "\n";
+  File.close();
 }
 
 void resultUpdate() {
@@ -78,7 +85,7 @@ bool showResultInfo() {
 	i = 0;
 	gotoxy(startX + 26, 19);
 	std::cout << score;
-	score = score + 123 > maxScore ? maxScore : score + 123;
+	score = score + scoreIncrease > resultData.score ? resultData.score : score + scoreIncrease;
 	return true;
   }
   if (i > 5) {
@@ -112,20 +119,20 @@ bool showResultInfo() {
   gotoxy(startX + i, 12);
   std::cout << "コイン";
   gotoxy(startX + 20 + i, 12);
-  std::cout << resultCoinNum;
+  std::cout << resultData.coin;
   gotoxy(startX + i, 14);
   std::cout << "破壊した氷山";
   gotoxy(startX + 20 + i, 14);
-  std::cout << resultIceNum;
+  std::cout << resultData.ice;
   gotoxy(startX + i, 16);
   std::cout << "ほっと力";
   gotoxy(startX + 20 + i, 16);
-  std::cout << hotPower << "%";
+  std::cout << resultData.hot << "%";
   gotoxy(startX + i, 19);
   std::cout << "スコア";
   gotoxy(startX + 20 + i, 19);
   std::cout << score;
-  score = score + 77 > maxScore ? maxScore : score + 77;
+  score = score + scoreIncrease > resultData.score ? resultData.score : score + scoreIncrease;
 
   resetTextColor();
   return false;

@@ -13,6 +13,7 @@ void checkShootingRange();
 void gunScreenUpdate();
 void clearGunScreen();
 void setGunActive(bool active);
+bool getGunActive();
 
 void drawFire5x3();
 void drawFire7x4();

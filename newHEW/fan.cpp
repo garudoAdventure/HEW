@@ -37,15 +37,10 @@ void fanUpdate() {
   drawFan();
   showCurrentVelocity(getPlayerVelocity());
 
-  if (isFanActive) {
-	drawBracketBorder({ 65, 1, 14, 6 }, yellow);
-	drawFlag();
-
-	if (getMicPeak() > 95.0f) {
-	  const float velocity = getPlayerVelocity();
-	  float newV = velocity + acceleration > maxV ? maxV : velocity + acceleration;
-	  setPlayerVelocity(newV);
-	}
+  if (getMicPeak() > 95.0f) {
+	const float velocity = getPlayerVelocity();
+	float newV = velocity + acceleration > maxV ? maxV : velocity + acceleration;
+	setPlayerVelocity(newV);
   }
 }
 
@@ -90,6 +85,10 @@ void setFanActive(bool active) {
   isFanActive = active;
 }
 
+bool getFanActive() {
+  return isFanActive;
+}
+
 void drawFlag() {
   static int frame = 0;
   int centerY = 19 + getBoatWave();
@@ -122,11 +121,11 @@ void showCurrentVelocity(float velocity) {
   setBufferText(fanCenterX - 2, fanCenterY + 3, tenDigit);
   setBufferText(fanCenterX - 1, fanCenterY + 3, digit);
 
-  setBufferText(fanCenterX, fanCenterY + 3, "K");
-  setBufferText(fanCenterX + 1, fanCenterY + 3, "m");
-  setBufferText(fanCenterX + 2, fanCenterY + 3, "/");
-  setBufferText(fanCenterX + 3, fanCenterY + 3, "s");
-  setBufferText(fanCenterX + 4, fanCenterY + 3, "²");
+  setBufferText(fanCenterX, fanCenterY + 3, "k");
+  setBufferText(fanCenterX + 1, fanCenterY + 3, "n");
+  setBufferText(fanCenterX + 2, fanCenterY + 3, "o");
+  setBufferText(fanCenterX + 3, fanCenterY + 3, "t");
+  // setBufferText(fanCenterX + 4, fanCenterY + 3, "t");
 
   float soundVol = 100.0f / 160.0f * num;
   setvolume(slidingSound, soundVol);

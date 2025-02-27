@@ -9,4 +9,5 @@ void drawFan();
 void drawFlag();
 void clearFanScene();
 void setFanActive(bool active);
+bool getFanActive();
 void showCurrentVelocity(float velocity);
