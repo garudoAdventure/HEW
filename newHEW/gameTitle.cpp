@@ -4,32 +4,36 @@
 #include "gameTitle.h"
 #include "buffer.h"
 #include "coin.h"
+#include "mic.h"
 
 float lightCenterX;
 bool changeScene;
 int sound;
-int boatCoordX;
+float boatCoordX;
+const float windForce = 0.1f;
 
 void titleInit() {
   lightCenterX = 24.0f;
   changeScene = false;
-  boatCoordX = 5;
+  boatCoordX = 5.0f;
 
   sound = opensound((char*)"./Sound/begin.mid");
   playsound(sound, 0);
 }
 
 void titleUpdate() {
-  if (!changeScene && inport(PK_ENTER)) {
-	changeScene = true;
-  }
   if (changeScene) {
-	if (!titleSceneFadeOut()) {
-	  changeScene = false;
+	if (titleSceneFadeOut()) {
 	  setScene(Scene::GAME);
 	}
 	return;
   }
+
+  if (boatCoordX > 80.0f) {
+	changeScene = true;
+  }
+
+  boatForwardByWind();
   drawTitleBackground();
   showStartHint();
   drawTitle();
@@ -45,6 +49,12 @@ void titleRender() {
 
 void titleDestroy() {
   closesound(sound);
+}
+
+void boatForwardByWind() {
+  if (getMicPeak() > 80.0f) {
+	boatCoordX += windForce;
+  }
 }
 
 bool titleSceneFadeOut() {
@@ -68,9 +78,9 @@ bool titleSceneFadeOut() {
   frame++;
   if (frame > 200) {
 	frame = 0;
-	return false;
+	return true;
   }
-  return true;
+  return false;
 }
 
 void drawTitleBackground() {
@@ -327,7 +337,7 @@ void drawSmallBoat() {
 	frame++;
   } else {
 	if (boatCoordX < 33) {
-	  boatCoordX++;
+	  boatCoordX += 1.0f;
 	}
 	frame = 0;
   }

@@ -9,6 +9,8 @@ void titleDestroy();
 
 bool titleSceneFadeOut();
 
+void boatForwardByWind();
+
 void drawTitle();
 void drawTitleBackground();
 void drawHo(int x, int y, Color color);
