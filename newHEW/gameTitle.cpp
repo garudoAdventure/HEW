@@ -393,10 +393,10 @@ void drawTitleCoin(int x, int y) {
 	  Color color = white;
 	  if (coinTemp[j][i] != " ") {
 		if (coinTemp[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = coinGold;
 		}
 		if (coinTemp[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = coinGoldLight;
 		}
 		setBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }

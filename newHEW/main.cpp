@@ -14,7 +14,7 @@ bool HEWStartup();
 bool HEWCleanup();
 /* ============================================================ */
 
-#define FPS	60
+#define FPS	30
 
 void init();
 void update();

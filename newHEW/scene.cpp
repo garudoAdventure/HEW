@@ -6,12 +6,14 @@
 #include "gameTitle.h"
 #include "game.h"
 #include "gameResult.h"
+#include "color.h"
 
 Scene scene = Scene::TITLE;
 Scene nextSecne = Scene::TITLE;
 
 void sceneInit() {
   bufferInit();
+  colorInit();
   switch (scene) {
 	case Scene::TITLE:
 	  micInit();

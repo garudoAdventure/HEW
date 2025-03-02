@@ -40,6 +40,8 @@ void setMapCoordEle(int x, int y, char text);
 
 void renderFieldBg();
 void renderBoundary();
+void renderSun();
+void drawSun(Vector3 sunCenter);
 
 void insertToSeaObjList(SeaObjNode* node);
 SeaObjNode* createSeaObjNode(ObjectType objType, Vector3 objVec);

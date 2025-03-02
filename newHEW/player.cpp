@@ -139,6 +139,12 @@ void playerMove() {
   const float dirX = cosf(rotateAngle) * player.dir.x - sinf(rotateAngle) * player.dir.y;
   const float dirY = sinf(rotateAngle) * player.dir.x + cosf(rotateAngle) * player.dir.y;
   player.viewAngle += rotateAngle;
+  if (player.viewAngle > 2 * PI) {
+	player.viewAngle -= 2 * PI;
+  }
+  if (player.viewAngle < -2 * PI) {
+	player.viewAngle += 2 * PI;
+  }
   player.dir.x = dirX;
   player.dir.y = dirY;
   rotateAngle = 0.0f;

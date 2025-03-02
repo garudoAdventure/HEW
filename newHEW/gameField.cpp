@@ -7,6 +7,7 @@
 #include "draw.h"
 #include "iceberg.h"
 #include "coin.h"
+#include "game.h"
 
 char map[GameFieldHeight][GameFieldWidth] = {
   //	  0         1         2         3         4         5  
@@ -44,6 +45,8 @@ char map[GameFieldHeight][GameFieldWidth] = {
 };
 
 SeaObjList* seaObjList;
+const int starNum = 50;
+Vector2 starCoord[starNum];
 
 void fieldInit() {
   drawBorder({ 0, 0, 64, 25 });
@@ -51,6 +54,12 @@ void fieldInit() {
   coinInit();
   seaObjList = (SeaObjList*)malloc(sizeof(SeaObjList));
   seaObjList->next = NULL;
+  
+  for (int i = 0; i < starNum; i++) {
+	int randX = rand() % 160 - 50;
+	int randY = rand() % 5 + 1;
+	starCoord[i] = { randX, randY };
+  }
 }
 
 void fieldUpdate() {
@@ -62,7 +71,6 @@ void fieldRender() {
 }
 
 void fieldDestroy() {
-  // clearField();
   clearSeaObjList();
   icebergDestroy();
   coinDestroy();
@@ -75,6 +83,7 @@ void fieldDestroy() {
 
 void renderField() {
   renderFieldBg();
+  renderSun();
   renderBoundary();
   renderIceberg();
   renderCoin();
@@ -146,22 +155,69 @@ void renderFieldBg() {
   for (int x = 1; x < ScreenFieldWidth; x++) {
 	for (int y = 1; y < ScreenFieldHeight; y++) {
 	  if (y <= 12) {
-		setBufferBgColor(x, y, skyBlue);
+		setBufferBgColor(x, y, getSkyBlue());
 	  }
 	  if (13 <= y && y <= 14) {
-		setBufferBgColor(x, y, seaBlueLight);
+		setBufferBgColor(x, y, getSeaBlueLight());
 	  }
 	  if (y == 15) {
-		setBufferBgColor(x, y, seaBlue58);
+		setBufferBgColor(x, y, getSeaBlue58());
 	  }
 	  if (16 <= y && y <= 18) {
-		setBufferBgColor(x, y, seaBlue50);
+		setBufferBgColor(x, y, getSeaBlue50());
 	  }
 	  if (y == 19) {
-		setBufferBgColor(x, y, seaBlue41);
+		setBufferBgColor(x, y, getSeaBlue41());
 	  }
 	  if (20 <= y && y <= 23) {
-		setBufferBgColor(x, y, seaBlueDark);
+		setBufferBgColor(x, y, getSeaBlueDark());
+	  }
+	}
+  }
+}
+
+void renderSun() {
+  const Player * player = getPlayer();
+  if (getCountdown() > 20) {
+	const float sunHeight = -0.3f + float((60 - getCountdown()) / 5) * 0.05f;
+	const Vector3 sunCoord = { player->pos.x, sunHeight, player->pos.y - 1.0f };
+	Vector3 sunViewCoord = transformToViewCoord(*player, sunCoord);
+	Vector3 sunProCoord = transformToProCoord(sunViewCoord);
+	if (0.0f <= sunProCoord.z && sunProCoord.z <= 1.0f) {
+	  drawSun(sunProCoord);
+	}
+  }
+  if (getCountdown() < 10) {
+	for (int i = 0; i < starNum; i++) {
+	  int starMove = sinf(player->viewAngle / 2) * 50;
+	  int coordX = starCoord[i].x - starMove;
+	  if (1 <= coordX && coordX <= ScreenFieldWidth - 1) {
+		setBuffer(coordX, starCoord[i].y, "·", white, getSkyBlue());
+	  }
+	}
+  }
+  
+}
+
+void drawSun(Vector3 sunCenter) {
+  const char* sun[5][9] = {
+	{" ", " ", "▄", "▄", "█", "▄", "▄", " ", " "},
+	{" ", "█", "█", "█", "█", "█", "█", "█", " "},
+	{"█", "█", "█", "█", "█", "█", "█", "█", "█"},
+	{" ", "█", "█", "█", "█", "█", "█", "█", " "},
+	{" ", " ", "▀", "▀", "█", "▀", "▀", " ", " "},
+  };
+  
+  for (int i = 0; i < 9; i++) {
+	for (int j = 0; j < 5; j++) {
+	  Color color = yellow;
+	  if (j == 0 || j == 4 || i == 0 || i == 8 ||
+		((i == 1 || i == 7) && (j == 1 || j == 3))
+		 ) {
+		color = orange;
+	  }
+	  if (sunCenter.y - 2 + j < 13) {
+		setFieldBufferText(sunCenter.x - 4 + i, sunCenter.y - 2 + j, sun[j][i], color, getSkyBlue());
 	  }
 	}
   }

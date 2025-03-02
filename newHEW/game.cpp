@@ -60,7 +60,6 @@ void gameUpdate() {
   }
 
   playerUpdate();
-  showLifeBar(countdown, 60);
   
   compassUpdate();
   gunUpdate();
@@ -116,6 +115,7 @@ bool gameCountdown() {
   } else {
 	frameCount = 0;
 	countdown--;
+	colorUpdate();
   }
   return true;
 }

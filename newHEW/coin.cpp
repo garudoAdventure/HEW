@@ -123,10 +123,10 @@ void drawCoin7x5(Vector2 center) {
 	  Color color = white;
 	  if (coinTemp[j][i] != " ") {
 		if (coinTemp[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = getCoinGold();
 		}
 		if (coinTemp[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = getCoinGoldLight();
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -168,10 +168,10 @@ void drawCoin5x4(Vector2 center) {
 	  Color color = white;
 	  if (coinTemp[j][i] != " ") {
 		if (coinTemp[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = getCoinGold();
 		}
 		if (coinTemp[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = getCoinGoldLight();
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -211,10 +211,10 @@ void drawCoin3x3(Vector2 center) {
 	  Color color = white;
 	  if (coinTemp[j][i] != " ") {
 		if (coinTemp[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = getCoinGold();
 		}
 		if (coinTemp[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = getCoinGoldLight();
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -240,10 +240,10 @@ void drawCoin3x2(Vector2 center) {
 	  Color color = white;
 	  if (coin[j][i] != " ") {
 		if (coin[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = getCoinGold();
 		}
 		if (coin[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = getCoinGoldLight();
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -275,10 +275,10 @@ void drawCoin3x1(Vector2 center) {
 	  Color color = white;
 	  if (coinTemp[j][i] != " ") {
 		if (coinTemp[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = getCoinGold();
 		}
 		if (coinTemp[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = getCoinGoldLight();
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
@@ -299,10 +299,10 @@ void drawCoin1x1(Vector2 center) {
 	  Color color = white;
 	  if (coin[j][i] != " ") {
 		if (coin[j][i] == "Y") {
-		  color = { 239, 191, 4 };
+		  color = getCoinGold();
 		}
 		if (coin[j][i] == "M") {
-		  color = { 244, 221, 131 };
+		  color = getCoinGoldLight();
 		}
 		setFieldBufferText(centerX - width / 2 + i, centerY - height / 2 + j, "█", color);
 	  }
