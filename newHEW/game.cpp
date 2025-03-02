@@ -21,6 +21,8 @@ int gameSound;
 int startSound;
 int endSound;
 
+ControlMode controlMode;
+
 void gameInit() {
   fieldInit();
   playerInit();
@@ -96,6 +98,14 @@ void gameDestroy() {
   closesound(endSound);
 }
 
+ControlMode getControlMode() {
+  return controlMode;
+}
+
+void setControlMode(ControlMode mode) {
+  controlMode = mode;
+}
+
 int getGameElapsedTime() {
   return gameElapsedTime;
 }
@@ -167,6 +177,7 @@ bool showGameEnd() {
   static int shift = 0;
   const int maxShift = 110;
   if (frame == 0 && shift == 0) {
+	stopSlidingSound();
 	stopsound(gameSound);
 	playsound(endSound, 0);
   }

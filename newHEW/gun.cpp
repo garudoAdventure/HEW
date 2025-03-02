@@ -9,6 +9,7 @@
 #include "iceberg.h"
 #include "inputKey.h"
 #include "mic.h"
+#include "game.h"
 
 const int rawGunCenterX = 65 + 7;
 const int rawGunCenterY = 15 + 2;
@@ -75,20 +76,24 @@ void gunUpdate() {
 
   inShootingRange = false;
   checkShootingRange();
+
+  if (getControlMode() == ControlMode::KEYBOARD) {
+	if (getKeydown(KeyType::SPACE)) {
+	  isShooting = true;
+	}
+	return;
+  }
   
   if (isStartShooting) {
 	float mic = getMicPeak();
-	if (mic < 50.0f) {
+	if (gunShootTimer < 0) {
 	  isStartShooting = false;
-	}
-	if (gunShootTimer > 0) {
+	} else {
 	  if (mic < 50.0f) {
 		isShooting = true;
 		isStartShooting = false;
 	  }
 	  gunShootTimer--;
-	} else {
-	  isStartShooting = false;
 	}
   }
   if (!isStartShooting && getMicPeak() - micPeak > 50.0f) {

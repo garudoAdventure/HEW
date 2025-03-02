@@ -5,6 +5,7 @@
 #include "buffer.h"
 #include "coin.h"
 #include "mic.h"
+#include "game.h"
 
 float lightCenterX;
 bool changeScene;
@@ -18,7 +19,7 @@ void titleInit() {
   boatCoordX = 5.0f;
 
   sound = opensound((char*)"./Sound/begin.mid");
-  playsound(sound, 0);
+  playsound(sound, 1);
 }
 
 void titleUpdate() {
@@ -30,6 +31,12 @@ void titleUpdate() {
   }
 
   if (boatCoordX > 80.0f) {
+	setControlMode(ControlMode::MIC);
+	changeScene = true;
+  }
+
+  if (inport(PK_ENTER)) {
+	setControlMode(ControlMode::KEYBOARD);
 	changeScene = true;
   }
 

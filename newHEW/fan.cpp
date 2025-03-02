@@ -6,6 +6,7 @@
 #include "gameMath.h"
 #include "player.h"
 #include "mic.h"
+#include "game.h"
 
 const int fanCenterX = 65 + 6;
 const int fanCenterY = 1 + 2;
@@ -37,7 +38,16 @@ void fanUpdate() {
   drawFan();
   showCurrentVelocity(getPlayerVelocity());
 
-  if (getMicPeak() > 95.0f) {
+  bool triggerFan = false;
+  switch (getControlMode()) {
+	case ControlMode::MIC:
+	  triggerFan = getMicPeak() > 95.0f;
+	  break;
+	case ControlMode::KEYBOARD:
+	  triggerFan = inport(PK_UP);
+	  break;
+  }
+  if (triggerFan) {
 	const float velocity = getPlayerVelocity();
 	float newV = velocity + acceleration > maxV ? maxV : velocity + acceleration;
 	setPlayerVelocity(newV);
@@ -87,6 +97,10 @@ void setFanActive(bool active) {
 
 bool getFanActive() {
   return isFanActive;
+}
+
+void stopSlidingSound() {
+  stopsound(slidingSound);
 }
 
 void drawFlag() {

@@ -11,3 +11,4 @@ void clearFanScene();
 void setFanActive(bool active);
 bool getFanActive();
 void showCurrentVelocity(float velocity);
+void stopSlidingSound();
